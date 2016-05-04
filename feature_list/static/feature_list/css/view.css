@@ -1,0 +1,65 @@
+body{
+    overflow: hidden;
+}
+.dashboard,
+.dashboard-container{
+
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.ol-zoom {
+    top: .5em;
+    right: .5em;
+    left: initial;
+}
+
+.full-size{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+.ui-layout-container{
+
+    overflow: hidden;
+
+}
+
+.panel.stretch{
+    overflow: hidden;
+    border: none;
+    margin: 0;
+}
+.panel .panel-heading{
+    border: none;
+}
+.panel.stretch .panel-body{
+    height: 100%;
+    padding: 0;
+}
+.panel.stretch .panel-body.with-title{
+    padding: 0 0 40px 0;
+}
+.panel.stretch .panel-body .panel-content{
+    height: 100%;
+    overflow: auto;
+    padding: 10px;
+}
+
+
+.full-size .map-container .widget,
+.full-size .map-container .widget .ng-scope,
+.full-size .map-container .widget .in {
+    height: 100% !important;
+    width: 100%;
+}
+
+.ui-splitbar{
+    display: none;
+}
+
+.popover-content {
+    min-width: 220px;
+    min-height: 120px;
+}

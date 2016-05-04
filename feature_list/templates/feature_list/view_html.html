@@ -1,0 +1,36 @@
+<div ng-app="featureListApp" ng-controller="featureListController">
+	<div ui-layout="rowLayoutOptions" >
+		<div ui-layout-container="central" >
+			<div ui-layout="columnLayoutOptions" >
+
+				<div ui-layout-container size="25%" class="panel panel-default">
+					<div class="panel-heading">Feature List</div>
+					<div class="panel-body with-title">
+						<div class="panel-content">
+							<feature-list app-id="{{app_id}}"></feature-list>
+						</div>
+					</div>
+				</div>
+				<div ui-layout-container >
+					<cartoview-map map-id="{{app_id}}" disable-identify="true" config-url="{% url 'feature_list.map_config' %}?id={{app_id}}">
+					</cartoview-map>
+				</div>
+			</div>
+		</div>
+        <div id="popup"></div>
+
+	</div>
+    <script type="text/ng-template" id="popup.html">
+        {% verbatim %}
+
+            <table class="table table-bordered table-condensed table-striped">
+                <tbody>
+                    <tr ng-repeat="attrName in selectedItem.olFeature.getKeys()" ng-if="attrName!='geometry'">
+                        <th>{{ attrName }}</th>
+                        <td>{{ selectedItem.olFeature.get(attrName) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endverbatim %}
+    </script>
+</div>
