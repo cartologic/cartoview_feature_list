@@ -63,3 +63,8 @@ body{
     min-width: 220px;
     min-height: 120px;
 }
+.feature-list-popover{
+    min-width: 400px;
+    min-height: 400px;
+    height: auto;
+}

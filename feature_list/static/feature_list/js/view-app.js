@@ -222,7 +222,9 @@ featureListApp.directive('featureList', function($http) {
                         'animation': false,
                         'html': true,
                         title: $scope.selectedItem.title,
-                        'content': $compile(html)($scope)
+                        'content': $compile(html)($scope),
+                        template:'<div class="popover feature-list-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+
                     });
 
                     $(element).on('shown.bs.popover',function () {
