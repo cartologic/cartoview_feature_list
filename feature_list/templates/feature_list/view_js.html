@@ -13,7 +13,7 @@
 	var PROXY_URL = "{{ PROXY_URL }}";
 	var MEDIA_URL = "{{ MEDIA_URL }}";
 	var MAP_CONFIG_URL = "{% url 'feature_list.map_config' %}";
-	var appConfig = {{instance.map_config|safe}};
+	var appConfig = {{instance.config|safe}};
 	var STATIC_URL = "{{ STATIC_URL }}";
 	var ANGULAR_TEMPLATES_URL =  STATIC_URL + "feature_list/angular_templates/";
 </script>

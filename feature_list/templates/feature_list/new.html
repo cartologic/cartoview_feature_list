@@ -1,0 +1,63 @@
+{% extends "apps/new_instance.html" %}
+
+{% block new_instance_scripts %}
+    <script type="text/javascript">
+        window.angularAppDependencies = [];
+        {% if instance_id %}
+        window.instanceId = {{ instance_id }};
+        {% endif %}
+    </script>
+    {{ block.super }}
+{#    <script type="text/javascript" src="{{ STATIC_URL }}mobile_workforce/new_project.js"></script>#}
+{% endblock new_instance_scripts %}
+
+{#{% block config_field %}{% endblock config_field %}#}
+
+{% block angular_templates %}
+    {% verbatim %}
+    <script type="text/ng-template" id="config-fields.html">
+        <div>
+            <div class="form-group">
+                <label>Layer</label>
+                <select class="form-control" ng-model="instanceObj.config.layer" ng-change="changerLayer()"
+                    ng-options="layer.name as layer.title for layer in mapLayers">
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Display Field</label>
+                <select class="form-control" ng-model="instanceObj.config.displayField"
+                    ng-options="attribute.name as attribute.title  for attribute in layerAttributes">
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Search Fields</label>
+                <div  style="display: inline-block;">
+                    <div class="checkbox col-lg-4 col-md-6"
+                         ng-repeat="attribute in layerAttributes"
+                         ng-if="isString(attribute)">
+                        <label>
+                            <input type="checkbox" ng-checked="instanceObj.config.searchFields.indexOf(attribute.name) != -1"
+                                   ng-click="toggleSelection(instanceObj.config.searchFields, attribute)">
+                            {{ attribute.title }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Fields to display in results</label>
+                <div style="display: inline-block;">
+                    <div class="checkbox col-lg-4 col-md-6"
+                         ng-repeat="attribute in layerAttributes"
+                         ng-if="canDisplay(attribute)">
+                        <label>
+                            <input type="checkbox" ng-checked="instanceObj.config.detailsFields.indexOf(attribute.name) != -1"
+                                   ng-click="toggleSelection(instanceObj.config.detailsFields, attribute)">
+                            {{ attribute.title }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    {% endverbatim %}
+{% endblock angular_templates %}
