@@ -1,4 +1,22 @@
-angular.module('cartoview.mapViewerApp').directive('featureList', function($http) {
+var featureListApp = angular.module('featureListApp', [
+    'ui.layout',
+    'ui.bootstrap',
+    'cartoview.map'
+]);
+featureListApp.controller('featureListController', function($scope) {
+    // appConfig is a global variable set in django template
+    //TODO: use angular service to get
+    $scope.appConfig = appConfig;
+    $scope.rowLayoutOptions = {
+        dividerSize: 0
+    };
+    $scope.columnLayoutOptions = {
+        flow: 'column',
+        dividerSize: 0
+    };
+
+});
+featureListApp.directive('featureList', function($http) {
 
     var selectedPointStyle = new ol.style.Style({
         image: new ol.style.Circle({
@@ -63,9 +81,9 @@ angular.module('cartoview.mapViewerApp').directive('featureList', function($http
             outputFormat: 'application/json',
             srsname: 'EPSG:3857'
         };
-        url = CARTOVIEW_PROXY_URL + "wfs";
+        url = PROXY_URL + encodeURIComponent(url + "?" + $.param(params));
         $http.get(url, {
-            params: params
+            //params: params
         }).success(function(data) {
             var vectorSource = new ol.source.Vector({
                 features: geojsonFormat.readFeatures(data)
@@ -96,28 +114,11 @@ angular.module('cartoview.mapViewerApp').directive('featureList', function($http
         restrict: 'E',
         transclude: true,
         replace: true,
-        template: "",
-
-        controller: function($scope, mapService, instanceConfig) {
-            mapService.get().then(function(){
-                console.debug(instanceConfig);
-                console.debug(mapService);
-                console.debug("---------------------------/////////-----------------------");
-                instanceConfig.layers.forEach(function(layerConfig) {
-                    var wmsLayer = getWMSLayer(layerConfig.name, mapService.map.overlays);
-                    wmsLayer.setVisible(false);
-                    var url = wmsLayer.get('source').getUrls()[0];
-                    createWFSLayer(url, layerConfig, $scope);
-                    var view = mapService.map.olMap.getView();
-                    //$scope.search.extent = view.calculateExtent($scope.map.olMap.getSize())
-                    // view.on('propertychange', function() {
-                    //     $scope.search.extent = view.calculateExtent($scope.map.olMap.getSize())
-                    // });
-                });
-
-
-            });
-            return;
+        templateUrl: ANGULAR_TEMPLATES_URL + "feature-list.html",
+        scope: {
+            appId: "@"
+        },
+        controller: function($scope, $element, $compile, $http, $uibModal, mapService, $templateRequest, ngeoDebounce) {
             angular.extend($scope, {
                 map: mapService.get($scope.appId),
                 data: [],
