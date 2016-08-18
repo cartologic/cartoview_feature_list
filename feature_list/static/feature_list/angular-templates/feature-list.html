@@ -1,5 +1,3 @@
-
-
 <md-content class="map-results">
     <div ng-repeat="result in featureList.content.results">
         <md-list  ng-show="!featureList.selected">
@@ -11,13 +9,24 @@
                 <md-divider ng-if="!$last"></md-divider>
             </md-list-item>
         </md-list>
-
     </div>
-    <div ng-show="featureList.selected">
+    <div ng-if="featureList.selected">
         <md-button ng-click="featureList.selectFeature()" aria-label>
             <md-icon class="material-icons">arrow_back</md-icon>
         </md-button>
-        <div dynamic-template template="featureList.selected.result.detailsTpl" feature="featureList.selected"></div>
+
+        <md-tabs md-dynamic-height md-border-bottom>
+            <md-tab label="Details">
+                <div dynamic-template template="featureList.selected.result.detailsTpl" feature="featureList.selected"></div>
+            </md-tab>
+            <md-tab label="Comments">
+                <cartoview-comments identifier="{{ featureList.appConfig.id }}-{{ featureList.selected.getId() }}"></cartoview-comments>
+            </md-tab>
+            <md-tab label="Images">
+                <cartoview-images identifier="{{ featureList.appConfig.id }}-{{ featureList.selected.getId() }}"></cartoview-images>
+            </md-tab>
+        </md-tabs>
+
     </div>
 </md-content>
 

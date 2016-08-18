@@ -1,9 +1,10 @@
 /**
  * Created by kamal on 7/3/16.
  */
-angular.module('cartoview.mapViewerApp').service('featureListService', function(mapService, urlsHelper, $http, appConfig, $rootScope) {
+angular.module('cartoview.featureListApp').service('featureListService', function(mapService, urlsHelper, $http, appConfig, $rootScope) {
     var DEFAULT_ITEM_TPL = urlsHelper.static + "viewer/angular-templates/view/default-list-item-tpl.html";
     var service = this;
+    service.appConfig = appConfig;
     service.content = {
         results: []
     };
@@ -58,6 +59,8 @@ angular.module('cartoview.mapViewerApp').service('featureListService', function(
             // feature.result = result;
             feature.set('isSelected', true);
         }
+        console.debug(service.selected)
+        console.debug(service)
     };
 
     var defaultPointStyle = new ol.style.Style({
@@ -135,7 +138,7 @@ angular.module('cartoview.mapViewerApp').service('featureListService', function(
         angular.forEach(appConfig.featureList.layers, function (layerConfig, layerName) {
             if (!layerConfig.included) return;
             var wmsLayer = getWMSLayer(layerName);
-            wmsLayer.setVisible(false);
+            // wmsLayer.setVisible(false);
             var result = {
                 layer: wmsLayer,
                 features: [],
@@ -173,139 +176,4 @@ angular.module('cartoview.mapViewerApp').service('featureListService', function(
             });
         });
     }
-});
-///////========================================///////////////////////////////////////////////////////////////////
-///////========================================///////////////////////////////////////////////////////////////////
-///////========================================///////////////////////////////////////////////////////////////////
-///////========================================///////////////////////////////////////////////////////////////////
-///////========================================///////////////////////////////////////////////////////////////////
-///////========================================///////////////////////////////////////////////////////////////////
-///////========================================///////////////////////////////////////////////////////////////////
-///////========================================///////////////////////////////////////////////////////////////////
-///////========================================///////////////////////////////////////////////////////////////////
-///////========================================///////////////////////////////////////////////////////////////////
-///////========================================///////////////////////////////////////////////////////////////////
-angular.module('cartoview.mapViewerApp').service('aaService', function($http, urlsHelper, mapService, appConfig) {
-    var service = this;
-    var selectedPointStyle = new ol.style.Style({
-        image: new ol.style.Circle({
-            fill: new ol.style.Fill({
-                color: '#ff0000'
-            }),
-            stroke: new ol.style.Stroke({
-                color: '#ffccff'
-            }),
-            radius: 8
-        })
-    });
-    var selectedPolygonStyle = new ol.style.Style({
-        stroke: new ol.style.Stroke({
-            color: '#ff0000',
-            width: 2
-        })
-    });
-
-
-    function featureStyle(feature) {
-        return [new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: 5,
-                fill: new ol.style.Fill({
-                    color: 'rgba(230,120,30,0.7)'
-                })
-            })
-        })]
-    }
-
-    function getCenterOfExtent(Extent) {
-        var X = Extent[0] + (Extent[2] - Extent[0]) / 2;
-        var Y = Extent[1] + (Extent[3] - Extent[1]) / 2;
-        return [X, Y];
-    }
-
-    var geojsonFormat = new ol.format.GeoJSON();
-    var createWFSLayer = function (url, layerConfig) {
-        var params = {
-            service: 'WFS',
-            version: '2.0.0',
-            request: 'GetFeature',
-            typename: layerConfig.name,
-            outputFormat: 'application/json',
-            srsname: 'EPSG:3857'
-        };
-        url = urlsHelper.cartoviewProxy + "wfs";
-        $http.get(url, {
-            params: params
-        }).success(function (data) {
-            var vectorSource = new ol.source.Vector({
-                features: geojsonFormat.readFeatures(data)
-            });
-
-            var vector = new ol.layer.Vector({
-                source: vectorSource //,
-                // style: featureStyle
-            });
-            vector.set('selectable', true);
-            mapService.map.olMap.addLayer(vector);
-            vectorSource.getFeatures().forEach(function (olFeature, i) {
-                var item = {
-                    id: olFeature.getId(),
-                    layerName: layerConfig.name,
-                    vectorSource: vectorSource,
-                    olFeature: olFeature,
-                    title: (olFeature.get(layerConfig.displayField) || "").toString().trim()
-                };
-                olFeature.__item = item;
-                service.items.push(item)
-            });
-            //vectorSource.clear();
-        });
-
-    };
-
-    mapService.get().then(function () {
-
-        angular.forEach(appConfig.featureList.layers, function (layerConfig, layerName) {
-            if (!layerConfig.included) return;
-            var wmsLayer = getWMSLayer(layerName, mapService.map.overlays);
-            wmsLayer.setVisible(false);
-            var result = {
-                layer: wmsLayer,
-                features: [],
-                title: wmsLayer.get('title'),
-                listItemTpl: "default-list-item-tpl.html"
-            };
-            mapService.map.addContent(result);
-            var url = wmsLayer.get('source').getUrls()[0];
-            var params = {
-                service: 'WFS',
-                version: '2.0.0',
-                request: 'GetFeature',
-                typename: layerName,
-                outputFormat: 'application/json',
-                srsname: 'EPSG:3857'
-            };
-            url = urlsHelper.cartoviewGeoserverProxy + "wfs";
-            $http.get(url, {
-                params: params
-            }).success(function (data) {
-                result.features = geojsonFormat.readFeatures(data);
-                var vectorSource = new ol.source.Vector({
-                    features: result.features
-                });
-
-                var vector = new ol.layer.Vector({
-                    source: vectorSource //,
-                    // style: featureStyle
-                });
-                vector.set('selectable', true);
-                mapService.map.olMap.addLayer(vector);
-                vectorSource.getFeatures().forEach(function (f, i) {
-                    f.properties = f.getProperties();
-                    delete f.properties[f.getGeometryName()];
-                });
-
-            });
-        });
-    });
 });

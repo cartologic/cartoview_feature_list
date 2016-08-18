@@ -1,7 +1,7 @@
 /**
  * Created by kamal on 6/29/16.
  */
-angular.module('cartoview.mapViewerApp').directive('featureList',  function(urlsHelper) {
+angular.module('cartoview.featureListApp').directive('featureList',  function(urlsHelper) {
     return {
         restrict: 'E',
         replace: true,
@@ -12,7 +12,7 @@ angular.module('cartoview.mapViewerApp').directive('featureList',  function(urls
     }
 });
 
-angular.module('cartoview.mapViewerApp').directive('dynamicTemplate',  function($compile) {
+angular.module('cartoview.featureListApp').directive('dynamicTemplate',  function($compile) {
     return {
         restrict: 'A',
         scope: {

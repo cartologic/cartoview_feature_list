@@ -7,6 +7,7 @@ import json
 from django.conf import settings
 from viewer import views as viewer_views
 from .viewer_widgets import widgets
+
 from django.contrib.auth.decorators import login_required
 
 
