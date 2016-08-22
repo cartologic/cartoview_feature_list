@@ -68,3 +68,17 @@ body{
     min-height: 400px;
     height: auto;
 }
+@media only screen
+  and (max-width:  960px) {
+    .feature-list-ct {
+        height: 50%;
+    }
+}
+
+/*@media only screen*/
+  /*and (min-width: 736px)*/
+  /*and (max-width: 1200px){*/
+    /*.feature-list-ct {*/
+        /*height: 50%;*/
+    /*}*/
+/*}*/

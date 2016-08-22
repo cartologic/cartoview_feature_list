@@ -28,24 +28,25 @@
 {% endblock %}
 {% block body_directives %}ng-app="cartoview.featureListApp" ng-controller="cartoview.featureListApp.MainController"{% endblock %}
 {% block body %}
-    <div class="content-panel md-whiteframe-1dp has-content" layout="column" >
-        <md-content class="header" layout="row">
-            <md-button ng-click="toggleSidenav()" class="md-primary" >
-                <md-icon aria-label="Menu" class="material-icons">menu</md-icon>
-            </md-button>
-            <span flex></span>
-            <md-button ng-click="identify.clearContent()" class="md-primary" ng-show="identify.hasContent">
-                <md-icon aria-label="Menu" class="material-icons">close</md-icon>
-            </md-button>
-        </md-content>
-        <md-content flex class="content">
-            <feature-list ng-show="!identify.hasContent"></feature-list>
-            <identify-results ng-show="identify.hasContent"></identify-results>
-        </md-content>
-    </div>
-
-    <div class="ol3-map" flex cartoview-map>
-        <zoom-bar ng-if="config.showZoombar"></zoom-bar>
+    <div class="full-height" layout-align="space-around stretch" layout="row" layout-sm="column" layout-xs="column">
+        <div flex-gt-sm="30" class="md-whiteframe-1dp feature-list-ct" layout="column" >
+            <md-content class="header" layout="row">
+                <md-button ng-click="toggleSidenav()" class="md-primary" >
+                    <md-icon aria-label="Menu" class="material-icons">menu</md-icon>
+                </md-button>
+                <span flex></span>
+                <md-button ng-click="identify.clearContent()" class="md-primary" ng-show="identify.hasContent">
+                    <md-icon aria-label="Menu" class="material-icons">close</md-icon>
+                </md-button>
+            </md-content>
+            <md-content flex class="content">
+                <feature-list ng-show="!identify.hasContent"></feature-list>
+                <identify-results ng-show="identify.hasContent"></identify-results>
+            </md-content>
+        </div>
+        <div flex cartoview-map style="position: relative;">
+            <zoom-bar ng-if="config.showZoombar"></zoom-bar>
+        </div>
     </div>
     <md-sidenav md-component-id="left" class="md-sidenav-left md-whiteframe-z2 floating-menu">
         {% verbatim %}
