@@ -58,9 +58,9 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
         if(feature){
             // feature.result = result;
             feature.set('isSelected', true);
+            mapService.map.fit(feature.getGeometry());
         }
-        console.debug(service.selected)
-        console.debug(service)
+
     };
 
     var defaultPointStyle = new ol.style.Style({
