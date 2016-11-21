@@ -5,7 +5,7 @@ angular.module('cartoview.featureListApp').directive('featureList',  function(ur
     return {
         restrict: 'E',
         replace: true,
-        templateUrl: urlsHelper.static + "feature_list/angular-templates/feature-list.html",
+        templateUrl: urlsHelper.static + "cartoview_feature_list/angular-templates/feature-list.html",
         controller: function ($scope, featureListService) {
             $scope.featureList = featureListService;
         }

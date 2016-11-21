@@ -5,7 +5,7 @@ angular.module('cartoview.viewer.editor').directive('featureListConfig',  functi
     return {
         transclude: true,
         replace: true,
-        templateUrl: urlsHelper.static + "feature_list/angular-templates/config-fields.html?" + new Date().getTime(),
+        templateUrl: urlsHelper.static + "cartoview_feature_list/angular-templates/config-fields.html?" + new Date().getTime(),
         controller: function ($scope, dataService, $tastypieResource) {
             $scope.attributes = new $tastypieResource("geonodelayerattribute");
 
