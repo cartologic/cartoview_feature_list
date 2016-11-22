@@ -7,7 +7,8 @@
 > In the app configuration page select the content you want to display in the side panel
 
 __Tip__
-The item names need to be included inside a pair of curly braces {{itme name}}
+
+In the configuration form of the app. The item names need to be included inside a pair of curly braces {{itme name}}
 
 Download and Install:
 - [Download](http://cartologic.com/cartoview/download/) and install Cartoview 
