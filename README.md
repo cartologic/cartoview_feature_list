@@ -12,8 +12,8 @@ In the configuration form of the app. The item names need to be included inside 
 
 Download and Install:
 - [Download](http://cartologic.com/cartoview/download/) and install Cartoview 
--  Download the Simple Catalog from the app market, or you can directly download the zip file of this Github Repository
+-  Download the Feature List App from the app market, or you can directly download the zip file of this Github Repository
 - Start CartoView
     * login as admin
     * Apps > Upload and select the zip file you downloaded
-	* Go to the Apps page and click create new to create new Catalogs
+	* Go to the Apps page and click create new to create new Feature List Application
