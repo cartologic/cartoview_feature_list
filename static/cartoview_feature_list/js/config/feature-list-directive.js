@@ -1,7 +1,7 @@
 /**
  * Created by kamal on 6/29/16.
  */
-angular.module('cartoview.viewer.editor').directive('featureListConfig',  function(urlsHelper) {
+angular.module('cartoview.viewer.editor').directive('featureListConfig', function (urlsHelper) {
     return {
         transclude: true,
         replace: true,
@@ -19,33 +19,36 @@ angular.module('cartoview.viewer.editor').directive('featureListConfig',  functi
             var initialized = false;
             var populateLayers = function () {
                 $scope.mapLayers = [];
-                angular.forEach(dataService.selected.map.map_layers, function (layer) {
-                    if (!layer.fixed) {
-                        layer.params = JSON.parse(layer.layer_params);
-                        layersDict[layer.name] = layer;
-                        var layerInfo = {
-                            name: layer.name,
-                            title: layer.params.title
-                        };
-                        Object.defineProperty(layerInfo, 'included', {
-                            configurable: true,
-                            get: function () {
-                                return $scope.instanceObj.config.featureList.layers[layerInfo.name].included;
-                            },
-                            set: function (val) {
-                                $scope.instanceObj.config.featureList.layers[layerInfo.name].included = val;
-                                if(val){
-                                    $scope.initLayerConfig(layerInfo)
+                if (dataService.selected.map) {
+                    angular.forEach(dataService.selected.map.map_layers, function (layer) {
+                        if (!layer.fixed) {
+                            layer.params = JSON.parse(layer.layer_params);
+                            layersDict[layer.name] = layer;
+                            var layerInfo = {
+                                name: layer.name,
+                                title: layer.params.title
+                            };
+                            Object.defineProperty(layerInfo, 'included', {
+                                configurable: true,
+                                get: function () {
+                                    return $scope.instanceObj.config.featureList.layers[layerInfo.name].included;
+                                },
+                                set: function (val) {
+                                    $scope.instanceObj.config.featureList.layers[layerInfo.name].included = val;
+                                    if (val) {
+                                        $scope.initLayerConfig(layerInfo)
+                                    }
                                 }
-                            }
-                        });
-                        $scope.mapLayers.push(layerInfo);
+                            });
+                            $scope.mapLayers.push(layerInfo);
 
-                        if (!$scope.instanceObj.config.featureList.layers[layer.name]){
-                            $scope.instanceObj.config.featureList.layers[layer.name] = {};
+                            if (!$scope.instanceObj.config.featureList.layers[layer.name]) {
+                                $scope.instanceObj.config.featureList.layers[layer.name] = {};
+                            }
                         }
-                    }
-                });
+                    });
+                }
+
                 // if (!$scope.instanceObj.config.layers) {
                 //     $scope.instanceObj.config.layers = [];
                 // }
@@ -71,7 +74,7 @@ angular.module('cartoview.viewer.editor').directive('featureListConfig',  functi
             });
             $scope.initLayerConfig = function (layer) {
                 var config = $scope.instanceObj.config.featureList.layers[layer.name];
-                if(config.listItemTpl) return;
+                if (config.listItemTpl) return;
                 $scope.layerAttributes[layer.name] = [];
                 $scope.attributes.objects.$find({layer__typename: layer.name}).then(function () {
                     var featureDetailsTpl = ["<table>"];
@@ -82,10 +85,10 @@ angular.module('cartoview.viewer.editor').directive('featureListConfig',  functi
                             title: attr.attribute_label || (attr.attribute + " "), //add space to fix angular bug when name and title is the same it isn't select the attribute in the drop down
                             type: attr.attribute_type
                         });
-                        if (attr.attribute_type.indexOf("gml") != 0){
+                        if (attr.attribute_type.indexOf("gml") != 0) {
                             featureDetailsTpl.push("<tr>"
-                                +"<th>" + (attr.attribute_label || attr.attribute) + "</th>"
-                                +"<td>{{" + attr.attribute + "}}</td>"
+                                + "<th>" + (attr.attribute_label || attr.attribute) + "</th>"
+                                + "<td>{{" + attr.attribute + "}}</td>"
                                 + "</tr>");
                         }
                     });
