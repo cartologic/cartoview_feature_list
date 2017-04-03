@@ -1,7 +1,7 @@
 /**
  * Created by kamal on 7/3/16.
  */
-angular.module('cartoview.featureListApp').service('featureListService', function(mapService, urlsHelper, $http, appConfig, $rootScope,$mdSidenav) {
+angular.module('cartoview.featureListApp').service('featureListService', function (mapService, urlsHelper, $http, appConfig, $rootScope, $mdSidenav) {
     var DEFAULT_ITEM_TPL = urlsHelper.static + "viewer/angular-templates/view/default-list-item-tpl.html";
     var service = this;
     service.appConfig = appConfig;
@@ -11,10 +11,10 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
     var map = mapService.map;
     service.loading = 0;
     Object.defineProperty(this, 'hasContent', {
-        get: function() {
+        get: function () {
             var hasContent = false;
             service.content.results.forEach(function (result) {
-                if(result.features && result.features.length > 0){
+                if (result.features && result.features.length > 0) {
                     hasContent = true;
                     return false;
                 }
@@ -51,14 +51,15 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
 
     //results management
     service.selectFeature = function (feature) {
-        if(service.selected){
+        if (service.selected) {
             service.selected.set('isSelected', false);
         }
         service.selected = feature;
-        if(!$mdSidenav('right').isOpen()){
-            $mdSidenav('right').toggle()
-        }
-        if(feature){
+
+        if (feature) {
+            if (!$mdSidenav('right').isOpen()) {
+                $mdSidenav('right').toggle()
+            }
             // feature.result = result;
             feature.set('isSelected', true);
             mapService.map.fit(feature.getGeometry());
@@ -104,13 +105,12 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
 
     var styleResults = function (feature) {
         var polygonStyle = defaultPolygonStyle, pointStyle = defaultPointStyle;
-        if(feature.get('isSelected')){
+        if (feature.get('isSelected')) {
             polygonStyle = selectedPolygonStyle;
             pointStyle = selectedPointStyle;
         }
         return [polygonStyle, pointStyle];
     };
-
 
 
     mapService.get().then(function () {
@@ -124,7 +124,7 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
             layers: [service.resultsLayer]
         });
 
-        service.selectInteraction.on('select', function(event) {
+        service.selectInteraction.on('select', function (event) {
             var feature = event.selected[0];
             service.selectFeature(feature);
             $rootScope.$apply()
@@ -170,7 +170,7 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
                 result.features = new ol.format.GeoJSON().readFeatures(data);
                 result.features.forEach(function (f, index, features) {
                     f.result = result;
-                    if(typeof layerConfig.forEachFeature == 'function'){
+                    if (typeof layerConfig.forEachFeature == 'function') {
                         layerConfig.forEachFeature(f, index, features);
                     }
                 });
