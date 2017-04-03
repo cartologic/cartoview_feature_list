@@ -1,7 +1,7 @@
 /**
  * Created by kamal on 7/3/16.
  */
-angular.module('cartoview.featureListApp').service('featureListService', function(mapService, urlsHelper, $http, appConfig, $rootScope) {
+angular.module('cartoview.featureListApp').service('featureListService', function(mapService, urlsHelper, $http, appConfig, $rootScope,$mdSidenav) {
     var DEFAULT_ITEM_TPL = urlsHelper.static + "viewer/angular-templates/view/default-list-item-tpl.html";
     var service = this;
     service.appConfig = appConfig;
@@ -55,6 +55,9 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
             service.selected.set('isSelected', false);
         }
         service.selected = feature;
+        if(!$mdSidenav('right').isOpen()){
+            $mdSidenav('right').toggle()
+        }
         if(feature){
             // feature.result = result;
             feature.set('isSelected', true);

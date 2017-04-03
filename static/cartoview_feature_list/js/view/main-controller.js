@@ -11,4 +11,12 @@ angular.module('cartoview.featureListApp').controller('cartoview.featureListApp.
         };
         $scope.map = mapService.map;
         $scope.identify = identifyService;
+        $scope.sideRight = false;
+        $scope.isOpenRight = function () {
+            // return $mdSidenav('right').toggle();
+            $mdSidenav('left').close().then(function () {
+                $scope.sideRight = true;
+            });
+
+        };
 });
