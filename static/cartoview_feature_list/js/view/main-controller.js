@@ -4,13 +4,13 @@
 
 
 angular.module('cartoview.featureListApp').controller('cartoview.featureListApp.MainController',
-    function($scope, mapService, $mdSidenav, $mdMedia, $mdDialog, appConfig){
+    function ($scope, mapService, $mdSidenav, $mdMedia, $mdDialog, appConfig) {
         $scope.config = appConfig;
-        $scope.toggleSidenav = function() {
+        $scope.toggleSidenav = function () {
             return $mdSidenav('left').toggle();
         };
         $scope.map = mapService.map;
-        $scope.sideRight = false;
+        $scope.sideRight = true;
         $scope.isOpenRight = function () {
             // return $mdSidenav('right').toggle();
             $mdSidenav('left').close().then(function () {
@@ -18,4 +18,10 @@ angular.module('cartoview.featureListApp').controller('cartoview.featureListApp.
             });
 
         };
-});
+        $scope.closeCommentNav = function () {
+            $mdSidenav('comment').close();
+        };
+        $scope.closeImageNav=function () {
+            $mdSidenav('image').close();
+        }
+    });

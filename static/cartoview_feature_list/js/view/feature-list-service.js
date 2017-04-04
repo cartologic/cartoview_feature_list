@@ -66,6 +66,24 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
         }
 
     };
+    service.commentNav = function () {
+        if ($mdSidenav('image').isOpen()) {
+            $mdSidenav('image').close();
+            $mdSidenav('comment').toggle();
+
+        } else {
+            $mdSidenav('comment').toggle();
+        }
+    };
+    service.imageNav = function () {
+        if ($mdSidenav('comment').isOpen()) {
+            $mdSidenav('comment').close();
+            $mdSidenav('image').toggle();
+
+        } else {
+            $mdSidenav('image').toggle();
+        }
+    };
 
     var defaultPointStyle = new ol.style.Style({
         image: new ol.style.Circle({

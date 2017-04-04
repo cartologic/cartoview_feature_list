@@ -10,6 +10,25 @@
         {% for css_url in w.view.css %}
             <link rel="stylesheet" href="{{ css_url }}">{% endfor %}
     {% endfor %}
+    <style>
+        .map-results table {
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+            margin-top: 10px;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        {#        .map-results table,th,td{#}
+        {#            border: 1px solid black;#}
+        {#        }#}
+        .map-results th, td {
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+    </style>
 {% endblock %}
 {% block scripts %}
     <script type="text/javascript" src="{{ STATIC_URL }}vendor/ol3/ol.js"></script>
@@ -21,7 +40,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/map-directive.js"></script>
     <script type="text/javascript"
             src="{{ STATIC_URL }}cartoview_map_viewer/js/view/basic-controls-directives.js"></script>
-<!--    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/identify-service.js"></script>-->
+    <!--    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/identify-service.js"></script>-->
     <!--<script type="text/javascript"
             src="{{ STATIC_URL }}cartoview_map_viewer/js/view/identify-results-directive.js"></script>-->
     <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/widget-view-directive.js"></script>
@@ -50,16 +69,6 @@
 
 
     </div>
-    {% verbatim %}
-    <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-is-open="sideRight" md-component-id="right">
-        <md-content flex class="content">
-            <feature-list ng-show="!identify.hasContent && !collectorService.form.visible"></feature-list>
-            <!--<identify-results ng-show="identify.hasContent && !collectorService.form.visible"></identify-results>-->
-            <!--<collector-add-item-form ng-show="collectorService.form.visible"></collector-add-item-form>-->
-        </md-content>
-
-    </md-sidenav>
-    {% endverbatim %}
     <div class="full-height" layout-align="space-around stretch" layout="row" layout-sm="column" layout-xs="column">
         <!--<div flex-gt-sm="30" class="md-whiteframe-1dp feature-list-ct" layout="column">
             <md-content class="header" layout="row">
@@ -107,18 +116,43 @@
             <toggle-button toggle="baseMapsSwitcherVisible" title="Base Maps" icon="satellite"></toggle-button>
             <basemaps-switcher ng-show="baseMapsSwitcherVisible"></basemaps-switcher>
         </div>
-        <md-button class="md-list-item-content" ng-click="isOpenRight()">
+        <!--<md-button class="md-list-item-content" ng-click="isOpenRight()">
             <md-icon class="material-icons floating-menu-item-icon">list</md-icon>
             <span class="md-inline-list-icon-label">List All Features</span>
-        </md-button>
+        </md-button>-->
         {% endverbatim %}
     </md-sidenav>
     {% verbatim %}
-    <md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-is-open="sideRight" md-component-id="right">
+    <md-sidenav class="md-sidenav-right md-whiteframe-4dp" style="width: 18em;" md-is-open="sideRight"
+                md-disable-backdrop="true" md-component-id="right">
         <md-content flex class="content">
             <feature-list ng-show="!identify.hasContent && !collectorService.form.visible"></feature-list>
             <!--<identify-results ng-show="identify.hasContent && !collectorService.form.visible"></identify-results>
             <collector-add-item-form ng-show="collectorService.form.visible"></collector-add-item-form>-->
+        </md-content>
+
+    </md-sidenav>
+    {% endverbatim %}
+    {% verbatim %}
+    <md-sidenav class="md-sidenav-right md-whiteframe-2dp" style="left: 79%;width: 20em;" md-disable-backdrop="true"
+                md-component-id="comment">
+        <md-button ng-click="closeCommentNav()" aria-label>
+            <md-icon class="material-icons">close</md-icon>
+        </md-button>
+        <md-content flex class="content" style="padding-left:20px;padding-right:20px">
+            <cartoview-comments
+                    identifier="{{ featureList.appConfig.id }}-{{ featureList.selected.getId() }}"></cartoview-comments>
+        </md-content>
+
+    </md-sidenav>
+    <md-sidenav class="md-sidenav-right md-whiteframe-2dp" style="left: 79%;width: 20em;" md-disable-backdrop="true"
+                md-component-id="image">
+        <md-button ng-click="closeImageNav()" aria-label>
+            <md-icon class="material-icons">close</md-icon>
+        </md-button>
+        <md-content flex class="content" style="padding-left:20px;padding-right:20px">
+            <cartoview-images
+                    identifier="{{ featureList.appConfig.id }}-{{ featureList.selected.getId() }}"></cartoview-images>
         </md-content>
 
     </md-sidenav>

@@ -1,31 +1,38 @@
 <md-content class="map-results">
     <div ng-repeat="result in featureList.content.results">
-        <md-list  ng-show="!featureList.selected">
+        <md-list ng-show="!featureList.selected">
             <md-list-item class="map-results-header"><h4>{{ result.title }}</h4></md-list-item>
+            <md-divider ></md-divider>
             <md-list-item aria-label=""
-                ng-repeat="feature in result.features"
-                ng-click="featureList.selectFeature(feature)">
+                          ng-repeat="feature in result.features"
+                          ng-click="featureList.selectFeature(feature)">
                 <p dynamic-template template="result.itemTpl" feature="feature"></p>
                 <md-divider ng-if="!$last"></md-divider>
             </md-list-item>
         </md-list>
     </div>
     <div ng-if="featureList.selected">
-        <md-button ng-click="featureList.selectFeature()" aria-label>
-            <md-icon class="material-icons">arrow_back</md-icon>
-        </md-button>
+        <div layout="row">
+            <div flex style="text-align: center;">
+                <md-button class="md-icon-button" ng-click="featureList.selectFeature()" aria-label>
+                    <md-icon class="material-icons">arrow_back</md-icon>
+                </md-button>
+            </div>
+            <div flex style="text-align: center;">
+                <md-button class="md-icon-button" ng-click="featureList.commentNav()" aria-label>
+                    <md-icon class="material-icons">chat</md-icon>
+                </md-button>
+            </div>
+            <div flex style="text-align: center;">
+                <md-button class="md-icon-button" ng-click="featureList.imageNav()" aria-label>
+                    <md-icon class="material-icons">perm_media</md-icon>
+                </md-button>
+            </div>
+        </div>
+        <md-divider></md-divider>
 
-        <md-tabs md-dynamic-height md-border-bottom>
-            <md-tab label="Details">
-                <div dynamic-template template="featureList.selected.result.detailsTpl" feature="featureList.selected"></div>
-            </md-tab>
-            <md-tab label="Comments">
-                <cartoview-comments identifier="{{ featureList.appConfig.id }}-{{ featureList.selected.getId() }}"></cartoview-comments>
-            </md-tab>
-            <md-tab label="Images">
-                <cartoview-images identifier="{{ featureList.appConfig.id }}-{{ featureList.selected.getId() }}"></cartoview-images>
-            </md-tab>
-        </md-tabs>
+
+        <div dynamic-template template="featureList.selected.result.detailsTpl" feature="featureList.selected"></div>
 
     </div>
 </md-content>
