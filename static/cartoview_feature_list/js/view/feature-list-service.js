@@ -51,15 +51,20 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
 
     //results management
     service.selectFeature = function (feature) {
+        if ($mdSidenav('comment').isOpen()) {
+            $mdSidenav('comment').close()
+        }
+        if ($mdSidenav('image').isOpen()) {
+            $mdSidenav('image').close()
+        }
         if (service.selected) {
             service.selected.set('isSelected', false);
         }
         service.selected = feature;
 
         if (feature) {
-            if (!$mdSidenav('right').isOpen()) {
-                $mdSidenav('right').toggle()
-            }
+
+
             // feature.result = result;
             feature.set('isSelected', true);
             mapService.map.fit(feature.getGeometry());
