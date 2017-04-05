@@ -1,4 +1,5 @@
 {% extends "cartoview/base.html" %}
+{% load static %}
 {% block title %}
     {{ block.super }} - {{ instance.title }}
 {% endblock %}
@@ -11,6 +12,10 @@
             <link rel="stylesheet" href="{{ css_url }}">{% endfor %}
     {% endfor %}
     <style>
+        .content-ct-inner {
+            overflow: hidden;
+        }
+
         .map-results table {
             margin-left: auto;
             margin-right: auto;
@@ -20,15 +25,21 @@
             border-bottom: 1px solid #ddd;
         }
 
-        {#        .map-results table,th,td{#}
-        {#            border: 1px solid black;#}
-        {#        }#}
         .map-results th, td {
             border-bottom: 1px solid #ddd;
             text-align: center;
         }
 
+        .md-sidenav {
+            min-width: 40%;
+        }
+
+        #location {
+            left: auto;
+            right: 41%
+        }
     </style>
+    <link rel="stylesheet" href="{% static 'cartoview_feature_list/css/responsive.css' %}">
 {% endblock %}
 {% block scripts %}
     <script type="text/javascript" src="{{ STATIC_URL }}vendor/ol3/ol.js"></script>
@@ -86,7 +97,8 @@
             </md-content>
         </div>-->
         <div flex cartoview-map style="position: relative;">
-            <zoom-bar style="position: absolute;right: auto;left: 10px;bottom: 10px;top: auto;" ng-if="config.showZoombar"></zoom-bar>
+            <zoom-bar style="position: absolute;right: auto;left: 10px;bottom: 10px;top: auto;"
+                      ng-if="config.showZoombar"></zoom-bar>
         </div>
     </div>
     <md-sidenav md-component-id="left" class="md-sidenav-left md-whiteframe-z2 floating-menu">
@@ -123,7 +135,7 @@
         {% endverbatim %}
     </md-sidenav>
     {% verbatim %}
-    <md-sidenav class="md-sidenav-right md-whiteframe-4dp" style="width: 18em;" md-is-open="sideRight"
+    <md-sidenav class="md-sidenav md-sidenav-right md-whiteframe-4dp" md-is-open="sideRight"
                 md-disable-backdrop="true" md-component-id="right">
         <md-content flex class="content">
             <feature-list ng-show="!identify.hasContent && !collectorService.form.visible"></feature-list>
@@ -134,7 +146,7 @@
     </md-sidenav>
     {% endverbatim %}
     {% verbatim %}
-    <md-sidenav class="md-sidenav-right md-whiteframe-2dp" style="left: 79%;width: 20em;" md-disable-backdrop="true"
+    <md-sidenav class="md-sidenav md-sidenav-right md-whiteframe-2dp" md-disable-backdrop="true"
                 md-component-id="comment">
         <md-button ng-click="closeCommentNav()" aria-label>
             <md-icon class="material-icons">close</md-icon>
@@ -145,13 +157,14 @@
         </md-content>
 
     </md-sidenav>
-    <md-sidenav class="md-sidenav-right md-whiteframe-2dp" style="left: 79%;width: 20em;" md-disable-backdrop="true"
+    <md-sidenav class="md-sidenav md-sidenav-right md-whiteframe-2dp" md-disable-backdrop="true"
                 md-component-id="image">
         <md-button ng-click="closeImageNav()" aria-label>
             <md-icon class="material-icons">close</md-icon>
         </md-button>
         <md-content flex class="content" style="padding-left:20px;padding-right:20px">
-            <cartoview-images identifier="{{ featureList.appConfig.id }}-{{ featureList.selected.getId() }}"></cartoview-images>
+            <cartoview-images
+                    identifier="{{ featureList.appConfig.id }}-{{ featureList.selected.getId() }}"></cartoview-images>
         </md-content>
 
     </md-sidenav>

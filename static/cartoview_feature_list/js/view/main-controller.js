@@ -21,7 +21,25 @@ angular.module('cartoview.featureListApp').controller('cartoview.featureListApp.
         $scope.closeCommentNav = function () {
             $mdSidenav('comment').close();
         };
-        $scope.closeImageNav=function () {
+        $scope.closeImageNav = function () {
             $mdSidenav('image').close();
-        }
+        };
+        $scope.commentNav = function () {
+            if ($mdSidenav('image').isOpen()) {
+                $mdSidenav('image').close();
+                $mdSidenav('comment').toggle();
+
+            } else {
+                $mdSidenav('comment').toggle();
+            }
+        };
+        $scope.imageNav = function () {
+            if ($mdSidenav('comment').isOpen()) {
+                $mdSidenav('comment').close();
+                $mdSidenav('image').toggle();
+
+            } else {
+                $mdSidenav('image').toggle();
+            }
+        };
     });
