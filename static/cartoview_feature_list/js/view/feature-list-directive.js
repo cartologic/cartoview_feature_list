@@ -6,8 +6,11 @@ angular.module('cartoview.featureListApp').directive('featureList',  function(ur
         restrict: 'E',
         replace: true,
         templateUrl: urlsHelper.static + "cartoview_feature_list/angular-templates/feature-list.html",
-        controller: function ($scope, featureListService) {
+        controller: function ($scope, featureListService,$timeout) {
             $scope.featureList = featureListService;
+            $scope.getIdentifier = function () {
+            return featureListService.appConfig.id+ "-" + featureListService.selected.getId();
+        }
         }
     }
 });

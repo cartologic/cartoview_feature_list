@@ -1,7 +1,7 @@
 /**
  * Created by kamal on 7/3/16.
  */
-angular.module('cartoview.featureListApp').service('featureListService', function (mapService, urlsHelper, $http, appConfig, $rootScope, $mdSidenav) {
+angular.module('cartoview.featureListApp').service('featureListService', function (mapService, urlsHelper, $http, appConfig, $rootScope) {
     var DEFAULT_ITEM_TPL = urlsHelper.static + "viewer/angular-templates/view/default-list-item-tpl.html";
     var service = this;
     service.appConfig = appConfig;
@@ -51,12 +51,6 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
 
     //results management
     service.selectFeature = function (feature) {
-        if ($mdSidenav('comment').isOpen()) {
-            $mdSidenav('comment').close()
-        }
-        if ($mdSidenav('image').isOpen()) {
-            $mdSidenav('image').close()
-        }
         if (service.selected) {
             service.selected.set('isSelected', false);
         }
@@ -70,24 +64,6 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
             mapService.map.fit(feature.getGeometry());
         }
 
-    };
-    service.commentNav = function () {
-        if ($mdSidenav('image').isOpen()) {
-            $mdSidenav('image').close();
-            $mdSidenav('comment').toggle();
-
-        } else {
-            $mdSidenav('comment').toggle();
-        }
-    };
-    service.imageNav = function () {
-        if ($mdSidenav('comment').isOpen()) {
-            $mdSidenav('comment').close();
-            $mdSidenav('image').toggle();
-
-        } else {
-            $mdSidenav('image').toggle();
-        }
     };
 
     var defaultPointStyle = new ol.style.Style({
@@ -140,6 +116,7 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
         service.resultsLayer = new ol.layer.Vector({
             source: new ol.source.Vector(),
             visible: true,
+            opacity:0,
             style: styleResults
         });
         map.olMap.addLayer(service.resultsLayer);
@@ -150,7 +127,7 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
         service.selectInteraction.on('select', function (event) {
             var feature = event.selected[0];
             service.selectFeature(feature);
-            $rootScope.$apply()
+            $rootScope.$apply();
         });
         map.olMap.addInteraction(service.selectInteraction);
 
@@ -159,6 +136,7 @@ angular.module('cartoview.featureListApp').service('featureListService', functio
         service.refresh();
     });
     service.refresh = function () {
+
         var resultsVectorSource = service.resultsLayer.get('source');
         service.clearContent();
         angular.forEach(appConfig.featureList.layers, function (layerConfig, layerName) {

@@ -4,8 +4,8 @@
             <md-list-item class="map-results-header"><h4>{{ result.title }}</h4></md-list-item>
             <md-divider></md-divider>
             <md-list-item
-                          ng-repeat="feature in result.features" aria-label="{{ featue }}"
-                          ng-click="featureList.selectFeature(feature)">
+                    ng-repeat="feature in result.features" aria-label="{{ featue }}"
+                    ng-click="featureList.selectFeature(feature)">
                 <p dynamic-template template="result.itemTpl" feature="feature"></p>
                 <md-divider ng-if="!$last"></md-divider>
             </md-list-item>
@@ -18,35 +18,15 @@
                     <md-icon class="material-icons">arrow_back</md-icon>
                 </md-button>
             </div>
-            <!--<div flex style="text-align: center;">
-                <md-button class="md-icon-button" ng-click="commentNav()" aria-label>
-                    <md-icon class="material-icons">chat</md-icon>
-                </md-button>
-            </div>
-            <div flex style="text-align: center;">
-                <md-button class="md-icon-button" ng-click="imageNav()" aria-label>
-                    <md-icon class="material-icons">perm_media</md-icon>
-                </md-button>
-            </div>-->
         </div>
         <md-divider></md-divider>
 
-
+        <cartoview-images ng-if="featureList.selected"
+                          identifier="{{ getIdentifier() }}"></cartoview-images>
+        <md-divider></md-divider>
         <div dynamic-template template="featureList.selected.result.detailsTpl" feature="featureList.selected"></div>
-        <div layout="row" style="text-align: center">
-            <div flex="50">
-                <md-button class="md-primary" ng-click="commentNav()" aria-label="Comments">
-                    <md-icon class="material-icons">chat</md-icon>
-                    Comment
-                </md-button>
-            </div>
-            <div flex="50">
-                <md-button class="md-primary" ng-click="imageNav()" aria-label="Images">
-                    <md-icon class="material-icons">perm_media</md-icon>
-                    Images
-                </md-button>
-            </div>
-        </div>
+        <cartoview-comments ng-if="featureList.selected"
+                            identifier="{{ getIdentifier() }}"></cartoview-comments>
     </div>
 </md-content>
 

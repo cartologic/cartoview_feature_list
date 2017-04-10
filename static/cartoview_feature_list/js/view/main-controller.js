@@ -4,8 +4,9 @@
 
 
 angular.module('cartoview.featureListApp').controller('cartoview.featureListApp.MainController',
-    function ($scope, mapService, $mdSidenav, $mdMedia, $mdDialog, appConfig) {
+    function ($scope, mapService, featureListService, $mdSidenav, $mdMedia, $mdDialog, appConfig) {
         $scope.config = appConfig;
+        $scope.featureList = featureListService;
         $scope.toggleSidenav = function () {
             return $mdSidenav('left').toggle();
         };
@@ -18,28 +19,35 @@ angular.module('cartoview.featureListApp').controller('cartoview.featureListApp.
             });
 
         };
-        $scope.closeCommentNav = function () {
-            $mdSidenav('comment').close();
+        if (featureListService.selected) {
+            console.log(featureListService.selected.getId())
+        }
+        $scope.getIdentifier = function () {
+            return featureListService.appConfig.id + "-" + featureListService.selected.getId();
         };
-        $scope.closeImageNav = function () {
-            $mdSidenav('image').close();
-        };
-        $scope.commentNav = function () {
-            if ($mdSidenav('image').isOpen()) {
-                $mdSidenav('image').close();
-                $mdSidenav('comment').toggle();
+        $scope.mobile = false;
+        $scope.mapShow = true;
+        if (window.innerWidth <= 800) {
+            $scope.mobile = true;
+        }
+        else {
+            $scope.mobile = false;
+        }
+        $(window).on("resize.doResize", function () {
 
-            } else {
-                $mdSidenav('comment').toggle();
-            }
+            $scope.$apply(function () {
+                if (window.innerWidth <= 800) {
+                    $scope.mobile = true;
+                }
+                else {
+                    $scope.mobile = false;
+                }
+            });
+        });
+        $scope.showhideList = function () {
+            $scope.mapShow = !$scope.mapShow
         };
-        $scope.imageNav = function () {
-            if ($mdSidenav('comment').isOpen()) {
-                $mdSidenav('comment').close();
-                $mdSidenav('image').toggle();
-
-            } else {
-                $mdSidenav('image').toggle();
-            }
+        $scope.closeSidenav = function () {
+            $mdSidenav('left').close();
         };
     });
