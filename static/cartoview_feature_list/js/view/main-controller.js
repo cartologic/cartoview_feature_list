@@ -41,6 +41,7 @@ angular.module('cartoview.featureListApp').controller('cartoview.featureListApp.
                 }
                 else {
                     $scope.mobile = false;
+                    $scope.mapShow = true;
                 }
             });
         });

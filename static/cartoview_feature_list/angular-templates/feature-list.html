@@ -21,7 +21,7 @@
         </div>
         <md-divider></md-divider>
 
-        <cartoview-images ng-if="featureList.selected"
+        <cartoview-images layout-fill ng-if="featureList.selected"
                           identifier="{{ getIdentifier() }}"></cartoview-images>
         <md-divider></md-divider>
         <div dynamic-template template="featureList.selected.result.detailsTpl" feature="featureList.selected"></div>

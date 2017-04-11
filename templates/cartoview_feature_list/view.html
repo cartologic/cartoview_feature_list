@@ -121,7 +121,7 @@
             </div>
             <feature-list></feature-list>
         </div>
-        <div ng-if="mobile && !mapShow" flex style="overflow: auto">
+        <div ng-if="mobile && !mapShow" ng-show="mobile && !mapShow" flex style="overflow: auto">
             <div layout="row">
                 <md-button ng-click="toggleSidenav()" class="md-primary">
                     <md-icon aria-label="Menu" class="material-icons">menu</md-icon>
