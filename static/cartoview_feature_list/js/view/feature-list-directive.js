@@ -8,7 +8,9 @@ angular.module('cartoview.featureListApp').directive('featureList', function (ur
         templateUrl: urlsHelper.static + "cartoview_feature_list/angular-templates/feature-list.html",
         controller: function ($scope, featureListService, $timeout) {
             $scope.featureList = featureListService;
+            $scope.detailsTPL = urlsHelper.static + "cartoview_feature_list/angular-templates/details.html";
             $scope.getIdentifier = function () {
+                console.log("######", featureListService.selected.getProperties(), featureListService.selected.getKeys(), featureListService.selected.getprope)
                 return featureListService.appConfig.id + "-" + featureListService.selected.getId();
             };
             $scope.gallary = false;
@@ -26,7 +28,21 @@ angular.module('cartoview.featureListApp').directive('featureList', function (ur
         }
     }
 });
-
+angular.module('cartoview.featureListApp').directive('featureTemplate', function (urlsHelper) {
+    return {
+        restrict: 'E',
+        templateUrl: urlsHelper.static + "cartoview_feature_list/angular-templates/details.html",
+        controller: function ($scope, $element, featureListService) {
+            $scope.feature = featureListService.selected;
+            $scope.valid = function (attr) {
+                if (attr == "geometry" || attr == "isSelected") {
+                    return false
+                }
+                return true
+            }
+        }
+    }
+});
 angular.module('cartoview.featureListApp').directive('dynamicTemplate', function ($compile) {
     return {
         restrict: 'A',

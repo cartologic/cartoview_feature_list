@@ -1,5 +1,8 @@
 <md-content class="map-results">
-    <div ng-repeat="result in featureList.content.results">
+    <div ng-if="featureList.loading" layout="row"  layout-sm="column" style="padding-top: 100px;overflow: hidden" layout-align="space-around">
+      <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+    </div>
+    <div ng-if="!featureList.loading" ng-repeat="result in featureList.content.results">
         <md-list ng-show="!featureList.selected">
             <md-list-item class="map-results-header"><h4>{{ result.title }}</h4></md-list-item>
             <md-divider></md-divider>
@@ -24,7 +27,7 @@
         <cartoview-images layout-fill ng-if="featureList.selected"
                           identifier="{{ getIdentifier() }}"></cartoview-images>
         <md-divider></md-divider>
-        <div dynamic-template template="featureList.selected.result.detailsTpl" feature="featureList.selected"></div>
+        <feature-template ></feature-template>
         <cartoview-comments ng-if="featureList.selected"
                             identifier="{{ getIdentifier() }}"></cartoview-comments>
     </div>

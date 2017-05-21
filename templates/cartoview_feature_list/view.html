@@ -68,6 +68,42 @@
             bottom: 100px
         }
 
+        .no-js #loader {
+            display: none;
+        }
+
+        .js #loader {
+            display: block;
+            position: absolute;
+            left: 100px;
+            top: 0;
+        }
+
+        .se-pre-con {
+            position: fixed;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: url({% static 'cartoview_feature_list/loading.gif' %}) center no-repeat #fff;
+        }
+
+        #zoom {
+            position: fixed;
+            right: 10px;
+            left: auto;
+            bottom: 10px;
+            top: auto;
+        }
+
+        .sample-show-hide {
+            transition: all linear 0.5s;
+        }
+
+        .sample-show-hide.ng-hide {
+            opacity: 0;
+        }
 
     </style>
     <link rel="stylesheet" href="{% static 'cartoview_feature_list/css/responsive.css' %}">
@@ -97,6 +133,7 @@
     ng-controller="cartoview.featureListApp.MainController"{% endblock %}
 {% block header_toolbar %}{% endblock %}
 {% block body %}
+    <div ng-if="featureList.loading" class="se-pre-con"></div>
     {% verbatim %}
     <md-toolbar ng-if="mobile" class="md-hue-2">
         <div class="md-toolbar-tools">
@@ -109,10 +146,6 @@
     </md-toolbar>
     {% endverbatim %}
     <div layout-align="space-around stretch" layout="row" style="height: 100%">
-        <div ng-if="mapShow" flex cartoview-map style="position: relative;">
-            <zoom-bar style="position: fixed;right: auto;left: 10px;bottom: 10px;top: auto;"
-                      ng-if="config.showZoombar"></zoom-bar>
-        </div>
         <div ng-if="!mobile" flex="40" style="overflow: auto">
             <div layout="row">
                 <md-button ng-click="toggleSidenav()" class="md-primary">
@@ -129,6 +162,11 @@
             </div>
             <feature-list></feature-list>
         </div>
+        <div ng-if="mapShow" flex="60" cartoview-map style="position: relative;">
+            <zoom-bar id="zoom"
+                      ng-if="config.showZoombar"></zoom-bar>
+        </div>
+
     </div>
     <md-sidenav md-component-id="left" class=" md-sidenav md-sidenav-right md-whiteframe-z2 floating-menu">
         {% verbatim %}

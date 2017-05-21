@@ -6,7 +6,7 @@
 angular.module('cartoview.featureListApp').controller('cartoview.featureListApp.MainController',
     function ($scope, mapService, featureListService, $mdSidenav, $mdMedia, $mdDialog, appConfig) {
         $scope.config = appConfig;
-        $scope.featureList = featureListService;
+        $scope.authenticated = cartoviewUser.isAuthenticated;
         $scope.toggleSidenav = function () {
             return $mdSidenav('left').toggle();
         };
