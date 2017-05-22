@@ -10,7 +10,6 @@ angular.module('cartoview.featureListApp').directive('featureList', function (ur
             $scope.featureList = featureListService;
             $scope.detailsTPL = urlsHelper.static + "cartoview_feature_list/angular-templates/details.html";
             $scope.getIdentifier = function () {
-                console.log("######", featureListService.selected.getProperties(), featureListService.selected.getKeys(), featureListService.selected.getprope)
                 return featureListService.appConfig.id + "-" + featureListService.selected.getId();
             };
             $scope.gallary = false;
@@ -39,7 +38,12 @@ angular.module('cartoview.featureListApp').directive('featureTemplate', function
                     return false
                 }
                 return true
-            }
+            };
+            $scope.$watch(function () {
+                return featureListService.selected;
+            }, function (newVal) {
+                $scope.feature = newVal;
+            });
         }
     }
 });
