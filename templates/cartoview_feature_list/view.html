@@ -5,8 +5,8 @@
 {% endblock %}
 {% block styles %}
     <link rel="stylesheet" href="{{ STATIC_URL }}vendor/ol3/ol.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}cartoview_map_viewer/css/map.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}cartoview_map_viewer/css/style.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}cartoview_feature_list/css/map.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}cartoview_feature_list/css/style.css">
     {% for w in widgets %}
         {% for css_url in w.view.css %}
             <link rel="stylesheet" href="{{ css_url }}">{% endfor %}
@@ -51,7 +51,7 @@
             margin: 0;
             margin-top: 0;
             width: 80px;
-        {#         height: 80px;#}
+          height: 80px;
         }
 
         .slide-thumb md-tabs-canvas, .slide-thumb md-pagination-wrapper, .slide-thumb md-tabs[md-align-tabs=bottom] md-tabs-wrapper {
@@ -112,13 +112,13 @@
     <script type="text/javascript" src="{{ STATIC_URL }}vendor/ol3/ol.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.14/proj4.js"></script>
 
-    {% include "cartoview_map_viewer/dynamic_view_js.html" %}
-    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/app.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/map-service.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/map-directive.js"></script>
+    {% include "cartoview_feature_list/dynamic_view_js.html" %}
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_feature_list/js/js/view/app.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_feature_list/js/js/view/map-service.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_feature_list/js/js/view/map-directive.js"></script>
     <script type="text/javascript"
-            src="{{ STATIC_URL }}cartoview_map_viewer/js/view/basic-controls-directives.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/widget-view-directive.js"></script>
+            src="{{ STATIC_URL }}cartoview_feature_list/js/js/view/basic-controls-directives.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_feature_list/js/js/view/widget-view-directive.js"></script>
     <script
             src="https://code.jquery.com/jquery-2.2.4.min.js"
             integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
