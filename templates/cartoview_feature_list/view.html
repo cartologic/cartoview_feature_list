@@ -1,84 +1,30 @@
-{% extends "cartoview/base.html" %}
 {% load static %}
-{% block title %}
-    {{ block.super }} - {{ instance.title }}
-{% endblock %}
-{% block styles %}
-    <link rel="stylesheet" href="{{ STATIC_URL }}vendor/ol3/ol.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}cartoview_map_viewer/css/map.css">
-    <link rel="stylesheet" href="{{ STATIC_URL }}cartoview_map_viewer/css/style.css">
-    {% for w in widgets %}
-        {% for css_url in w.view.css %}
-            <link rel="stylesheet" href="{{ css_url }}">{% endfor %}
-    {% endfor %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ instance.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <style>
-        .content-ct-inner {
+        html {
+            height: 100%;
+            margin: 0px;
+        }
+        body {
             overflow: hidden;
+            height: 100%;
+            margin: 0px;
         }
-
-        .map-results table {
-            margin-left: auto;
-            margin-right: auto;
-            width: 100%;
-            margin-top: 10px;
-            border-top: 1px solid #ddd;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .map-results th, td {
-            border-bottom: 1px solid #ddd;
-            text-align: center;
-        }
-
-        .md-sidenav {
-            min-width: 40%;
-        }
-
-        #location {
-            left: auto;
-            right: 41%
-        }
-
-        .img-bar {
-            margin-right: 10px;
-            margin-left: 10px;
-            border: 1px solid #021a40;
-            height: 50px;
-            width: 50px;
-        }
-
-        .slide-thumb md-tab-item img {
-            margin: 0;
-            margin-top: 0;
-            width: 80px;
-        {#         height: 80px;#}
-        }
-
-        .slide-thumb md-tabs-canvas, .slide-thumb md-pagination-wrapper, .slide-thumb md-tabs[md-align-tabs=bottom] md-tabs-wrapper {
-            height: 100px
-
-        }
-
-        .slide-thumb md-tab-content > div {
-            background: rgb(80, 76, 76);
-            background: rgba(80, 76, 76, 0.08);
-        }
-
-        .slide-thumb md-tabs[md-align-tabs=bottom] md-tabs-content-wrapper {
-            bottom: 100px
-        }
-
         .no-js #loader {
             display: none;
         }
-
         .js #loader {
             display: block;
             position: absolute;
             left: 100px;
             top: 0;
         }
-
         .se-pre-con {
             position: fixed;
             left: 0px;
@@ -86,121 +32,22 @@
             width: 100%;
             height: 100%;
             z-index: 9999;
-            background: url({% static 'cartoview_feature_list/loading.gif' %}) center no-repeat #fff;
+            background: url({% static 'cartoview_feature_list/img/loading.gif' %}) center no-repeat #fff;
         }
-
-        #zoom {
-            position: fixed;
-            right: 10px;
-            left: auto;
-            bottom: 10px;
-            top: auto;
-        }
-
-        .sample-show-hide {
-            transition: all linear 0.5s;
-        }
-
-        .sample-show-hide.ng-hide {
-            opacity: 0;
-        }
-
     </style>
-    <link rel="stylesheet" href="{% static 'cartoview_feature_list/css/responsive.css' %}">
-{% endblock %}
-{% block scripts %}
-    <script type="text/javascript" src="{{ STATIC_URL }}vendor/ol3/ol.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.14/proj4.js"></script>
+</head>
+<body>
+<div class="se-pre-con"></div>
 
-    {% include "cartoview_map_viewer/dynamic_view_js.html" %}
-    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/app.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/map-service.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/map-directive.js"></script>
-    <script type="text/javascript"
-            src="{{ STATIC_URL }}cartoview_map_viewer/js/view/basic-controls-directives.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}cartoview_map_viewer/js/view/widget-view-directive.js"></script>
-    <script
-            src="https://code.jquery.com/jquery-2.2.4.min.js"
-            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-            crossorigin="anonymous"></script>
-    {% for w in widgets %}
-        {% for js_url in w.view.js %}
-            <script type="text/javascript" src="{{ js_url }}"></script>{% endfor %}
-    {% endfor %}
+<div style="height:100%" id="root"></div>
 
-{% endblock %}
-{% block body_directives %}ng-app="cartoview.featureListApp"
-    ng-controller="cartoview.featureListApp.MainController"{% endblock %}
-{% block header_toolbar %}{% endblock %}
-{% block body %}
-    <div ng-if="featureList.loading" class="se-pre-con"></div>
-    {% verbatim %}
-    <md-toolbar ng-if="mobile" class="md-hue-2">
-        <div class="md-toolbar-tools">
-            <h2 flex md-truncate>{{ config.title }}</h2>
-
-            <md-button class="md-raised" ng-click="showhideList()" aria-label="List">
-                Feature List
-            </md-button>
-        </div>
-    </md-toolbar>
-    {% endverbatim %}
-    <div layout-align="space-around stretch" layout="row" style="height: 100%">
-        <div ng-if="!mobile" flex="40" style="overflow: auto">
-            <div layout="row">
-                <md-button ng-click="toggleSidenav()" class="md-primary">
-                    <md-icon aria-label="Menu" class="material-icons">menu</md-icon>
-                </md-button>
-            </div>
-            <feature-list></feature-list>
-        </div>
-        <div ng-if="mobile && !mapShow" ng-show="mobile && !mapShow" flex style="overflow: auto">
-            <div layout="row">
-                <md-button ng-click="toggleSidenav()" class="md-primary">
-                    <md-icon aria-label="Menu" class="material-icons">menu</md-icon>
-                </md-button>
-            </div>
-            <feature-list></feature-list>
-        </div>
-        <div ng-if="mapShow" flex cartoview-map style="position: relative;">
-            <zoom-bar id="zoom"
-                      ng-if="config.showZoombar"></zoom-bar>
-        </div>
-
-    </div>
-    <md-sidenav md-component-id="left" class=" md-sidenav md-sidenav-right md-whiteframe-z2 floating-menu">
-        {% verbatim %}
-        <md-toolbar class="md-hue-2">
-            <div class="md-toolbar-tools">
-                <h2 flex>{{ config.title }}</h2>
-                <md-button class="md-fab md-mini" style="padding: initial;background-color: #673AB7;border-radius: 20%;"
-                           ng-click="closeSidenav()" aria-label="Close">
-                    <md-icon class="material-icons">close</md-icon>
-                </md-button>
-
-            </div>
-        </md-toolbar>
-        <md-button class="md-list-item-content" ng-click="map.zoomHome()">
-            <md-icon class="material-icons floating-menu-item-icon">home</md-icon>
-            <span class="md-inline-list-icon-label">Home</span>
-        </md-button>
-        <md-button about-button class="md-list-item-content">
-            <md-icon class="material-icons floating-menu-item-icon">help</md-icon>
-            <span class="md-inline-list-icon-label">About</span>
-        </md-button>
-        <div ng-if="config.showLayerSwitcher">
-            <toggle-button toggle="layersSwitcherVisible" title="Layers" icon="layers"></toggle-button>
-            <layers-switcher ng-show="layersSwitcherVisible"></layers-switcher>
-        </div>
-        <div ng-if="config.showLegend">
-            <toggle-button toggle="legendVisible" title="Legend" icon="view_list"></toggle-button>
-            <layers-legend ng-show="legendVisible"></layers-legend>
-        </div>
-        <div ng-if="config.showBasemapSwitcher">
-            <toggle-button toggle="baseMapsSwitcherVisible" title="Base Maps" icon="satellite"></toggle-button>
-            <basemaps-switcher ng-show="baseMapsSwitcherVisible"></basemaps-switcher>
-        </div>
-        {% endverbatim %}
-    </md-sidenav>
-
-{% endblock %}
+<script>
+    var appConfig = {{ instance.config | safe }};
+    var map_id={{instance.map_id}};
+    var mapUrl = "{% url 'map_json' instance.map_id %}";
+    var geoserver_url = "{{ GEOSERVER_BASE_URL }}";
+    var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
+</script>
+<script src="{% static 'cartoview_feature_list/dist/ReactClient.bundle.js' %}"></script>
+</body>
+</html>
