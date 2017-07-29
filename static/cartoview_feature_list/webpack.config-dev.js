@@ -7,7 +7,7 @@ var filename = '[name].bundle.js';
 module.exports = {
   entry: {
     config: path.join(APP_DIR, 'AppRender.jsx'),
-    ReactClient: path.join(APP_DIR, 'view.jsx'),
+    FeatureList: path.join(APP_DIR, 'view.jsx'),
   },
   output: {
     path: BUILD_DIR,

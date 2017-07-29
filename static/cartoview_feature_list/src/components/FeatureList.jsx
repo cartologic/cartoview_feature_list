@@ -9,6 +9,7 @@ import { wfsQueryBuilder } from "../helpers/helpers.jsx"
 import UltimatePaginationMaterialUi from './MaterialPagination';
 import Spinner from "react-spinkit"
 import NavigationArrowBack from "material-ui/svg-icons/navigation/arrow-back.js"
+import AlertWarning from "material-ui/svg-icons/alert/warning.js"
 import IconButton from 'material-ui/IconButton';
 import {
 	Table,
@@ -102,14 +103,22 @@ export default class FeatureList extends React.Component {
 	}
 	init( map ) {
 		map.on('singleclick', ( e ) => {
+			document.body.style.cursor = "progress";
 			WMSService.getFeatureInfo(getWMSLayer(appConfig.layer, map.getLayers( ).getArray( )), e.coordinate, map, 'application/json', ( result ) => {
-				console.log(map.getView( ).calculateExtent(map.getSize( )));
-				this.setState({ selectedFeatures: result.features, selectMode: true })
-				console.log(this.props.map.getView( ).getProjection( ));
-				this.zoomToFeature(result.features[0])
-				// this.state.features = this.state.features.concat( result.features );
-				// result.features.forEach(f => f.set("_layerTitle", result.layer.get( 'title'
-				// ))) this.setState({ features: this.state.features, busy: false });
+				if ( result.features.length == 1 ) {
+					document.body.style.cursor = "default";
+					result.features[0].getGeometry( ).transform('EPSG:4326', this.props.map.getView( ).getProjection( ));
+					this.zoomToFeature(result.features[0])
+					this.setState({ selectedFeatures: result.features, selectMode: true })
+				} else if ( result.features.length > 1 ) {
+					let transformedFeatures = [ ]
+					result.features.forEach(( feature ) => {
+						feature.getGeometry( ).transform('EPSG:4326', this.props.map.getView( ).getProjection( ));
+						transformedFeatures.push( feature )
+					});
+					this.setState({ selectedFeatures: transformedFeatures, selectMode: true })
+				}
+
 			});
 		});
 	}
@@ -233,6 +242,16 @@ export default class FeatureList extends React.Component {
 						})}
 					</TableBody>
 				</Table>}
+				{!loading && this.state.selectMode && this.state.selectedFeatures.length > 1 && <div>
+					<MenuItem
+						rightIcon={< IconButton > <AlertWarning ></AlertWarning> < /IconButton>}>{"Multiple Feature Selected please select one"}</MenuItem>
+					{this.state.selectedFeatures.map(( feature, i ) => {
+						return <div key={i}>
+							<MenuItem onTouchTap={this.zoomToFeature.bind( this, feature )}>{feature.getProperties( )[ appConfig.attribute ]}</MenuItem>
+							<Divider></Divider>
+						</div>
+					})}
+				</div>}
 			</Drawer>
 		);
 	}

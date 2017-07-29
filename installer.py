@@ -1,8 +1,8 @@
-__author__ = 'kamal'
+__author__ = 'hisham'
 
 info = {
     "title": "Feature List",
-    "description": "Simple Map Viewer to view your map with a list of features from a layer in this map",
+    "description": "Map and configurable feature list side by side. Map and feature list are connected in zoom and pan. Use for store locations or similar apps.",
     "author": 'Cartologic',
     "home_page": 'http://cartologic.com/cartoview/apps/feature_list',
     "help_url": "http://cartologic.com/cartoview/apps/feature_list/help/",
