@@ -106,7 +106,7 @@ export default class FeatureList extends React.Component {
 			document.body.style.cursor = "progress";
 			WMSService.getFeatureInfo(getWMSLayer(appConfig.layer, map.getLayers( ).getArray( )), e.coordinate, map, 'application/json', ( result ) => {
 				if ( result.features.length == 1 ) {
-					document.body.style.cursor = "default";
+
 					result.features[0].getGeometry( ).transform('EPSG:4326', this.props.map.getView( ).getProjection( ));
 					this.zoomToFeature(result.features[0])
 					this.setState({ selectedFeatures: result.features, selectMode: true })
@@ -118,7 +118,7 @@ export default class FeatureList extends React.Component {
 					});
 					this.setState({ selectedFeatures: transformedFeatures, selectMode: true })
 				}
-
+				document.body.style.cursor = "default";
 			});
 		});
 	}
@@ -220,7 +220,12 @@ export default class FeatureList extends React.Component {
 						</TableRow>
 						<TableRow>
 							<TableHeaderColumn tooltip="Property">Property</TableHeaderColumn>
-							<TableHeaderColumn tooltip="Value">Value</TableHeaderColumn>
+							<TableHeaderColumn
+								style={{
+								textAlign: 'center'
+							}}
+								colSpan="2"
+								tooltip="Value">Value</TableHeaderColumn>
 						</TableRow>
 					</TableHeader>
 					<TableBody
@@ -233,7 +238,9 @@ export default class FeatureList extends React.Component {
 									<TableRowColumn>
 										<span>{key}</span>
 									</TableRowColumn>
-									<TableRowColumn>
+									<TableRowColumn style={{
+										whiteSpace: 'pre-line'
+									}}>
 										<span>{this.state.selectedFeatures[0].getProperties( )[ key ]}</span>
 									</TableRowColumn>
 								</TableRow >
