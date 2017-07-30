@@ -1,17 +1,13 @@
 import json
-
 from cartoview.app_manager.models import App, AppInstance
 from cartoview.app_manager.views import _resolve_appinstance
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponse, render
 from geonode.maps.views import _PERMISSION_MSG_VIEW
-
 from . import APP_NAME
-
 
 def save(request, instance_id=None, app_name=APP_NAME):
     res_json = dict(success=False)
-
     data = json.loads(request.body)
     map_id = data.get('map', None)
     title = data.get('title', "")
@@ -73,6 +69,30 @@ def save(request, instance_id=None, app_name=APP_NAME):
     res_json.update(dict(success=True, id=instance_obj.id))
     return HttpResponse(json.dumps(res_json), content_type="application/json")
 
+
+def save(request, instance_id=None, app_name=APP_NAME):
+    res_json = dict(success=False)
+    # try:
+    map_id = request.POST.get('map', None)
+    title = request.POST.get('title', "")
+    config = request.POST.get('config', None)
+    abstract = request.POST.get('abstract', "")
+    if instance_id is None:
+        instance_obj = AppInstance()
+        instance_obj.app = App.objects.get(name=app_name)
+        instance_obj.owner = request.user
+    else:
+        instance_obj = AppInstance.objects.get(pk=instance_id)
+    instance_obj.title = title
+    instance_obj.config = config
+    instance_obj.abstract = abstract
+    instance_obj.map_id = map_id
+    instance_obj.save()
+    res_json.update(dict(success=True, id=instance_obj.id))
+    # except Exception, e:
+    #     print e
+    #     res_json["error_message"] = str(e)
+    return HttpResponse(json.dumps(res_json), content_type="application/json")    
 
 @login_required
 def new(
