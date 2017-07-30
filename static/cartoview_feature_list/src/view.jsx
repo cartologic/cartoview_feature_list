@@ -15,7 +15,8 @@ import Zoom from '@boundlessgeo/sdk/components/Zoom';
 import Legend from '@boundlessgeo/sdk/components/Legend';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
-
+import MapPanel from '@boundlessgeo/sdk/components/MapPanel';
+import LoadingPanel from '@boundlessgeo/sdk/components/LoadingPanel';
 import $ from "jquery";
 import FeatureList from "./components/FeatureList.jsx"
 import CustomTheme from './theme';
@@ -71,9 +72,6 @@ export default class ReactClient extends React.Component {
 	getChildContext( ) {
 		return {muiTheme: getMuiTheme( CustomTheme )};
 	}
-	componentDidMount( ) {
-		this.map.setTarget(findDOMNode( this.refs.map ));
-	}
 	_toggleBaseMapModal( ) {
 		this.refs.basemapmodal.getWrappedInstance( ).open( );
 	}
@@ -109,10 +107,9 @@ export default class ReactClient extends React.Component {
 
 			<div className="full-height-width">
 				{basemap_button}
-				<div ref="map" className="map"></div>
-
+				<MapPanel map={this.map}></MapPanel>
+				<LoadingPanel map={this.map}></LoadingPanel>
 				<FeatureList map={this.map}></FeatureList>
-
 				{layerlist}
 				{base_map_modal}
 				{zoom}

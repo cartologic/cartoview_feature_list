@@ -95,7 +95,7 @@ export default class FeatureList extends React.Component {
 			perPage: 50,
 			currentPage: 1,
 			selectionLayerAdded: false,
-			drawerOpen:true
+			drawerOpen: true
 		};
 		this.featureCollection = new ol.Collection( );
 		this.selectLayer = new ol.layer.Vector({
@@ -106,7 +106,9 @@ export default class FeatureList extends React.Component {
 			format: new ol.format.GeoJSON({defaultDataProjection: this.props.map.getView( ).getProjection( ), featureProjection: this.props.map.getView( ).getProjection( )})
 		});
 	}
-	handleToggle = () => this.setState({drawerOpen: !this.state.drawerOpen});
+	handleToggle = ( ) => this.setState({
+		drawerOpen: !this.state.drawerOpen
+	});
 	init( map ) {
 		map.on('singleclick', ( e ) => {
 			document.body.style.cursor = "progress";
@@ -116,7 +118,7 @@ export default class FeatureList extends React.Component {
 					result.features[0].getGeometry( ).transform('EPSG:4326', this.props.map.getView( ).getProjection( ));
 					this.zoomToFeature(result.features[0])
 					this.setState({ selectedFeatures: result.features, selectMode: true })
-					this.handleToggle()
+					this.handleToggle( )
 				} else if ( result.features.length > 1 ) {
 					let transformedFeatures = [ ]
 					result.features.forEach(( feature ) => {
@@ -124,7 +126,7 @@ export default class FeatureList extends React.Component {
 						transformedFeatures.push( feature )
 					});
 					this.setState({ selectedFeatures: transformedFeatures, selectMode: true })
-					this.handleToggle()
+					this.handleToggle( )
 				}
 				document.body.style.cursor = "default";
 			});
@@ -190,100 +192,101 @@ export default class FeatureList extends React.Component {
 		let { loading } = this.state
 		return (
 			<div>
-
-				<FloatingActionButton mini={true} className="ami" style={{position:'fixed',top:'3%',right:'5%'}}
-					 onTouchTap={this.handleToggle}>
-
-		<ContentAdd />
-
-	</FloatingActionButton>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           this.state.drawerOpen}
-			<Drawer openSecondary={true} open={this.state.drawerOpen}  containerClassName="featureDrawer">
-				<AppBar
-					 iconElementRight={<IconButton  onTouchTap={this.handleToggle}><NavigationClose /></IconButton>}
-					showMenuIconButton={this.state.selectMode}
-					iconElementLeft={< IconButton onTouchTap = {
-					this.backToList.bind( this )
-				} > <NavigationArrowBack ></NavigationArrowBack> < /IconButton>}
-					title={appConfig.layer.split( ":" )[ 1 ]}/>
-
-
-
-
-
-
- {loading && <MenuItem style={{
-					textAlign: "center",
-					padding: 10
-				}}><Spinner className="loading-center" name="line-scale-party" color="steelblue"/></MenuItem>}
-				{!loading && !this.state.selectMode && this.state.features.map(( feature, i ) => {
-					return <div key={i}>
-						<MenuItem onTouchTap={this.zoomToFeature.bind( this, feature )}>{feature.getProperties( )[ appConfig.attribute ]}</MenuItem>
-						<Divider></Divider>
-					</div>
-				})}
-				{!loading && !this.state.selectMode && <UltimatePaginationMaterialUi
-					totalPages={Math.ceil( this.state.totalFeatures / this.state.perPage )}
-					currentPage={this.state.currentPage}
-					onChange={number => this.setState({
-					currentPage: number
-				}, this.loadfeatures.bind( this ))}/>}
-				{!loading && this.state.selectMode && this.state.selectedFeatures.length == 1 && <Table selectable={false}>
-					<TableHeader
-						displaySelectAll={false}
-						adjustForCheckbox={false}
-						enableSelectAll={false}>
-						<TableRow>
-							<TableHeaderColumn
-								colSpan="3"
-								tooltip="Feature Details"
-								style={{
-								textAlign: 'center'
-							}}>
-								{"Feature Details"}
-							</TableHeaderColumn>
-						</TableRow>
-						<TableRow>
-							<TableHeaderColumn tooltip="Property">Property</TableHeaderColumn>
-							<TableHeaderColumn
-								style={{
-								textAlign: 'center'
-							}}
-								colSpan="2"
-								tooltip="Value">Value</TableHeaderColumn>
-						</TableRow>
-					</TableHeader>
-					<TableBody
-						displayRowCheckbox={false}
-						deselectOnClickaway={false}
-						stripedRows={true}>
-						{Object.keys(this.state.selectedFeatures[0].getProperties( )).map(( key, i ) => {
-							if ( key != "geometry" ) {
-								return <TableRow key={i}>
-									<TableRowColumn>
-										<span>{key}</span>
-									</TableRowColumn>
-									<TableRowColumn style={{
-										whiteSpace: 'pre-line'
-									}}>
-										<span>{this.state.selectedFeatures[0].getProperties( )[ key ]}</span>
-									</TableRowColumn>
-								</TableRow >
-							}
-
-						})}
-					</TableBody>
-				</Table>}
-				{!loading && this.state.selectMode && this.state.selectedFeatures.length > 1 && <div>
-					<MenuItem
-						rightIcon={< IconButton > <AlertWarning ></AlertWarning> < /IconButton>}>{"Multiple Feature Selected please select one"}</MenuItem>
-					{this.state.selectedFeatures.map(( feature, i ) => {
+				<FloatingActionButton
+					mini={true}
+					className="ami"
+					style={{
+					position: 'fixed',
+					top: '3%',
+					right: '5%'
+				}}
+					onTouchTap={this.handleToggle}>
+					<ContentAdd/>
+				</FloatingActionButton>
+				<Drawer
+					openSecondary={true}
+					open={this.state.drawerOpen}
+					containerClassName="featureDrawer">
+					<AppBar
+						iconElementRight={< IconButton onTouchTap = {
+						this.handleToggle
+					} > <NavigationClose/> < /IconButton>}
+						showMenuIconButton={this.state.selectMode}
+						iconElementLeft={< IconButton onTouchTap = {
+						this.backToList.bind( this )
+					} > <NavigationArrowBack ></NavigationArrowBack> < /IconButton>}
+						title={appConfig.layer.split( ":" )[ 1 ]}/> {loading && <MenuItem style={{
+						textAlign: "center",
+						padding: 10
+					}}><Spinner className="loading-center" name="line-scale-party" color="steelblue"/></MenuItem>}
+					{!loading && !this.state.selectMode && this.state.features.map(( feature, i ) => {
 						return <div key={i}>
 							<MenuItem onTouchTap={this.zoomToFeature.bind( this, feature )}>{feature.getProperties( )[ appConfig.attribute ]}</MenuItem>
 							<Divider></Divider>
 						</div>
 					})}
-				</div>}
-			</Drawer>
+					{!loading && !this.state.selectMode && <UltimatePaginationMaterialUi
+						totalPages={Math.ceil( this.state.totalFeatures / this.state.perPage )}
+						currentPage={this.state.currentPage}
+						onChange={number => this.setState({
+						currentPage: number
+					}, this.loadfeatures.bind( this ))}/>}
+					{!loading && this.state.selectMode && this.state.selectedFeatures.length == 1 && <Table selectable={false}>
+						<TableHeader
+							displaySelectAll={false}
+							adjustForCheckbox={false}
+							enableSelectAll={false}>
+							<TableRow>
+								<TableHeaderColumn
+									colSpan="3"
+									tooltip="Feature Details"
+									style={{
+									textAlign: 'center'
+								}}>
+									{"Feature Details"}
+								</TableHeaderColumn>
+							</TableRow>
+							<TableRow>
+								<TableHeaderColumn tooltip="Property">Property</TableHeaderColumn>
+								<TableHeaderColumn
+									style={{
+									textAlign: 'center'
+								}}
+									colSpan="2"
+									tooltip="Value">Value</TableHeaderColumn>
+							</TableRow>
+						</TableHeader>
+						<TableBody
+							displayRowCheckbox={false}
+							deselectOnClickaway={false}
+							stripedRows={true}>
+							{Object.keys(this.state.selectedFeatures[0].getProperties( )).map(( key, i ) => {
+								if ( key != "geometry" ) {
+									return <TableRow key={i}>
+										<TableRowColumn>
+											<span>{key}</span>
+										</TableRowColumn>
+										<TableRowColumn style={{
+											whiteSpace: 'pre-line'
+										}}>
+											<span>{this.state.selectedFeatures[0].getProperties( )[ key ]}</span>
+										</TableRowColumn>
+									</TableRow >
+								}
+							})}
+						</TableBody>
+					</Table>}
+					{!loading && this.state.selectMode && this.state.selectedFeatures.length > 1 && <div>
+						<MenuItem
+							rightIcon={< IconButton > <AlertWarning ></AlertWarning> < /IconButton>}>{"Multiple Feature Selected please select one"}</MenuItem>
+						{this.state.selectedFeatures.map(( feature, i ) => {
+							return <div key={i}>
+								<MenuItem onTouchTap={this.zoomToFeature.bind( this, feature )}>{feature.getProperties( )[ appConfig.attribute ]}</MenuItem>
+								<Divider></Divider>
+							</div>
+						})}
+					</div>}
+				</Drawer>
 			</div>
 		);
 	}
