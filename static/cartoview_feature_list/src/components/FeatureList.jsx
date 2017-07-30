@@ -11,6 +11,9 @@ import Spinner from "react-spinkit"
 import NavigationArrowBack from "material-ui/svg-icons/navigation/arrow-back.js"
 import AlertWarning from "material-ui/svg-icons/alert/warning.js"
 import IconButton from 'material-ui/IconButton';
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/action/reorder';
 import {
 	Table,
 	TableBody,
@@ -21,6 +24,7 @@ import {
 	TableRowColumn
 } from 'material-ui/Table';
 import WMSService from '@boundlessgeo/sdk/services/WMSService';
+
 const image = new ol.style.Circle({
 	radius: 5,
 	fill: null,
@@ -90,7 +94,8 @@ export default class FeatureList extends React.Component {
 			selectedFeatures: [],
 			perPage: 50,
 			currentPage: 1,
-			selectionLayerAdded: false
+			selectionLayerAdded: false,
+			drawerOpen:true
 		};
 		this.featureCollection = new ol.Collection( );
 		this.selectLayer = new ol.layer.Vector({
@@ -101,6 +106,7 @@ export default class FeatureList extends React.Component {
 			format: new ol.format.GeoJSON({defaultDataProjection: this.props.map.getView( ).getProjection( ), featureProjection: this.props.map.getView( ).getProjection( )})
 		});
 	}
+	handleToggle = () => this.setState({drawerOpen: !this.state.drawerOpen});
 	init( map ) {
 		map.on('singleclick', ( e ) => {
 			document.body.style.cursor = "progress";
@@ -110,6 +116,7 @@ export default class FeatureList extends React.Component {
 					result.features[0].getGeometry( ).transform('EPSG:4326', this.props.map.getView( ).getProjection( ));
 					this.zoomToFeature(result.features[0])
 					this.setState({ selectedFeatures: result.features, selectMode: true })
+					this.handleToggle()
 				} else if ( result.features.length > 1 ) {
 					let transformedFeatures = [ ]
 					result.features.forEach(( feature ) => {
@@ -117,6 +124,7 @@ export default class FeatureList extends React.Component {
 						transformedFeatures.push( feature )
 					});
 					this.setState({ selectedFeatures: transformedFeatures, selectMode: true })
+					this.handleToggle()
 				}
 				document.body.style.cursor = "default";
 			});
@@ -181,8 +189,17 @@ export default class FeatureList extends React.Component {
 	render( ) {
 		let { loading } = this.state
 		return (
-			<Drawer openSecondary={true} open={true} className="featureDrawer">
+			<div>
+
+				<FloatingActionButton mini={true} className="ami" style={{position:'fixed',top:'3%',right:'5%'}}
+					 onTouchTap={this.handleToggle}>
+
+		<ContentAdd />
+
+	</FloatingActionButton>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           this.state.drawerOpen}
+			<Drawer openSecondary={true} open={this.state.drawerOpen}  containerClassName="featureDrawer">
 				<AppBar
+					 iconElementRight={<IconButton  onTouchTap={this.handleToggle}><NavigationClose /></IconButton>}
 					showMenuIconButton={this.state.selectMode}
 					iconElementLeft={< IconButton onTouchTap = {
 					this.backToList.bind( this )
@@ -267,6 +284,7 @@ export default class FeatureList extends React.Component {
 					})}
 				</div>}
 			</Drawer>
+			</div>
 		);
 	}
 }

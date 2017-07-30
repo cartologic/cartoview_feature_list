@@ -15,6 +15,7 @@ import Zoom from '@boundlessgeo/sdk/components/Zoom';
 import Legend from '@boundlessgeo/sdk/components/Legend';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
+
 import $ from "jquery";
 import FeatureList from "./components/FeatureList.jsx"
 import CustomTheme from './theme';
@@ -111,7 +112,7 @@ export default class ReactClient extends React.Component {
 				<div ref="map" className="map"></div>
 
 				<FeatureList map={this.map}></FeatureList>
-				
+
 				{layerlist}
 				{base_map_modal}
 				{zoom}
