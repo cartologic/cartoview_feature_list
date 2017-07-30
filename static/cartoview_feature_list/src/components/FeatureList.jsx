@@ -181,13 +181,20 @@ export default class FeatureList extends React.Component {
 	render( ) {
 		let { loading } = this.state
 		return (
-			<Drawer openSecondary={true} width={"30%"} open={true}>
+			<Drawer openSecondary={true} open={true} className="featureDrawer">
 				<AppBar
 					showMenuIconButton={this.state.selectMode}
 					iconElementLeft={< IconButton onTouchTap = {
 					this.backToList.bind( this )
 				} > <NavigationArrowBack ></NavigationArrowBack> < /IconButton>}
-					title={appConfig.layer.split( ":" )[ 1 ]}/> {loading && <MenuItem style={{
+					title={appConfig.layer.split( ":" )[ 1 ]}/>
+
+
+
+
+
+
+ {loading && <MenuItem style={{
 					textAlign: "center",
 					padding: 10
 				}}><Spinner className="loading-center" name="line-scale-party" color="steelblue"/></MenuItem>}

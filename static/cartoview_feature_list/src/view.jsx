@@ -105,10 +105,13 @@ export default class ReactClient extends React.Component {
 			? <Zoom map={this.map}/>
 			: '';
 		return (
+
 			<div className="full-height-width">
 				{basemap_button}
 				<div ref="map" className="map"></div>
+
 				<FeatureList map={this.map}></FeatureList>
+				
 				{layerlist}
 				{base_map_modal}
 				{zoom}

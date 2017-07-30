@@ -51,3 +51,9 @@
 .switch.on {
     background: #2c689c!important;
 }
+@media screen and (max-width: 699px) and (min-width: 520px) {
+    .featureDrawer {
+        padding-left: 30px;
+        
+    }
+}
