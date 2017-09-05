@@ -1,19 +1,3 @@
-import React from 'react';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
-import ol from 'openlayers'
-import Divider from 'material-ui/Divider';
-import AppBar from 'material-ui/AppBar';
-import { wfsQueryBuilder } from "../helpers/helpers.jsx"
-import UltimatePaginationMaterialUi from './MaterialPagination';
-import Spinner from "react-spinkit"
-import NavigationArrowBack from "material-ui/svg-icons/navigation/arrow-back.js"
-import AlertWarning from "material-ui/svg-icons/alert/warning.js"
-import IconButton from 'material-ui/IconButton';
-import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/action/reorder';
 import {
 	Table,
 	TableBody,
@@ -23,7 +7,24 @@ import {
 	TableRow,
 	TableRowColumn
 } from 'material-ui/Table';
+
+import AlertWarning from "material-ui/svg-icons/alert/warning.js"
+import AppBar from 'material-ui/AppBar';
+import ContentAdd from 'material-ui/svg-icons/action/reorder';
+import Divider from 'material-ui/Divider';
+import Drawer from 'material-ui/Drawer';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import IconButton from 'material-ui/IconButton';
+import MenuItem from 'material-ui/MenuItem';
+import NavigationArrowBack from "material-ui/svg-icons/navigation/arrow-back.js"
+import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import RaisedButton from 'material-ui/RaisedButton';
+import React from 'react';
+import Spinner from "react-spinkit"
+import UltimatePaginationMaterialUi from './MaterialPagination';
 import WMSService from '@boundlessgeo/sdk/services/WMSService';
+import ol from 'openlayers'
+import { wfsQueryBuilder } from "../helpers/helpers.jsx"
 
 const image = new ol.style.Circle({
 	radius: 5,
@@ -64,7 +65,21 @@ const styles = {
 const styleFunction = ( feature ) => {
 	return styles[feature.getGeometry( ).getType( )];
 };
-
+const wmsGetFeatureInfoFormats = {
+	'application/json': new ol.format.GeoJSON(),
+	'application/vnd.ogc.gml': new ol.format.WMSGetFeatureInfo()
+};
+const getFeatureInfoUrl=(layer, coordinate, view, infoFormat)=> {
+    var resolution = view.getResolution(), projection = view.getProjection();
+    var url = layer.getSource().getGetFeatureInfoUrl(
+      coordinate,
+      resolution,
+      projection, {
+        'INFO_FORMAT': infoFormat
+      }
+    );
+    return url
+}
 const isWMSLayer = ( layer ) => {
 	return layer.getSource( )instanceof ol.source.TileWMS || layer.getSource( )instanceof ol.source.ImageWMS;
 }
@@ -112,24 +127,40 @@ export default class FeatureList extends React.Component {
 	init( map ) {
 		map.on('singleclick', ( e ) => {
 			document.body.style.cursor = "progress";
-			WMSService.getFeatureInfo(getWMSLayer(appConfig.layer, map.getLayers( ).getArray( )), e.coordinate, map, 'application/json', ( result ) => {
-				if ( result.features.length == 1 ) {
-
-					result.features[0].getGeometry( ).transform('EPSG:4326', this.props.map.getView( ).getProjection( ));
-					this.zoomToFeature(result.features[0])
-					this.setState({ selectedFeatures: result.features, selectMode: true })
-					this.handleToggle( )
-				} else if ( result.features.length > 1 ) {
+			const view = map.getView();
+			const url = getFeatureInfoUrl(getWMSLayer(appConfig.layer, map.getLayers( ).getArray( )), e.coordinate,view, 'application/json')
+			fetch( url ).then(( response ) => response.json( )).then(( result ) => {
+				const features=wmsGetFeatureInfoFormats['application/json'].readFeatures(result)
+				const crs=result.crs.properties.name.split(":").pop()
+				if ( features.length == 1 ) {
+					if(proj4.defs('EPSG:' + result.crs.properties.name.split(":").pop())){
+						features[0].getGeometry( ).transform('EPSG:'+crs, this.props.map.getView( ).getProjection( ));
+						this.zoomToFeature(features[0])
+						this.setState({ selectedFeatures: features, selectMode: true })
+						this.handleToggle( )
+					}else{
+						fetch("http://epsg.io/?format=json&q=" + crs).then(response=>response.json()).then(projres=>{
+							proj4.defs('EPSG:' + crs, projres.results[0].proj4)
+							features[0].getGeometry( ).transform('EPSG:'+crs, this.props.map.getView( ).getProjection( ));
+							this.zoomToFeature(features[0])
+							this.setState({ selectedFeatures: features, selectMode: true })
+							this.handleToggle( )
+						})
+					}
+					
+					
+				} else if ( features.length > 1 ) {
 					let transformedFeatures = [ ]
-					result.features.forEach(( feature ) => {
-						feature.getGeometry( ).transform('EPSG:4326', this.props.map.getView( ).getProjection( ));
+					features.forEach(( feature ) => {
+						feature.getGeometry( ).transform('EPSG:'+result.crs.properties.name.split(":").pop(), this.props.map.getView( ).getProjection( ));
 						transformedFeatures.push( feature )
 					});
 					this.setState({ selectedFeatures: transformedFeatures, selectMode: true })
 					this.handleToggle( )
 				}
 				document.body.style.cursor = "default";
-			});
+			})	
+				
 		});
 	}
 	getLayers( layers ) {
@@ -154,6 +185,7 @@ export default class FeatureList extends React.Component {
 			request: 'GetFeature',
 			typeNames: appConfig.layer,
 			outputFormat: 'json',
+			srsName:this.props.map.getView( ).getProjection( ).getCode(),
 			count: this.state.perPage,
 			startIndex: this.state.perPage * ( this.state.currentPage - 1 )
 		})
