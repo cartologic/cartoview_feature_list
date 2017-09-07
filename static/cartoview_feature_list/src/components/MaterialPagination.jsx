@@ -1,51 +1,48 @@
-import React from 'react';
-import { createUltimatePagination, ITEM_TYPES } from 'react-ultimate-pagination';
-import FlatButton from 'material-ui/FlatButton';
-import NavigationFirstPage from 'material-ui/svg-icons/navigation/first-page';
-import NavigationLastPage from 'material-ui/svg-icons/navigation/last-page';
-import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
-import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
+import { ITEM_TYPES, createUltimatePagination } from 'react-ultimate-pagination'
+
+import Button from 'material-ui/Button'
+import ChevronLeft from 'material-ui-icons/ChevronLeft'
+import ChevronRight from 'material-ui-icons/ChevronRight'
+import FirstPage from 'material-ui-icons/FirstPage'
+import IconButton from 'material-ui/IconButton';
+import LastPage from 'material-ui-icons/LastPage'
+import React from 'react'
 
 const flatButtonStyle = {
-	minWidth: 36
+    minWidth: 36
 };
-
-const Page = ({ value, isActive, onClick }) => ( <FlatButton
+const Page = ( { value, isActive, onClick } ) => (
+    <Button
 	style={flatButtonStyle}
-	label={value.toString( )}
-	primary={isActive}
-	onClick={onClick}/> );
-
-const Ellipsis = ({ onClick }) => ( <FlatButton style={flatButtonStyle} label="..." onClick={onClick}/> );
-
-const FirstPageLink = ({ isActive, onClick }) => (
-	<FlatButton
-		style={flatButtonStyle}
-		icon={< NavigationFirstPage />}
-		onClick={onClick}/>
+	color={isActive ? "primary" : "default"}
+	onClick={onClick}>
+	{value.toString( )}
+	</Button>
+)
+const Ellipsis = ( { onClick } ) => (
+    <Button style={flatButtonStyle} onClick={onClick}>{'...'}</Button> );
+const FirstPageLink = ( { isActive, onClick } ) => (
+    <IconButton color="accent"
+		onClick={onClick}>
+		<FirstPage/>
+		</IconButton>
 );
-
-const PreviousPageLink = ({ isActive, onClick }) => (
-	<FlatButton
-		style={flatButtonStyle}
-		icon={< NavigationChevronLeft />}
-		onClick={onClick}/>
+const PreviousPageLink = ( { isActive, onClick } ) => (
+    <IconButton color="accent"
+		onClick={onClick}>
+		< ChevronLeft />
+		</IconButton>
 );
-
-const NextPageLink = ({ isActive, onClick }) => (
-	<FlatButton
-		style={flatButtonStyle}
-		icon={< NavigationChevronRight />}
-		onClick={onClick}/>
+const NextPageLink = ( { isActive, onClick } ) => (
+    <IconButton color="accent"
+		onClick={onClick}>
+		< ChevronRight />
+		</IconButton>
 );
-
-const LastPageLink = ({ isActive, onClick }) => (
-	<FlatButton
-		style={flatButtonStyle}
-		icon={< NavigationLastPage />}
-		onClick={onClick}/>
+const LastPageLink = ( { isActive, onClick } ) => (
+    <IconButton color="accent"
+		onClick={onClick}>< LastPage /></IconButton>
 );
-
 const itemTypeToComponent = {
 	[ ITEM_TYPES.PAGE ]: Page,
 	[ ITEM_TYPES.ELLIPSIS ]: Ellipsis,
@@ -54,7 +51,5 @@ const itemTypeToComponent = {
 	[ ITEM_TYPES.NEXT_PAGE_LINK ]: NextPageLink,
 	[ ITEM_TYPES.LAST_PAGE_LINK ]: LastPageLink
 };
-
-const UltimatePaginationMaterialUi = createUltimatePagination({ itemTypeToComponent });
-
-export default UltimatePaginationMaterialUi;
+const UltimatePaginationMaterialUi = createUltimatePagination( { itemTypeToComponent } );
+export default UltimatePaginationMaterialUi
