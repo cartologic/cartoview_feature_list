@@ -42,12 +42,12 @@ class SearchInput extends React.Component {
              </div>
             </Grid>
             <Grid container align={'center'} justify={'center'} spacing={0} item xs={12} sm={12} md={4} >
-                    <Grid item xs={6} sm={6} md={6} >
+                    <Grid style={{textAlign: 'center'}}  item xs={6} sm={6} md={6} >
                         <Button dense color="primary" raised className={classes.button} onClick={() => this.props.search(undefined, this.searchTextInput.value, this.props.layerNameSpace, this.props.layerName, filters.value)}>
                             <Search/>
                         </Button>
                     </Grid>
-                    <Grid item xs={6} sm={6} md={6} >
+                    <Grid style={{textAlign: 'center'}}  item xs={6} sm={6} md={6} >
                         <Button dense color="primary" raised className={classes.button} onClick={() => this.clearSearch()}>
                             <Close/>
                         </Button>
