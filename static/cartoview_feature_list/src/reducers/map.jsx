@@ -1,5 +1,8 @@
 import ol from 'openlayers'
 let map_obj = new ol.Map( {
+    interactions: ol.interaction.defaults().extend([
+        new ol.interaction.DragRotateAndZoom()
+      ]),
     layers: [ new ol.layer.Tile( {
         title: 'OpenStreetMap',
         source: new ol.source.OSM( )
