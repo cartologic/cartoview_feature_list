@@ -1,4 +1,6 @@
+import LayerSwitcher  from '../vendor/ol3-layerswitcher/src/ol3-layerswitcher'
 import ol from 'openlayers'
+
 let map_obj = new ol.Map( {
     interactions: ol.interaction.defaults().extend([
         new ol.interaction.DragRotateAndZoom()
@@ -14,6 +16,8 @@ let map_obj = new ol.Map( {
         zoom: 3
     } )
 } )
+var layerSwitcher = new LayerSwitcher();
+map_obj.addControl(layerSwitcher);
 export function map( state = map_obj, action ) {
     switch ( action.type ) {
     case 'SET_MAP':

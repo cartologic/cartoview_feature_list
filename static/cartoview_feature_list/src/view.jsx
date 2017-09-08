@@ -1,5 +1,6 @@
 import './app.css'
 import 'openlayers/dist/ol.css'
+import './vendor/ol3-layerswitcher/src/ol3-layerswitcher.css'
 
 import { IntlProvider, addLocaleData } from 'react-intl'
 
