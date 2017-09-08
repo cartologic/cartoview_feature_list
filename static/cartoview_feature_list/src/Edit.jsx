@@ -1,11 +1,14 @@
-import React, { Component } from 'react'
 import './css/app.css'
+
+import React, { Component } from 'react'
+
+import EditService from './services/editService.jsx'
+import General from './components/General.jsx'
+import ListOptions from './components/ListOptions.jsx'
+import NavigationTools from './components/NavigationTools.jsx'
 import Navigator from './components/Navigator.jsx'
 import ResourceSelector from './components/ResourceSelector.jsx'
-import General from './components/General.jsx'
-import NavigationTools from './components/NavigationTools.jsx'
-import ListOptions from './components/ListOptions.jsx'
-import EditService from './services/editService.jsx'
+
 export default class Edit extends Component {
 	constructor( props ) {
 		super( props )
@@ -81,7 +84,6 @@ export default class Edit extends Component {
 						: this.state.config.config,
 					urls: this.props.config.urls,
 					onComplete: ( config ) => {
-						console.log( this.state.config );
 						this.setState({
 							config: Object.assign( this.state.config, config )
 						}, this.goToStep( ++step ))
@@ -91,44 +93,47 @@ export default class Edit extends Component {
 					}
 				}
 			}, {
-				label: "Navigation Tools",
-				component: NavigationTools,
-				urls: this.props.config.urls,
-				props: {
-					instance: this.state.selectedResource,
-					// config: this.state.config.config,
-					config: this.props.config.instance
-						? this.props.config.instance.config
-						: undefined,
-					id: this.props.config.instance
-						? this.props.config.instance.id
-						: this.state.id
-							? this.state.id
-							: undefined,
-					urls: this.props.config.urls,
-					success: this.state.success,
-					onComplete: ( basicConfig ) => {
-						var { step, config } = this.state;
-						let newConfig = Object.assign( config.config, basicConfig )
-						this.setState({
-							config: Object.assign( this.state.config, newConfig )
-						}, ( ) => {
-							this.editService.save( this.state.config, this.state.id
-								? this.state.id
-								: this.props.config.instance
-									? this.props.config.instance.id
-									: undefined ).then(( res ) => {
-								if ( res.success === true ) {
-									this.setState({ success: true, id: res.id })
-								}
-							})
-						})
-					},
-					onPrevious: ( ) => {
-						this.onPrevious( )
-					}
-				}
-			}
+                label: "Navigation Tools",
+                component: NavigationTools,
+                urls: this.props.config.urls,
+                props: {
+                    instance: this.state.selectedResource,
+                    config: this.props.config.instance ? this.props.config
+                        .instance.config : null,
+                    id: this.props.config.instance ? this.props.config
+                        .instance.id : this.state.id ? this.state.id : undefined,
+                    urls: this.props.config.urls,
+                    success: this.state.success,
+                    onComplete: ( basicConfig ) => {
+                        var { step, config } = this.state
+                        let newConfig = Object.assign( config.config,
+                            basicConfig )
+                        this.setState( {
+                            config: config
+                        }, ( ) => {
+                            this.editService.save( this.state
+                                .config, this.state.id ?
+                                this.state.id : this.props
+                                .config.instance ?
+                                this.props.config.instance
+                                .id : undefined ).then(
+                                ( res ) => {
+                                    if ( res.success ===
+                                        true ) {
+                                        this.setState( {
+                                            success: true,
+                                            id: res
+                                                .id
+                                        } )
+                                    }
+                                } )
+                        } )
+                    },
+                    onPrevious: ( ) => {
+                        this.onPrevious( )
+                    }
+                }
+            }
 		]
 		return (
 			<div className="wrapping">

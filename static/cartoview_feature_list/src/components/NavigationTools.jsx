@@ -1,73 +1,75 @@
 import React, { Component } from 'react';
+
 import t from 'tcomb-form';
-const mapConfig = t.struct({ showZoombar: t.Boolean, showLayerSwitcher: t.Boolean, showBaseMapSwitcher: t.Boolean, showLegend: t.Boolean });
 
+// const zoomControls = t.struct({   duration: t.Number,   ZoomInTip: t.String,
+// delta: t.Number,   ZoomOutTip: t.String, })
+//
+// const showZoomControls = t.struct({   showZoomControl: t.Boolean,
+// zoomControls: zoomControls })
+const mapConfig = t.struct( {
+    showZoombar: t.Boolean,
+    showLayerSwitcher: t.Boolean,
+    showBaseMapSwitcher: t.Boolean,
+    showLegend: t.Boolean,
+    EnableGeolocation: t.Boolean
+} );
 const options = {
-	fields: {
-		showZoombar: {
-			label: "Zoom Bar"
-		},
-		showLayerSwitcher: {
-			label: "Layer Switcher"
-		},
-		showBaseMapSwitcher: {
-			showBaseMapSwitcher: "Base Map Switcher"
-		},
-		showLegend: {
-			label: "Legend"
-		}
-	}
+    fields: {
+        showZoombar: {
+            label: "Zoom Bar"
+        },
+        showLayerSwitcher: {
+            label: "Layer Switcher"
+        },
+        showBaseMapSwitcher: {
+            showBaseMapSwitcher: "Base Map Switcher"
+        },
+        showLegend: {
+            label: "Legend"
+        },
+        EnableGeolocation: {
+            label: "GeoLocation"
+        }
+    }
 };
-
 const Form = t.form.Form;
-
 export default class NavigationTools extends Component {
-
-	constructor( props ) {
-		super( props )
-		console.log( this.props.config );
-		this.state = {
-			defaultConfig: {
-				showZoombar: this.props.config
-					? this.props.config.showZoombar
-					: true,
-				showLayerSwitcher: this.props.config
-					? this.props.config.showLayerSwitcher
-					: true,
-				showBaseMapSwitcher: this.props.config
-					? this.props.config.showBaseMapSwitcher
-					: true,
-				showLegend: this.props.config
-					? this.props.config.showLegend
-					: true
-			}
-		}
-	}
-
-	componentWillReceiveProps( nextProps ) {
-		// console.log(nextProps); if (nextProps.config !== this.state.defaultConfig) {
-		this.setState({ defaultConfig: nextProps.config, success: nextProps.success });
-		// }
-	}
-
-	save( ) {
-		var basicConfig = this.refs.form.getValue( );
-		if ( basicConfig ) {
-			const properConfig = {
-
-				showZoombar: basicConfig.showZoombar,
-				showLayerSwitcher: basicConfig.showLayerSwitcher,
-				showBaseMapSwitcher: basicConfig.showBaseMapSwitcher,
-				showLegend: basicConfig.showLegend
-
-			}
-			this.props.onComplete( properConfig )
-		}
-	}
-
-	render( ) {
-		return (
-			<div className="row">
+    constructor( props ) {
+        super( props )
+        this.state = {
+            defaultConfig: {
+                showZoombar: this.props.config ? this.props.config.showZoombar : true,
+                showLayerSwitcher: this.props.config ? this.props.config
+                    .showLayerSwitcher : true,
+                showBaseMapSwitcher: this.props.config ? this.props.config
+                    .showBaseMapSwitcher : true,
+                showLegend: this.props.config ? this.props.config.showLegend : true,
+                EnableGeolocation: this.props.config ? this.props.config.EnableGeolocation : true
+            }
+        }
+    }
+    componentWillReceiveProps( nextProps ) {
+        this.setState( {
+            success: nextProps.success
+        } )
+    }
+    save( ) {
+        var basicConfig = this.refs.form.getValue( );
+        if ( basicConfig ) {
+            const properConfig = {
+                showZoombar: basicConfig.showZoombar,
+                showLayerSwitcher: basicConfig.showLayerSwitcher,
+                showBaseMapSwitcher: basicConfig.showBaseMapSwitcher,
+				showLegend: basicConfig.showLegend,
+				EnableGeolocation:basicConfig.EnableGeolocation
+            }
+            this.props.onComplete( properConfig )
+        }
+    }
+    render( ) {
+        return (
+            <div className="row">
 				<div className="row">
 					<div className="col-xs-5 col-md-4"></div>
 					<div className="col-xs-7 col-md-8">
@@ -77,9 +79,7 @@ export default class NavigationTools extends Component {
 							margin: "0px 3px 0px 3px"
 						}}
 							className="btn btn-primary btn-sm pull-right disabled"
-							onClick={this.save.bind( this )}>{"next "}
-							<i className="fa fa-arrow-right"></i>
-						</button>
+							onClick={this.save.bind( this )}>{"next "}<i className="fa fa-arrow-right"></i></button>
 
 						<button
 							style={{
@@ -87,8 +87,7 @@ export default class NavigationTools extends Component {
 							margin: "0px 3px 0px 3px"
 						}}
 							className="btn btn-primary btn-sm pull-right"
-							onClick={( ) => this.props.onPrevious( )}>
-							<i className="fa fa-arrow-left"></i>{" Previous"}</button>
+							onClick={( ) => this.props.onPrevious( )}><i className="fa fa-arrow-left"></i>{" Previous"}</button>
 					</div>
 				</div>
 				<div className="row" style={{
@@ -155,6 +154,6 @@ export default class NavigationTools extends Component {
 					type={mapConfig}
 					options={options}/>
 			</div>
-		)
-	}
+        )
+    }
 }
