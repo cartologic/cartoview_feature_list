@@ -83,11 +83,8 @@ export default class ListOptions extends Component {
     loadLayers( ) {
         fetch( this.props.urls.mapLayers + "?id=" + this.props.map.id ).then(
             ( response ) => response.json( ) ).then( ( data ) => {
-            let pointLayers = data.objects.filter( ( layer ) => {
-                return layer.layer_type.toLowerCase( ).includes(
-                    "point" )
-            } )
-            this.setState( { layers: pointLayers, loading: false } )
+           
+            this.setState( { layers: data.objects, loading: false } )
         } ).catch( ( error ) => {
             console.error( error )
         } )
