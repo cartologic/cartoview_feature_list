@@ -8,8 +8,9 @@ import {
     selectedFeatures
 } from '../actions/features'
 
-import AppBar from 'material-ui/AppBar';
-import Divider from 'material-ui/Divider';
+import AppBar from 'material-ui/AppBar'
+import Button from 'material-ui/Button'
+import Divider from 'material-ui/Divider'
 import FeatureListItem from "./FeatureListItem"
 import ItemDetails from "./ItemDetails"
 import Paper from 'material-ui/Paper'
@@ -263,9 +264,16 @@ class FeatureList extends React.Component {
                  <div style={{width:'100%'}}>
                     <AppBar position="static" color="primary">
                         <Toolbar>
-                        <Typography type="title" color="inherit">
+                        <Typography type="title" style={{flex:1}} color="inherit">
                             {this.props.formTitle}
                         </Typography>
+                        {!(featureIsLoading || attachmentFilesIsLoading) && selectMode && selectedFeatures.length == 1 && <div className="col-xs-12 col-sm-12 col-md-12">
+
+                            <Button type="button" raised  onClick={
+                                this.backToList.bind(this)
+                            }><i className="fa fa-arrow-left" aria-hidden="true"></i>  Back</Button>
+
+                        </div>}
                         </Toolbar>
                     </AppBar>
                 </div>
@@ -289,13 +297,6 @@ class FeatureList extends React.Component {
                     totalPages={Math.ceil(totalFeatures / this.state.perPage)}
                     currentPage={this.state.currentPage}
                     onChange={number => this.setState({ currentPage: number }, this.loadfeatures)} /></div>}
-                {!(featureIsLoading || attachmentFilesIsLoading) && selectMode && selectedFeatures.length == 1 && <div className="col-xs-12 col-sm-12 col-md-12">
-
-                    <button type="button" onClick={
-                        this.backToList.bind(this)
-                    } className="btn btn-primary pull-right"><i className="fa fa-arrow-left" aria-hidden="true"></i>  Back</button>
-
-                </div>}
                 {!(featureIsLoading || attachmentFilesIsLoading) && selectMode && selectedFeatures.length == 1 &&
                     <ItemDetails />
                 }

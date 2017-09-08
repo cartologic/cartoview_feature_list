@@ -1,6 +1,7 @@
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 
-import Divider from 'material-ui/Divider';
+import Divider from 'material-ui/Divider'
+import Grid from 'material-ui/Grid'
 import Img from 'react-image'
 import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
@@ -38,9 +39,9 @@ class ItemDetails extends React.Component {
         }
         return (
             <div>
-            <div className="row">
-                <div style={{ paddingRight: 10, paddingLeft: 10 }} className="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
-                    {this.searchFilesById(selectedFeatures[0].getId()).length > 0 && <Slider style={{ marginRight: 'auto', marginLeft: 'auto' }} {...settings}>
+            <Grid style={{paddingBottom:40}} container align={'center'} justify={'center'} spacing={0}>
+                <Grid item xs={12} sm={6} md={6} >
+                {this.searchFilesById(selectedFeatures[0].getId()).length > 0 && <Slider style={{ marginRight: 'auto', marginLeft: 'auto' }} {...settings}>
                         {this.searchFilesById(selectedFeatures[0].getId()).map(
                             (imageObj, i) => {
                                 return <div key={i}><Img
@@ -49,13 +50,13 @@ class ItemDetails extends React.Component {
                                         noImage
                                     ]}
                                     loader={<Spinner className="loading-center" name="line-scale-party" color="steelblue" />}
-                                    className="img-responsive" />
+                                    style={{width:'100%',height:'auto'}}/>
                                 </div>
                             }
                         )}
                     </Slider>}
-                </div>
-            </div>
+                </Grid>
+            </Grid>
             <Divider light />
             <Table>
                 <TableHead>
