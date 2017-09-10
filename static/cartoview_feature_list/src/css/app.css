@@ -51,3 +51,6 @@
 .switch.on {
     background: #2c689c!important;
 }
+.ol-control button {
+  background-color: rgb(78, 188, 212) !important;
+}

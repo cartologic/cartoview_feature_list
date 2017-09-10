@@ -1,5 +1,4 @@
 import './app.css'
-import 'openlayers/dist/ol.css'
 import './vendor/ol3-layerswitcher/src/ol3-layerswitcher.css'
 
 import { IntlProvider, addLocaleData } from 'react-intl'
@@ -8,6 +7,7 @@ import FeatureList from './components/FeatureList'
 import Grid from 'material-ui/Grid';
 import LoadingPanel from '@boundlessgeo/sdk/components/LoadingPanel'
 import MapPanel from '@boundlessgeo/sdk/components/MapPanel'
+import { MuiThemeProvider } from 'material-ui/styles';
 import PropTypes from 'prop-types'
 import { Provider } from 'react-redux'
 import React from 'react'
@@ -19,8 +19,8 @@ import {
     loadMap
 } from './actions/map'
 import { render } from 'react-dom'
+import { theme } from './theme.jsx'
 import { viewStore } from './store/stores'
-
 injectTapEventPlugin( )
 addLocaleData( enLocaleData )
 class CartoviewFeatureList extends React.Component {
@@ -33,17 +33,17 @@ class CartoviewFeatureList extends React.Component {
     }
     render( ) {
         return (
-            <div style={{flexGrow:1,height:'100%'}}>
-            <Grid style={{height:'100%'}} align={"stretch"} container spacing={0}>
-              <Grid container align={"stretch"} item xs={12} sm={12} md={8} spacing={0} >
-                <MapPanel map={this.map}></MapPanel>
-				<LoadingPanel map={this.map}></LoadingPanel>
-              </Grid>
-              <Grid container align={"stretch"} item xs={12} sm={12} md={4} spacing={0} >
-                <FeatureList {...this.props.configProps} />
-              </Grid>
-            </Grid>
-          </div>
+            <div style={{ flexGrow: 1, height: '100%' }}>
+                <Grid style={{ height: '100%' }} align={"stretch"} container spacing={0}>
+                    <Grid container align={"stretch"} item xs={12} sm={12} md={8} spacing={0} >
+                        <MapPanel map={this.map}></MapPanel>
+                        <LoadingPanel map={this.map}></LoadingPanel>
+                    </Grid>
+                    <Grid container align={"stretch"} item xs={12} sm={12} md={4} spacing={0} >
+                        <FeatureList {...this.props.configProps} />
+                    </Grid>
+                </Grid>
+            </div>
         )
     }
 }
@@ -66,10 +66,12 @@ global.CartoviewFeatureList = {
     show: ( el, props ) => {
         render(
             <Provider store={viewStore}>
-            <IntlProvider locale='en' messages={enMessages}>
-                <App configProps={props}></App>
-            </IntlProvider>
-        </Provider>,
+                <IntlProvider locale='en' messages={enMessages}>
+                <MuiThemeProvider theme={theme}>
+                    <App configProps={props}></App>
+                    </MuiThemeProvider>
+                </IntlProvider>
+            </Provider>,
             document.getElementById( el ) )
     }
 }

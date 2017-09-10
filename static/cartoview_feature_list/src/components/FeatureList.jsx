@@ -12,6 +12,7 @@ import AppBar from 'material-ui/AppBar'
 import Button from 'material-ui/Button'
 import Divider from 'material-ui/Divider'
 import FeatureListItem from "./FeatureListItem"
+import IconButton from 'material-ui/IconButton';
 import ItemDetails from "./ItemDetails"
 import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
@@ -269,9 +270,9 @@ class FeatureList extends React.Component {
                         </Typography>
                         {!(featureIsLoading || attachmentFilesIsLoading) && selectMode && selectedFeatures.length == 1 && <div className="col-xs-12 col-sm-12 col-md-12">
 
-                            <Button type="button" raised  onClick={
+                            <IconButton color="accent"  onClick={
                                 this.backToList.bind(this)
-                            }><i className="fa fa-arrow-left" aria-hidden="true"></i>  Back</Button>
+                            }><i className="fa fa-arrow-left" aria-hidden="true"></i></IconButton>
 
                         </div>}
                         </Toolbar>
