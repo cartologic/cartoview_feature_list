@@ -21,6 +21,7 @@ import {
 import { render } from 'react-dom'
 import { theme } from './theme.jsx'
 import { viewStore } from './store/stores'
+
 injectTapEventPlugin( )
 addLocaleData( enLocaleData )
 class CartoviewFeatureList extends React.Component {

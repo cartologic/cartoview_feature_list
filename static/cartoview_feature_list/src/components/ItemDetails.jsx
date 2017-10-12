@@ -39,9 +39,9 @@ class ItemDetails extends React.Component {
         }
         return (
             <div>
-            <Grid style={{paddingBottom:40,marginTop:40}} container align={'center'} justify={'center'} spacing={0}>
-                <Grid item xs={6} sm={6} md={6} >
-                {this.searchFilesById(selectedFeatures[0].getId()).length > 0 && <Slider style={{ marginRight: 'auto', marginLeft: 'auto' }} {...settings}>
+            <Grid style={{marginTop:40}} container align={'center'} justify={'center'} spacing={0}>
+            {this.searchFilesById(selectedFeatures[0].getId()).length > 0 &&  <Grid item xs={6} sm={6} md={6} >
+                <Slider style={{ marginRight: 'auto', marginLeft: 'auto' }} {...settings}>
                         {this.searchFilesById(selectedFeatures[0].getId()).map(
                             (imageObj, i) => {
                                 return <div key={i}><Img
@@ -54,8 +54,8 @@ class ItemDetails extends React.Component {
                                 </div>
                             }
                         )}
-                    </Slider>}
-                </Grid>
+                    </Slider>
+                </Grid>}
             </Grid>
             <Divider light />
             <Table>
