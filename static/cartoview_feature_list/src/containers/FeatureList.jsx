@@ -1,15 +1,11 @@
 import {
-    addSelectionLayer,
     getFeatureInfoUrl,
     getLayers,
     getMap,
-    getWMSLayer,
-    isWMSLayer,
     wmsGetFeatureInfoFormats
 } from './staticMethods'
 
 import { Component } from 'react'
-import LayerSwitcher from '../vendor/ol3-layerswitcher/src/ol3-layerswitcher'
 import MapConfigService from '@boundlessgeo/sdk/services/MapConfigService'
 import MapConfigTransformService from '@boundlessgeo/sdk/services/MapConfigTransformService'
 import PropTypes from 'prop-types'
@@ -42,9 +38,9 @@ class FeatureListContainer extends Component {
             styleFunction)
     }
     componentWillMount() {
-        const { urls, typeName, count, startIndex } = this.props
+        const { urls,config } = this.props
         this.loadMap(urls.mapJsonURL)
-        this.getFeatures(url.wfsURL, typeName, count, startIndex)
+        this.getFeatures(urls.wfsURL, config.typeName, config.count, config.startIndex)
     }
     componentDidMount() {
         this.singleClickListner()
@@ -229,5 +225,6 @@ class FeatureListContainer extends Component {
     }
 }
 FeatureListContainer.propTypes = {
-    urls:PropTypes.object.isRequired
+    urls:PropTypes.object.isRequired,
+    config:PropTypes.object.isRequired
 }
