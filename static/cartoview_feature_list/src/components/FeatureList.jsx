@@ -199,7 +199,7 @@ class FeatureList extends React.Component {
                             features )
                         this.props.setSelectMode( true )
                     }
-                    document.body.style.cursor = "default";
+                    document.body.style.cursor = "default"
                 } )
         } )
     }

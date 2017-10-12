@@ -13,7 +13,8 @@ let map_obj = new ol.Map( {
         center: [
             0, 0
         ],
-        zoom: 3
+        zoom: 3,
+        maxZoom:16
     } )
 } )
 var layerSwitcher = new LayerSwitcher();
