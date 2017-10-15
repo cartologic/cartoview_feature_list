@@ -37,7 +37,7 @@
                 proxy: "{{ PROXY_URL }}",
                 appInstance: "{% url 'api_dispatch_detail' api_name='api' resource_name='appinstances' pk=instance.id %}",
                 geoserverUrl : "{{ GEOSERVER_BASE_URL }}",
-                wfsURL : "/geoserver/wfs",
+                wfsURL : "{{ GEOSERVER_BASE_URL }}wfs",
                 static: "{{ STATIC_URL }}",
                 media: "{{ MEDIA_URL }}",
                 rest: "{% url 'app_manager_base_url' %}rest/app_manager/",
