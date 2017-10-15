@@ -22,5 +22,5 @@ export const addTrailingSlash = ( str ) => {
 };
 //TODO:TEST THIS FUNCTION
 export const wfsQueryBuilder = ( geoserverUrl, query ) => {
-	return decodeURIComponent(UrlAssembler( addTrailingSlash( geoserverUrl ) + "wfs" ).query( query ).toString( ))
+	return decodeURIComponent(UrlAssembler(geoserverUrl).query( query ).toString( ))
 }

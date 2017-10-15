@@ -126,6 +126,7 @@ class FeatureListContainer extends Component {
         })
         fetch(wfsURL, {
             method: 'POST',
+            credentials: 'include',
             body: new XMLSerializer().serializeToString(request)
         }).then((response) => {
             return response.json()
