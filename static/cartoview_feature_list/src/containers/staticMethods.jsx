@@ -15,7 +15,7 @@ export const getFeatureInfoUrl = ( layer, coordinate, view, infoFormat ) => {
         resolution, projection, {
             'INFO_FORMAT': infoFormat
         } )
-    return url
+    return `${url}&FEATURE_COUNT=10`
 }
 export const getMap = ( ) => {
     const map = new ol.Map( {
@@ -71,7 +71,7 @@ export const getLayers = ( layers ) => {
     layers.forEach( ( layer ) => {
         if ( layer instanceof ol.layer.Group ) {
             children = children.concat( getLayers( layer.getLayers( ) ) )
-        } else if ( layer.getVisible( ) && isWMS( layer ) ) {
+        } else if ( layer.getVisible( ) && isWMSLayer( layer ) ) {
             children.push( layer )
         }
     } )

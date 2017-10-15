@@ -1,33 +1,50 @@
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
 
+import Button from 'material-ui/Button';
 import Divider from 'material-ui/Divider'
 import Grid from 'material-ui/Grid'
 import Img from 'react-image'
-import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Slider from 'react-slick'
 import Spinner from "react-spinkit"
-import { connect } from 'react-redux'
+import Typography from 'material-ui/Typography'
 import noImage from '../img/no-img.png'
+import { withStyles } from 'material-ui/styles'
 
+const styles = theme => ({
+    root: {
+        width: '100%',
+    },
+    flex: {
+        flex: 1,
+    },
+    menuButton: {
+        marginLeft: -12,
+        marginRight: 20,
+    },
+    button: {
+        margin: theme.spacing.unit,
+    },
+    textCenter: {
+        textAlign: 'center',
+        marginBottom:'auto',
+        [theme.breakpoints.down('md')]: {
+            marginBottom: 40,
+        },
+
+    }
+})
 class ItemDetails extends React.Component {
-    constructor( props ) {
-        super( props )
+    constructor(props) {
+        super(props)
     }
-    searchFilesById = ( id ) => {
-        let result = [ ]
-        this.props.files.map( ( imageObj ) => {
-            if ( imageObj.is_image && imageObj.feature_id ===
-                id ) {
-                result.push( imageObj )
-            }
-        } )
-        return result
-    }
-    render( ) {
+    render() {
         let {
-            selectedFeatures
+            selectedFeature,
+            searchFilesById,
+            classes,
+            back
         } = this.props
         const settings = {
             dots: true,
@@ -39,55 +56,59 @@ class ItemDetails extends React.Component {
         }
         return (
             <div>
-            <Grid style={{marginTop:40}} container align={'center'} justify={'center'} spacing={0}>
-            {this.searchFilesById(selectedFeatures[0].getId()).length > 0 &&  <Grid item xs={6} sm={6} md={6} >
-                <Slider style={{ marginRight: 'auto', marginLeft: 'auto' }} {...settings}>
-                        {this.searchFilesById(selectedFeatures[0].getId()).map(
-                            (imageObj, i) => {
-                                return <div key={i}><Img
-                                    src={[
-                                        imageObj.file,
-                                        noImage
-                                    ]}
-                                    loader={<Spinner className="loading-center" name="line-scale-party" color="steelblue" />}
-                                    style={{width:'100%',height:'auto'}}/>
-                                </div>
+                <Typography type="title" color="inherit" className={classes.flex}>
+                    Feature Details
+                </Typography>
+                <Grid style={{ marginTop: 40 }} container align={'center'} justify={'center'} spacing={0}>
+                    {searchFilesById(selectedFeature.getId()).length > 0 && <Grid item xs={6} sm={6} md={6} >
+                        <Slider style={{ marginRight: 'auto', marginLeft: 'auto' }} {...settings}>
+                            {searchFilesById(selectedFeature.getId()).map(
+                                (imageObj, i) => {
+                                    return <div key={i}><Img
+                                        src={[
+                                            imageObj.file,
+                                            noImage
+                                        ]}
+                                        loader={<Spinner className="loading-center" name="line-scale-party" color="steelblue" />}
+                                        style={{ width: '100%', height: 'auto' }} />
+                                    </div>
+                                }
+                            )}
+                        </Slider>
+                    </Grid>}
+                </Grid>
+                <Divider light />
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Property</TableCell>
+                            <TableCell>Value</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {Object.keys(selectedFeature.getProperties()).map((key, i) => {
+                            if (key != "geometry") {
+                                return <TableRow key={i}>
+                                    <TableCell>{key}</TableCell>
+                                    <TableCell style={{ whiteSpace: 'pre-line' }}>{selectedFeature.getProperties()[key]}</TableCell>
+                                </TableRow>
                             }
-                        )}
-                    </Slider>
-                </Grid>}
-            </Grid>
-            <Divider light />
-            <Table>
-                <TableHead>
-                <TableRow>
-                    <TableCell>Property</TableCell>
-                    <TableCell>Value</TableCell>
-                </TableRow>
-                </TableHead>
-                <TableBody>
-                {Object.keys(selectedFeatures[0].getProperties()).map((key, i) => {
-                        if (key != "geometry") {
-                            return <TableRow key={i}>
-                                <TableCell>{key}</TableCell>
-                                <TableCell style={{whiteSpace: 'pre-line'}}>{selectedFeatures[0].getProperties()[key]}</TableCell>
-                            </TableRow>
-                        }
-                    })}
-                </TableBody>
-      </Table>
-        </div>
+                        })}
+                    </TableBody>
+                </Table>
+                <div className={classes.textCenter}>
+                    <Button onClick={() => back()} color="primary" className={classes.button}>
+                        Back
+                </Button>
+                </div>
+            </div>
         )
     }
 }
 ItemDetails.propTypes = {
-    selectedFeatures: PropTypes.array.isRequired,
-    files: PropTypes.array.isRequired
+    classes: PropTypes.object.isRequired,
+    selectedFeature: PropTypes.object.isRequired,
+    searchFilesById: PropTypes.func.isRequired,
+    back: PropTypes.func.isRequired
 }
-const mapStateToProps = ( state ) => {
-    return {
-        selectedFeatures: state.selectedFeatures,
-        files: state.files
-    }
-}
-export default connect( mapStateToProps )( ItemDetails )
+export default withStyles(styles)(ItemDetails)

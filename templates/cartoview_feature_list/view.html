@@ -16,6 +16,10 @@
         html,body {
             height: 100%;
             margin: 0px;
+            overflow: hidden
+        }
+        #root{
+            height: 100%
         }
         
 
@@ -26,29 +30,32 @@
 <div style="height: 100%;" id="root"></div>
 <script src="{% static 'cartoview_feature_list/dist/FeatureList.bundle.js?version=2' %}"></script>
 <script type="text/javascript">
-    var URLS = {
-      geoserver: "{{ GEOSERVER_BASE_URL }}",
-      //{% if PROXY_URL %}
-      proxy: "{{ PROXY_URL }}",
-      //{% endif %}
-      static: "{{ STATIC_URL }}",
-      media: "{{ MEDIA_URL }}",
-      rest: "{% url 'app_manager_base_url' %}rest/app_manager/",
-      geonodeRest: "{% url 'api_api_top_level' 'api' %}"
-    };
-    function getMapConfigUrl(id){
-      return "/maps/" + id + "/data"
-    }
+    {% if instance %}
+            var instanceId= {{ instance.id }}
+            const urls={
+                mapJsonUrl: "{% url 'map_json' mapid=instance.map.id %}",
+                proxy: "{{ PROXY_URL }}",
+                appInstance: "{% url 'api_dispatch_detail' api_name='api' resource_name='appinstances' pk=instance.id %}",
+                geoserverUrl : "{{ GEOSERVER_BASE_URL }}",
+                wfsURL : "/geoserver/wfs",
+                static: "{{ STATIC_URL }}",
+                media: "{{ MEDIA_URL }}",
+                rest: "{% url 'app_manager_base_url' %}rest/app_manager/",
+                geonodeRest: "{% url 'api_api_top_level' 'api' %}",
+                attachmentUploadUrl:function(layerName){
+                    return '/apps/cartoview_attachment_manager/'+layerName+'/file'
+            },
+            viewURL: "{% url "cartoview_geo_collect.view" instance_id=instance.id %}",
+            appLogo:'{% static 'cartoview_feature_list/logo.png' %}',
+            }
+    {% endif %}
 
     const props = {{ instance.config | safe }};
     
     props.formTitle="{{instance.title}}"
     props.formAbstract="{{instance.abstract}}"
-    props.mapId =  {{ instance.map.id }};
-    props.geoserverUrl = URLS.geoserver
-    props.uploadUrl = ""
     props.username="{{request.user.username}}"
-    CartoviewFeatureList.show('root', props);
+    CartoviewFeatureList.show('root', props,urls);
   </script>
 </body>
 </html>

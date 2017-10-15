@@ -1,12 +1,11 @@
 import { createMuiTheme } from 'material-ui/styles'
-import cyan from 'material-ui/colors/cyan'
+import lightBlue from 'material-ui/colors/lightBlue'
 import red from 'material-ui/colors/red'
-import teal from 'material-ui/colors/teal'
 export const theme = createMuiTheme( {
     palette: {
-        primary: cyan,
+        primary: lightBlue,
         secondary: { 
-            ...teal,
+            ...lightBlue,
             "A200": "#006064",
         },
         error: red,

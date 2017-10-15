@@ -17,8 +17,8 @@ let map_obj = new ol.Map( {
         maxZoom:16
     } )
 } )
-var layerSwitcher = new LayerSwitcher();
-map_obj.addControl(layerSwitcher);
+var layerSwitcher = new LayerSwitcher()
+map_obj.addControl(layerSwitcher)
 export function map( state = map_obj, action ) {
     switch ( action.type ) {
     case 'SET_MAP':

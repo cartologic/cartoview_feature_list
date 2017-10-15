@@ -1,15 +1,19 @@
+import React, { Component } from 'react'
 import {
+    addSelectionLayer,
     getFeatureInfoUrl,
     getLayers,
     getMap,
+    getWMSLayer,
     wmsGetFeatureInfoFormats
 } from './staticMethods'
 
-import { Component } from 'react'
+import FeatureList from '../components/cartoviewFeatureList'
 import MapConfigService from '@boundlessgeo/sdk/services/MapConfigService'
 import MapConfigTransformService from '@boundlessgeo/sdk/services/MapConfigTransformService'
 import PropTypes from 'prop-types'
 import ol from 'openlayers'
+import { render } from 'react-dom'
 import { styleFunction } from './styling.jsx'
 import { wfsQueryBuilder } from "../helpers/helpers.jsx"
 
@@ -27,25 +31,38 @@ class FeatureListContainer extends Component {
             attachmentIsLoading: false,
             attachments: null,
             selectionModeEnabled: false,
-            selectedFeatures: null,
             featureIdentifyLoading: false,
-            featureIdentifyResult: false,
-            activeFeatures: 0
+            featureIdentifyResult: null,
+            activeFeatures: null
         }
         this.map = getMap()
         this.featureCollection = new ol.Collection()
-        this.addSelectionLayer(this.map, this.featureCollection,
-            styleFunction)
+        addSelectionLayer(this.map, this.featureCollection, styleFunction)
     }
     componentWillMount() {
-        const { urls,config } = this.props
-        this.loadMap(urls.mapJsonURL)
-        this.getFeatures(urls.wfsURL, config.typeName, config.count, config.startIndex)
+        const { urls, config } = this.props
+        this.loadMap(urls.mapJsonUrl,urls.proxy)
+        this.getFeatures(0)
+        this.loadAttachments(urls.attachmentUploadUrl(this.layerName(
+            config.layer)))
+    }
+    searchFilesById = (id) => {
+        const { attachments } = this.state
+        let result = []
+        attachments.map((imageObj) => {
+            if (imageObj.is_image && imageObj.feature_id === id) {
+                result.push(imageObj)
+            }
+        })
+        return result
+    }
+    layerName = (typeName) => {
+        return typeName.split(":").pop()
     }
     componentDidMount() {
         this.singleClickListner()
     }
-    loadMap = (mapUrl) => {
+    loadMap = (mapUrl,proxyURL) => {
         this.setState({ mapIsLoading: true })
         fetch(mapUrl, {
             method: "GET",
@@ -55,24 +72,25 @@ class FeatureListContainer extends Component {
         }).then((config) => {
             if (config) {
                 MapConfigService.load(MapConfigTransformService.transform(
-                    config), this.map)
+                    config), this.map,proxyURL)
                 this.setState({ mapIsLoading: false })
             }
         }).catch((error) => {
             throw Error(error)
         })
     }
-    getFeatures(url, typeName, count, startIndex) {
+    getFeatures = (startIndex) => {
         let { totalFeatures } = this.state
+        const { urls, config } = this.props
         this.setState({ featuresIsLoading: true })
-        const requestUrl = wfsQueryBuilder(url, {
+        const requestUrl = wfsQueryBuilder(urls.wfsURL, {
             service: 'wfs',
             version: '2.0.0',
             request: 'GetFeature',
-            typeNames: typeName,
+            typeNames: config.layer,
             outputFormat: 'json',
             srsName: this.map.getView().getProjection().getCode(),
-            count,
+            count: parseInt(config.pagination),
             startIndex
         })
         fetch(requestUrl).then((response) => response.json()).then(
@@ -86,7 +104,7 @@ class FeatureListContainer extends Component {
                 if (totalFeatures == 0) {
                     this.setState({ totalFeatures: total })
                 }
-                this.setState(features)
+                this.setState({ features })
             })
     }
     search = (wfsURL, text, layerNameSpace, selectedLayerName, property) => {
@@ -137,19 +155,27 @@ class FeatureListContainer extends Component {
             })
     }
     zoomToFeature = (feature) => {
-        this.map.getView().fit(feature.getGeometry().getExtent(), this
-            .map.getSize(), { duration: 10000 })
+        this.map.getView().fit(feature.getGeometry().getExtent(), this.map
+            .getSize(), { duration: 10000 })
     }
     singleClickListner = () => {
         this.map.on('singleclick', (e) => {
             this.setState({
                 featureIdentifyLoading: true,
-                activeFeatures: 0,
-                featureIdentifyResult: null
+                activeFeatures: null,
+                featureIdentifyResult: null,
+                selectionModeEnabled: true
             })
             document.body.style.cursor = "progress"
             this.featureIdentify(this.map, e.coordinate)
         })
+    }
+    backToAllFeatures = () => {
+        this.setState({
+            selectionModeEnabled: false,
+            featureIdentifyResult: null
+        })
+        this.addStyleToFeature([])
     }
     transformFeatures = (layer, features, map, crs) => {
         let transformedFeatures = []
@@ -161,70 +187,72 @@ class FeatureListContainer extends Component {
         })
         this.setState({
             featureIdentifyResult: transformedFeatures,
-            activeFeatures: 0,
+            activeFeatures: null,
             featureIdentifyLoading: false
         })
         document.body.style.cursor = "default"
     }
-    addStyleToFeature = () => {
-        let { featureIdentifyResult, activeFeatures } = this.state
-        if (featureIdentifyResult.length > 0) {
-            this.featureCollection.clear()
-            this.featureCollection.push(featureIdentifyResult[
-                activeFeatures])
-        }
+    addStyleToFeature = (features) => {
+
+        this.featureCollection.clear()
+        this.featureCollection.extend(features)
+
     }
     featureIdentify = (map, coordinate) => {
-        getLayers(map.getLayers().getArray()).forEach(
-            (layer) => {
-                const view = map.getView()
-                const url = getFeatureInfoUrl(layer, coordinate, view,
-                    'application/json')
-                fetch(url).then((response) => response.json()).then(
-                    (result) => {
-                        if (result.features.length > 0) {
-                            const features =
-                                wmsGetFeatureInfoFormats[
-                                    'application/json'].readFeatures(
-                                    result)
-                            const crs = result.features.length > 0 ?
-                                result.crs.properties.name.split(
-                                    ":").pop() : null
-                            if (proj4.defs('EPSG:' + crs)) {
+        const { config } = this.props
+        const view = map.getView()
+        const layer = getWMSLayer(config.layer, this.map.getLayers().getArray())
+        const url = getFeatureInfoUrl(layer, coordinate, view,
+            'application/json')
+        fetch(url).then((response) => response.json()).then(
+            (result) => {
+                if (result.features.length > 0) {
+                    const features = wmsGetFeatureInfoFormats[
+                        'application/json'].readFeatures(result)
+                    const crs = result.features.length > 0 ? result.crs
+                        .properties.name.split(":").pop() : null
+                    if (proj4.defs('EPSG:' + crs)) {
+                        this.transformFeatures(layer, features, map,
+                            crs)
+                    } else {
+                        fetch("https://epsg.io/?format=json&q=" + crs)
+                            .then(response => response.json()).then(
+                            projres => {
+                                proj4.defs('EPSG:' + crs, projres
+                                    .results[0].proj4)
                                 this.transformFeatures(layer,
                                     features, map, crs)
-                            } else {
-                                fetch(
-                                    "https://epsg.io/?format=json&q=" +
-                                    crs).then(response =>
-                                        response.json()).then(
-                                    projres => {
-                                        proj4.defs('EPSG:' +
-                                            crs, projres.results[
-                                                0].proj4)
-                                        this.transformFeatures(
-                                            layer,
-                                            features, map,
-                                            crs)
-                                    })
-                            }
-                        } else {
-                            this.setState({
-                                featureIdentifyResult: [],
-                                activeFeatures: 0,
-                                featureIdentifyLoading: false
                             })
-                            document.body.style.cursor = "default"
-                        }
-                        this.addStyleToFeature()
+                    }
+                } else {
+                    this.setState({
+                        featureIdentifyResult: [],
+                        activeFeatures: null,
+                        featureIdentifyLoading: false
                     })
+                    document.body.style.cursor = "default"
+                }
+                this.addStyleToFeature(this.state.featureIdentifyResult)
             })
     }
     render() {
-        return null
+        const { config } = this.props
+        let childrenProps = {
+            config, ...this.state, getFeatures: this.getFeatures,
+            searchFilesById: this.searchFilesById, zoomToFeature: this
+                .zoomToFeature, addStyleToFeature: this.addStyleToFeature,
+            backToAllFeatures: this.backToAllFeatures
+        }
+        return <FeatureList childrenProps={childrenProps} map={this.map} />
     }
 }
 FeatureListContainer.propTypes = {
-    urls:PropTypes.object.isRequired,
-    config:PropTypes.object.isRequired
+    urls: PropTypes.object.isRequired,
+    config: PropTypes.object.isRequired
+}
+global.CartoviewFeatureList = {
+    show: (el, props, urls) => {
+        render(<FeatureListContainer urls={urls} config={props} />,
+            document.getElementById(el))
+    }
 }
