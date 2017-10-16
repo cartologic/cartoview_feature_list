@@ -6,10 +6,11 @@ import Divider from 'material-ui/Divider'
 import ItemDetails from "./ItemDetails"
 import PropTypes from 'prop-types'
 import React from 'react'
+import SearchInput from './SearchInput'
 import Spinner from "react-spinkit"
 import Typography from 'material-ui/Typography'
 import UltimatePaginationMaterialUi from './MaterialPagination'
-import noImage from '../img/no-img.png'
+import noImage from '../../img/no-img.png'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ( {
@@ -54,6 +55,9 @@ class CartoviewList extends React.Component {
         } else {
             addStyleToFeature( [] )
         }
+    }
+    openDetails=(state)=>{
+        this.setState({ ...state}, () => this.addStyleZoom())
     }
     addStyleZoom = () => {
         const { zoomToFeature, addStyleToFeature } = this.props
@@ -126,11 +130,13 @@ class CartoviewList extends React.Component {
             getFeatures,
             selectionModeEnabled,
             searchFilesById,
-            backToAllFeatures
+            backToAllFeatures,
+            search
         } = this.props
         let { detailsModeEnabled, detailsOfFeature } = this.state
         return (
             <div className={classes.root}>
+                <SearchInput openDetails={this.openDetails} search={search} config={config} addStyleZoom={this.addStyleZoom} searchFilesById={searchFilesById} />
                 {!selectionModeEnabled && !detailsModeEnabled && this.getFeatureListComponent()}
                 {selectionModeEnabled && !detailsModeEnabled && this.getIdentifyListComponent()}
                 {selectionModeEnabled && !detailsModeEnabled && <div className={classes.loadingCenter}>

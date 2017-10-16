@@ -8,7 +8,7 @@ import {
     wmsGetFeatureInfoFormats
 } from './staticMethods'
 
-import FeatureList from '../components/cartoviewFeatureList'
+import FeatureList from '../components/view/cartoviewFeatureList'
 import MapConfigService from '@boundlessgeo/sdk/services/MapConfigService'
 import MapConfigTransformService from '@boundlessgeo/sdk/services/MapConfigTransformService'
 import PropTypes from 'prop-types'
@@ -28,6 +28,7 @@ class FeatureListContainer extends Component {
             searchResultIsLoading: false,
             searchModeEnable: false,
             searchTotalFeatures: 0,
+            searchResult:null,
             attachmentIsLoading: false,
             attachments: null,
             selectionModeEnabled: false,
@@ -58,6 +59,9 @@ class FeatureListContainer extends Component {
     }
     layerName = (typeName) => {
         return typeName.split(":").pop()
+    }
+    layerNameSpace = (typeName) => {
+        return typeName.split(":")[0]
     }
     componentDidMount() {
         this.singleClickListner()
@@ -107,40 +111,31 @@ class FeatureListContainer extends Component {
                 this.setState({ features })
             })
     }
-    search = (wfsURL, text, layerNameSpace, selectedLayerName, property) => {
+    search = (text) => {
+        console.log('here')
         /* 
         Openlayer build request to avoid errors
         undefined passed to filter to skip paramters and
         use default values
         */
+        const { urls, config } = this.props
         let { searchTotalFeatures } = this.state
         this.setState({ searchResultIsLoading: true, searchModeEnable: true })
         var request = new ol.format.WFS().writeGetFeature({
             srsName: this.map.getView().getProjection().getCode(),
             featureNS: 'http://www.geonode.org/',
-            featurePrefix: layerNameSpace,
+            featurePrefix: this.layerNameSpace(config.layer),
             outputFormat: 'application/json',
-            featureTypes: [selectedLayerName],
-            filter: ol.format.filter.like(property, '%' + text +
+            featureTypes: [this.layerName(config.layer)],
+            filter: ol.format.filter.like(config.filters.value, '%' + text +
                 '%', undefined, undefined, undefined, false)
         })
-        fetch(wfsURL, {
+        return fetch(urls.wfsURL, {
             method: 'POST',
             credentials: 'include',
             body: new XMLSerializer().serializeToString(request)
         }).then((response) => {
             return response.json()
-        }).then((json) => {
-            let features = new ol.format.GeoJSON().readFeatures(
-                json)
-            const total = json.totalFeatures
-            if (searchTotalFeatures == 0) {
-                this.setState({ searchTotalFeatures: total })
-            }
-            this.setState({
-                searchResultIsLoading: false,
-                features
-            })
         })
     }
     loadAttachments = (attachmentURL) => {
@@ -242,7 +237,7 @@ class FeatureListContainer extends Component {
             config, ...this.state, getFeatures: this.getFeatures,
             searchFilesById: this.searchFilesById, zoomToFeature: this
                 .zoomToFeature, addStyleToFeature: this.addStyleToFeature,
-            backToAllFeatures: this.backToAllFeatures
+            backToAllFeatures: this.backToAllFeatures,layerName:this.layerName,layerNameSpace:this.layerNameSpace,search:this.search
         }
         return <FeatureList childrenProps={childrenProps} map={this.map} />
     }

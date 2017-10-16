@@ -1,4 +1,4 @@
-import '../vendor/ol3-layerswitcher/src/ol3-layerswitcher.css'
+import '../../vendor/ol3-layerswitcher/src/ol3-layerswitcher.css'
 
 import { IntlProvider, addLocaleData } from 'react-intl'
 import React, { Component } from 'react'
@@ -10,26 +10,25 @@ import PropTypes from 'prop-types'
 import enLocaleData from 'react-intl/locale-data/en'
 import enMessages from '@boundlessgeo/sdk/locale/en'
 import injectTapEventPlugin from 'react-tap-event-plugin'
-import { render } from 'react-dom'
-import { theme } from '../theme.jsx'
+import { theme } from './theme.jsx'
 import { withStyles } from 'material-ui/styles'
 
-const styles = theme => ( {
+const styles = theme => ({
     root: {
         height: '100%'
     }
-} )
-injectTapEventPlugin( )
-addLocaleData( enLocaleData )
+})
+injectTapEventPlugin()
+addLocaleData(enLocaleData)
 class FeatureList extends Component {
-    render( ) {
-        let { classes, map,childrenProps } = this.props
+    render() {
+        let { classes, map, childrenProps } = this.props
         return (
             <IntlProvider locale='en' messages={enMessages}>
                 <MuiThemeProvider theme={theme}>
                     <div className={classes.root}>
                         <NavBar childrenProps={childrenProps} />
-                        <ContentGrid childrenProps={childrenProps} map={map}/>
+                        <ContentGrid childrenProps={childrenProps} map={map} />
                     </div>
                 </MuiThemeProvider>
             </IntlProvider>
@@ -38,5 +37,7 @@ class FeatureList extends Component {
 }
 FeatureList.propTypes = {
     classes: PropTypes.object.isRequired,
+    childrenProps: PropTypes.object.isRequired,
+    map: PropTypes.object.isRequired,
 }
 export default withStyles(styles)(FeatureList)

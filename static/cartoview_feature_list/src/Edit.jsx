@@ -3,11 +3,11 @@ import './css/app.css'
 import React, { Component } from 'react'
 
 import EditService from './services/editService.jsx'
-import General from './components/General.jsx'
-import ListOptions from './components/ListOptions.jsx'
-import NavigationTools from './components/NavigationTools.jsx'
-import Navigator from './components/Navigator.jsx'
-import ResourceSelector from './components/ResourceSelector.jsx'
+import General from './components/edit/General.jsx'
+import ListOptions from './components/edit/ListOptions.jsx'
+import NavigationTools from './components/edit/NavigationTools.jsx'
+import Navigator from './components/edit/Navigator.jsx'
+import ResourceSelector from './components/edit/ResourceSelector.jsx'
 
 export default class Edit extends Component {
 	constructor( props ) {

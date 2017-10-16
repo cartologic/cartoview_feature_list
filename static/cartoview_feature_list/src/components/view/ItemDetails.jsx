@@ -9,7 +9,7 @@ import React from 'react'
 import Slider from 'react-slick'
 import Spinner from "react-spinkit"
 import Typography from 'material-ui/Typography'
-import noImage from '../img/no-img.png'
+import noImage from '../../img/no-img.png'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
