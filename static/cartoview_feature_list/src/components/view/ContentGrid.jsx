@@ -33,7 +33,7 @@ class ContentGrid extends Component {
         return (
             <Grid className={classes.root} container  align={"stretch"} spacing={0}>
                 <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
-                    <MapPanel className={classes.mapPanel} map={map}></MapPanel>
+                    <MapPanel useHistory={false} className={classes.mapPanel} map={map}></MapPanel>
                     <LoadingPanel map={map}></LoadingPanel>
                 </Grid>
                 <Grid item md={4} lg={4} xl={4} hidden={{ smDown: true }}>
