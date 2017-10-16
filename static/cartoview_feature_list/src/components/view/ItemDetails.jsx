@@ -1,18 +1,17 @@
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
 
 import Button from 'material-ui/Button';
+import { Carousel } from 'react-responsive-carousel';
 import Divider from 'material-ui/Divider'
 import Grid from 'material-ui/Grid'
-import Img from 'react-image'
 import PropTypes from 'prop-types'
 import React from 'react'
-import Slider from 'react-slick'
-import Spinner from "react-spinkit"
 import Typography from 'material-ui/Typography'
-import noImage from '../../img/no-img.png'
 import { withStyles } from 'material-ui/styles'
 
-const styles = theme => ({
+const styles = theme => ( {
     root: {
         width: '100%',
     },
@@ -28,16 +27,15 @@ const styles = theme => ({
     },
     textCenter: {
         textAlign: 'center',
-        marginBottom:'auto',
-        [theme.breakpoints.down('md')]: {
+        marginBottom: 'auto',
+        [ theme.breakpoints.down( 'md' ) ]: {
             marginBottom: 40,
         },
-
     }
-})
+} )
 class ItemDetails extends React.Component {
-    constructor(props) {
-        super(props)
+    constructor( props ) {
+        super( props )
     }
     render() {
         let {
@@ -46,35 +44,23 @@ class ItemDetails extends React.Component {
             classes,
             back
         } = this.props
-        const settings = {
-            dots: true,
-            fade: true,
-            infinite: true,
-            speed: 500,
-            slidesToShow: 1,
-            slidesToScroll: 1
-        }
         return (
             <div>
                 <Typography type="title" color="inherit" className={classes.flex}>
                     Feature Details
                 </Typography>
                 <Grid style={{ marginTop: 40 }} container align={'center'} justify={'center'} spacing={0}>
-                    {searchFilesById(selectedFeature.getId()).length > 0 && <Grid item xs={6} sm={6} md={6} >
-                        <Slider style={{ marginRight: 'auto', marginLeft: 'auto' }} {...settings}>
+                    {searchFilesById(selectedFeature.getId()).length > 0 && <Grid item xs={8} sm={8} md={8} xl={8} >
+                        <Carousel showArrows={true}>
                             {searchFilesById(selectedFeature.getId()).map(
                                 (imageObj, i) => {
-                                    return <div key={i}><Img
-                                        src={[
-                                            imageObj.file,
-                                            noImage
-                                        ]}
-                                        loader={<Spinner className="loading-center" name="line-scale-party" color="steelblue" />}
-                                        style={{ width: '100%', height: 'auto' }} />
+                                    return <div key={i}>
+                                        <img src={imageObj.file} />
+                                        <p className="legend">{`Uploaded by ${imageObj.username}`}</p>
                                     </div>
                                 }
                             )}
-                        </Slider>
+                        </Carousel>
                     </Grid>}
                 </Grid>
                 <Divider light />
@@ -111,4 +97,4 @@ ItemDetails.propTypes = {
     searchFilesById: PropTypes.func.isRequired,
     back: PropTypes.func.isRequired
 }
-export default withStyles(styles)(ItemDetails)
+export default withStyles( styles )( ItemDetails )
