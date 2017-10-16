@@ -61,7 +61,7 @@ class NavBar extends React.Component {
                             </IconButton>
                         </Hidden>
                         <Typography type="title" color="inherit" className={classes.flex}>
-                            Feature List
+                            {childrenProps.config && childrenProps.config.formTitle && `${childrenProps.config.formTitle||'Feature List'}`}
                          </Typography>
                     </Toolbar>
                 </AppBar>
