@@ -41,15 +41,21 @@ class FeatureList(StandardAppViews):
             'publish_resourcebase',
         ]
         # access limited to specific users
-        users_permissions = {'{}'.format(request.user): owner_permissions}
-        for user in access:
-            if isinstance(user, dict) and \
-                    user.get('value', None) != request.user.username:
-                users_permissions.update(
-                    {user.get('value', None): ['view_resourcebase', ]})
-        permessions = {
-            'users': users_permissions
-        }
+        if access == "private":
+            permessions = {
+                'users': {
+                    '{}'.format(request.user): owner_permissions,
+                }
+            }
+        else:
+            permessions = {
+                'users': {
+                    '{}'.format(request.user): owner_permissions,
+                    'AnonymousUser': [
+                        'view_resourcebase',
+                    ],
+                }
+            }
         # set permissions so that no one can view this appinstance other than
         #  the user
         instance_obj.set_permissions(permessions)

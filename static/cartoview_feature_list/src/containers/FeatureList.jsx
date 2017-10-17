@@ -121,7 +121,6 @@ class FeatureListContainer extends Component {
         */
         const { config } = this.props
         const filterType = typeof ( value )
-        console.log(filterType)
         if ( filterType === 'number' ) {
             return ol.format.filter.equalTo( config.filters.value, value )
         } else {

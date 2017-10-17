@@ -24,12 +24,6 @@ const options = {
         title: {
             label: "App Title"
         },
-        access: {
-            factory: t.form.Textbox,
-            template: getAccessTemplate( {
-                loadOptions: getAccessOptions
-            } )
-        },
         keywords: {
             factory: t.form.Textbox,
             template: getKeywordsTemplate( {
@@ -55,17 +49,20 @@ export default class General extends Component {
     }
     save( ) {
         var basicConfig = this.form.getValue( )
-        console.log(basicConfig)
         if ( basicConfig ) {
             this.props.onComplete( basicConfig )
         }
     }
     render( ) {
         let { onPrevious } = this.props
+        const accessOptions = t.enums({
+            public: 'Public',
+            private: 'Private'
+          });
         let mapConfig = t.struct( {
             title: t.String,
             abstract: t.String,
-            access: t.list( selectAccessItem ),
+            access: accessOptions,
             keywords: t.list( t.maybe( selectKeywordItem ) )
         } )
         return (
