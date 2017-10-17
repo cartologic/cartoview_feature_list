@@ -105,7 +105,7 @@ class IntegrationAutosuggest extends React.Component {
                 json)
             const total = json.totalFeatures
             let suggestions = features.map((feature, i) => {
-                return { label: feature.getProperties()[config.filters.value], value: feature }
+                return { label: feature.getProperties()[config.filters], value: feature }
             })
             this.setState({
                 suggestions
@@ -143,7 +143,7 @@ class IntegrationAutosuggest extends React.Component {
                 inputProps={{
                     autoFocus: true,
                     classes,
-                    placeholder: `Search by ${config.filters.value}`,
+                    placeholder: `Search by ${config.filters}`,
                     value: this.state.value,
                     onChange: this.handleChange,
                 }}

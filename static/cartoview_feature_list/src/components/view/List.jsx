@@ -1,16 +1,13 @@
-import List, { ListItem, ListItemText } from 'material-ui/List'
+import {Item, Message} from './statelessComponents'
 
-import Avatar from 'material-ui/Avatar'
-import Button from 'material-ui/Button';
-import Divider from 'material-ui/Divider'
+import Button from 'material-ui/Button'
 import ItemDetails from "./ItemDetails"
-import {Loader} from './statelessComponents'
+import List from 'material-ui/List'
+import { Loader } from './statelessComponents'
 import PropTypes from 'prop-types'
 import React from 'react'
 import SearchInput from './SearchInput'
-import Typography from 'material-ui/Typography'
 import UltimatePaginationMaterialUi from './MaterialPagination'
-import noImage from '../../img/no-img.png'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
@@ -37,9 +34,7 @@ const styles = theme => ({
         margin: `0 ${theme.spacing.unit * 2}px`,
     },
 })
-const Message = (props) => {
-    return <Typography type={props.type} align="center" color="inherit" className={props.classes.flex}>{props.message}</Typography>
-}
+
 class CartoviewList extends React.Component {
     state = {
         currentPage: 1,
@@ -83,13 +78,7 @@ class CartoviewList extends React.Component {
             <List subheader="All Features">
                 {features && features.map((feature, index) => {
                     const attachment = searchFilesById(feature.getId())
-                    return <div key={index}>
-                        <ListItem onClick={() => this.setState({ detailsModeEnabled: true, detailsOfFeature: feature }, () => this.addStyleZoom())} dense button className={classes.listItem}>
-                            <Avatar src={attachment.length > 0 ? attachment[0].file : noImage} className={classes.bigAvatar} />
-                            <ListItemText primary={`${feature.getProperties()[config.titleAttribute]}`} secondary={`${feature.getProperties()[config.subtitleAttribute]}`} />
-                        </ListItem>
-                        <Divider light />
-                    </div>
+                    return <Item key={index} classes={classes} feature={feature} config={config} attachment={attachment} openDetails={this.openDetails} />
                 })}
             </List> :
             <Loader classes={classes} />)
@@ -109,13 +98,7 @@ class CartoviewList extends React.Component {
             <List subheader="Identified Features">
                 {featureIdentifyResult && featureIdentifyResult.map((feature, index) => {
                     const attachment = searchFilesById(feature.getId())
-                    return <div key={index}>
-                        <ListItem onClick={() => this.setState({ detailsModeEnabled: true, detailsOfFeature: feature }, () => this.addStyleZoom())} dense button className={classes.listItem}>
-                            <Avatar src={attachment.length > 0 ? attachment[0].file : noImage} className={classes.bigAvatar} />
-                            <ListItemText primary={`${feature.getProperties()[config.titleAttribute]}`} secondary={`${feature.getProperties()[config.subtitleAttribute]}`} />
-                        </ListItem>
-                        <Divider light />
-                    </div>
+                    return<Item key={index} classes={classes} feature={feature} config={config}  attachment={attachment} openDetails={this.openDetails} />
                 })}
             </List> :
             featureIdentifyResult && featureIdentifyResult.length ==
