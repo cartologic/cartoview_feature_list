@@ -16,7 +16,7 @@ const styles = theme => ( {
             height: `calc(100% - 64px)`,
         },
         [ theme.breakpoints.down( 'md' ) ]: {
-            height: `calc(100% - 48px)`,
+            height: `calc(100% - 52px)`,
         }
     },
     paper: {

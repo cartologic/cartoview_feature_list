@@ -20,7 +20,7 @@ const styles = theme => ({
     },
     bigAvatar: {
         width: 80,
-        height: 80,
+        height: 'auto',
     },
     loadingCenter: {
         textAlign: 'center'
