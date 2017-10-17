@@ -8,7 +8,7 @@ export default class ListOptions extends Component {
     constructor( props ) {
         super( props )
         this.state = {
-            layers: [ ],
+            layers: [],
             loading: true,
             selectedLayer: this.props.config ? this.props.config.layer : null,
             selectedTitleAttribute: this.props.config ? this.props.config
@@ -16,14 +16,14 @@ export default class ListOptions extends Component {
             selectedSubtitleAttribute: this.props.config ? this.props.config
                 .subtitleAttribute : null,
             pagination: this.props.config ? this.props.config.pagination : null,
-            attributes: [ ],
-            searchOptions: [ ],
+            attributes: [],
+            searchOptions: [],
             filters: this.props.config ? this.props.config.filters : null,
             messages: null
         }
     }
-    attributesOption = ( ) => {
-        let options = [ ]
+    attributesOption = () => {
+        let options = []
         this.state.attributes.forEach( ( attribute ) => {
             if ( attribute.attribute_type.indexOf( "gml:" ) == -1 ) {
                 options.push( {
@@ -34,14 +34,14 @@ export default class ListOptions extends Component {
         } )
         this.setState( { searchOptions: options } )
     }
-    selectLayer( ) {
+    selectLayer() {
         if ( this.refs.selectedLayer.value ) {
             this.setState( {
                 selectedLayer: this.refs.selectedLayer.value
-            }, this.loadAttributes( ) )
+            }, this.loadAttributes() )
         }
     }
-    selectTitleAttribute( ) {
+    selectTitleAttribute() {
         if ( this.refs.selectedTitleAttribute.value !== "" ) {
             this.setState( {
                 selectedTitleAttribute: this.refs.selectedTitleAttribute
@@ -49,7 +49,7 @@ export default class ListOptions extends Component {
             } )
         }
     }
-    selectSubtitleAttribute( ) {
+    selectSubtitleAttribute() {
         if ( this.refs.selectedSubtitleAttribute.value !== "" ) {
             this.setState( {
                 selectedSubtitleAttribute: this.refs.selectedSubtitleAttribute
@@ -57,7 +57,7 @@ export default class ListOptions extends Component {
             } )
         }
     }
-    selectPagination( ) {
+    selectPagination() {
         if ( this.refs.selectedPagination.value !== "" ) {
             console.log( this.refs.selectedPagination.value )
             this.setState( {
@@ -65,25 +65,24 @@ export default class ListOptions extends Component {
             } )
         }
     }
-    loadAttributes( ) {
+    loadAttributes() {
         let typename = this.refs.selectedLayer ? this.refs.selectedLayer.value :
             this.state.selectedLayer
         if ( typename != "" && typename ) {
             fetch( this.props.urls.layerAttributes + "?layer__typename=" +
-                typename ).then( ( response ) => response.json( ) ).then(
+                typename ).then( ( response ) => response.json() ).then(
                 ( data ) => {
-                    this.setState( { attributes: data.objects }, ( ) => {
-                        this.attributesOption( )
+                    this.setState( { attributes: data.objects }, () => {
+                        this.attributesOption()
                     } )
                 } ).catch( ( error ) => {
                 console.error( error )
             } )
         }
     }
-    loadLayers( ) {
+    loadLayers() {
         fetch( this.props.urls.mapLayers + "?id=" + this.props.map.id ).then(
-            ( response ) => response.json( ) ).then( ( data ) => {
-           
+            ( response ) => response.json() ).then( ( data ) => {
             this.setState( { layers: data.objects, loading: false } )
         } ).catch( ( error ) => {
             console.error( error )
@@ -92,21 +91,21 @@ export default class ListOptions extends Component {
     handleSelectChange = ( value ) => {
         this.setState( { filters: value, messages: null } )
     }
-    handleSubmit( ) {
+    handleSubmit() {
         if ( this.state.filters ) {
-            this.refs.submitButton.click( )
+            this.refs.submitButton.click()
         } else {
             this.setState( { messages: "Please Select Search Attribute" } )
         }
     }
-    componentDidMount( ) {
-        this.loadLayers( )
+    componentDidMount() {
+        this.loadLayers()
         if ( this.state.selectedLayer ) {
-            this.loadAttributes( )
+            this.loadAttributes()
         }
     }
     save( e ) {
-        e.preventDefault( )
+        e.preventDefault()
         this.props.onComplete( {
             config: {
                 layer: this.state.selectedLayer,
@@ -117,136 +116,139 @@ export default class ListOptions extends Component {
             }
         } )
     }
-    render( ) {
+    render() {
         let { layers, loading, attributes, selectedLayer } = this.state
         return (
             <div className="row">
-				<div className="row">
-					<div className="col-xs-5 col-md-4"></div>
-					<div className="col-xs-7 col-md-8">
-						<button
-							style={{
-								display: "inline-block",
-								margin: "0px 3px 0px 3px"
-							}}
-							className="btn btn-primary btn-sm pull-right"
-							onClick={this.handleSubmit.bind(this)}>{"next "}
-							<i className="fa fa-arrow-right"></i>
-						</button>
-						<button
-							style={{
-								display: "inline-block",
-								margin: "0px 3px 0px 3px"
-							}}
-							className="btn btn-primary btn-sm pull-right"
-							onClick={() => this.props.onPrevious()}>
-							<i className="fa fa-arrow-left"></i>{" Previous"}</button>
-					</div>
-				</div>
-				<div className="row" style={{
-					marginTop: "3%"
-				}}>
-					<div className="col-xs-5 col-md-4">
-						<h4>{'Customize List'}</h4>
-					</div>
-				</div>
-				<hr></hr>
-				<form onSubmit={this.save.bind(this)}>
-					{!loading && <div className="form-group">
-						<label htmlFor="layer-select">Layer</label>
-						<select
-							className="form-control"
-							id="layer-select"
-							ref="selectedLayer"
-							defaultValue={this.state.selectedLayer}
-							onChange={this.selectLayer.bind(this)}
-							required>
-							<option value="">Choose Layer</option>
-							{layers.length > 0 && layers.map((layer, i) => {
-								return <option value={layer.typename} key={i}>{layer.name}</option>
-							})}
-						</select>
-					</div>}
-					{layers.length == 0 && !loading && <b>No Point Layers In this Map Please Select a Map With Point Layer</b>}
-					{!loading && selectedLayer && <div className="form-group">
-						<label htmlFor="attribute-select">Title Attribute</label>
-						<select
-							className="form-control"
-							id="attribute-select"
-							ref="selectedTitleAttribute"
-							defaultValue={this.state.selectedTitleAttribute}
-							onChange={this.selectTitleAttribute.bind(this)}
-							required>
-							<option value="">Choose Attribute</option>
-							{attributes.length > 0 && attributes.map((attribute, i) => {
-								if (attribute.attribute_type.indexOf("gml:") == -1) {
-									return <option key={i} value={attribute.attribute}>
-										{attribute.attribute || attribute.attribute_label}
-									</option>
-								}
-							})}
-						</select>
-					</div>}
-					{!loading && selectedLayer && <div className="form-group">
-						<label htmlFor="attribute-select">Subtitle Attribute</label>
-						<select
-							className="form-control"
-							id="attribute-select"
-							ref="selectedSubtitleAttribute"
-							defaultValue={this.state.selectedSubtitleAttribute}
-							onChange={this.selectSubtitleAttribute.bind(this)}
-							required>
-							<option value="">Choose Attribute</option>
-							{attributes.length > 0 && attributes.map((attribute, i) => {
-								if (attribute.attribute_type.indexOf("gml:") == -1) {
-									return <option key={i} value={attribute.attribute}>
-										{attribute.attribute || attribute.attribute_label}
-									</option>
-								}
-							})}
-						</select>
-					</div>}
-					{!loading && selectedLayer && <div className="form-group">
-						<label htmlFor="pagination-select">Features Per Page</label>
-						<select
-							className="form-control"
-							id="pagination-select"
-							ref="selectedPagination"
-							defaultValue={this.state.pagination}
-							onChange={this.selectPagination.bind(this)}
-							required>
-							<option value="">Choose Number Of Features</option>
-							<option value="10">10</option>
-							<option value="20">20</option>
-							<option value="50">50</option>
-							<option value="80">80</option>
-							<option value="100">100</option>
-						</select>
-					</div>}
+                <div className="row">
+                    <div className="col-xs-5 col-md-4"></div>
+                    <div className="col-xs-7 col-md-8">
+                        <button
+                            style={{
+                                display: "inline-block",
+                                margin: "0px 3px 0px 3px"
+                            }}
+                            className="btn btn-primary btn-sm pull-right"
+                            onClick={this.handleSubmit.bind(this)}>{"next "}
+                            <i className="fa fa-arrow-right"></i>
+                        </button>
+                        <button
+                            style={{
+                                display: "inline-block",
+                                margin: "0px 3px 0px 3px"
+                            }}
+                            className="btn btn-primary btn-sm pull-right"
+                            onClick={() => this.props.onPrevious()}>
+                            <i className="fa fa-arrow-left"></i>{" Previous"}</button>
+                    </div>
+                </div>
+                <div className="row" style={{
+                    marginTop: "3%"
+                }}>
+                    <div className="col-xs-5 col-md-4">
+                        <h4>{'Customize List'}</h4>
+                    </div>
+                </div>
+                <hr></hr>
+                <form onSubmit={this.save.bind(this)}>
+                    {!loading && <div className="form-group">
+                        <label htmlFor="layer-select">Layer</label>
+                        <select
+                            className="form-control"
+                            id="layer-select"
+                            ref="selectedLayer"
+                            defaultValue={this.state.selectedLayer}
+                            onChange={this.selectLayer.bind(this)}
+                            required>
+                            <option value="">Choose Layer</option>
+                            {layers.length > 0 && layers.map((layer, i) => {
+                                return <option value={layer.typename} key={i}>{layer.name}</option>
+                            })}
+                        </select>
+                    </div>}
+                    {layers.length == 0 && !loading && <b>No Point Layers In this Map Please Select a Map With Point Layer</b>}
+                    {!loading && selectedLayer && <div className="form-group">
+                        <label htmlFor="attribute-select">Title Attribute</label>
+                        <select
+                            className="form-control"
+                            id="attribute-select"
+                            ref="selectedTitleAttribute"
+                            defaultValue={this.state.selectedTitleAttribute}
+                            onChange={this.selectTitleAttribute.bind(this)}
+                            required>
+                            <option value="">Choose Attribute</option>
+                            {attributes.length > 0 && attributes.map((attribute, i) => {
+                                if (attribute.attribute_type.indexOf("gml:") == -1) {
+                                    return <option key={i} value={attribute.attribute}>
+                                        {attribute.attribute || attribute.attribute_label}
+                                    </option>
+                                }
+                            })}
+                        </select>
+                    </div>}
+                    {!loading && selectedLayer && <div className="form-group">
+                        <label htmlFor="attribute-select">Subtitle Attribute</label>
+                        <select
+                            className="form-control"
+                            id="attribute-select"
+                            ref="selectedSubtitleAttribute"
+                            defaultValue={this.state.selectedSubtitleAttribute}
+                            onChange={this.selectSubtitleAttribute.bind(this)}
+                            required>
+                            <option value="">Choose Attribute</option>
+                            {attributes.length > 0 && attributes.map((attribute, i) => {
+                                if (attribute.attribute_type.indexOf("gml:") == -1) {
+                                    return <option key={i} value={attribute.attribute}>
+                                        {attribute.attribute || attribute.attribute_label}
+                                    </option>
+                                }
+                            })}
+                        </select>
+                    </div>}
+                    {!loading && selectedLayer && <div className="form-group">
+                        <label htmlFor="pagination-select">Features Per Page</label>
+                        <select
+                            className="form-control"
+                            id="pagination-select"
+                            ref="selectedPagination"
+                            defaultValue={this.state.pagination}
+                            onChange={this.selectPagination.bind(this)}
+                            required>
+                            <option value="">Choose Number Of Features</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="80">80</option>
+                            <option value="100">100</option>
+                        </select>
+                    </div>}
 
-					{!loading && selectedLayer &&
-						<div className="form-group">
-							<label htmlFor="pagination-select">Search By</label>
-							<Select
-								multi={false}
-								onChange={this.handleSelectChange}
-								value={this.state.filters}
-								options={this.state.searchOptions} />
-						</div>}
+                    {!loading && selectedLayer &&
+                        <div className="form-group">
+                            <label htmlFor="pagination-select">Search By</label>
+                            <Select
+                                multi={false}
+                                onChange={this.handleSelectChange}
+                                value={this.state.filters}
+                                options={this.state.searchOptions} />
+                        </div>}
+                        <div className="checkbox">
+                            <label><input type="checkbox" value=""/>Zoom on Select</label>
+                        </div>
 
 
-					{this.state.messages && <small style={{ color: "red" }}>{this.state.messages}</small>}
-					<button
-						style={{
-							display: 'none'
-						}}
-						ref="submitButton"
-						type="submit"
-						value="submit"
-						className="btn btn-primary">Save</button>
+                    {this.state.messages && <small style={{ color: "red" }}>{this.state.messages}</small>}
+                    <button
+                        style={{
+                            display: 'none'
+                        }}
+                        ref="submitButton"
+                        type="submit"
+                        value="submit"
+                        className="btn btn-primary">Save</button>
 
-				</form>
-			</div>
+                </form>
+            </div>
         )
     }
 }

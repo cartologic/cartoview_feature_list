@@ -11,8 +11,7 @@ const mapConfig = t.struct( {
     showZoombar: t.Boolean,
     showLayerSwitcher: t.Boolean,
     showBaseMapSwitcher: t.Boolean,
-    showLegend: t.Boolean,
-    EnableGeolocation: t.Boolean
+    showLegend: t.Boolean
 } );
 const options = {
     fields: {
@@ -27,13 +26,10 @@ const options = {
         },
         showLegend: {
             label: "Legend"
-        },
-        EnableGeolocation: {
-            label: "GeoLocation"
         }
     }
 };
-const Form = t.form.Form;
+const Form = t.form.Form
 export default class NavigationTools extends Component {
     constructor( props ) {
         super( props )
@@ -44,14 +40,16 @@ export default class NavigationTools extends Component {
                     .showLayerSwitcher : true,
                 showBaseMapSwitcher: this.props.config ? this.props.config
                     .showBaseMapSwitcher : true,
-                showLegend: this.props.config ? this.props.config.showLegend : true,
-                EnableGeolocation: this.props.config ? this.props.config.EnableGeolocation : true
+                showLegend: this.props.config ? this.props.config.showLegend : true
             }
         }
     }
     componentWillReceiveProps( nextProps ) {
         this.setState( {
-            success: nextProps.success
+			success: nextProps.success,
+			defaultConfig:{
+				...nextProps.config.config
+			}
         } )
     }
     save( ) {
@@ -62,11 +60,11 @@ export default class NavigationTools extends Component {
                 showLayerSwitcher: basicConfig.showLayerSwitcher,
                 showBaseMapSwitcher: basicConfig.showBaseMapSwitcher,
 				showLegend: basicConfig.showLegend,
-				EnableGeolocation:basicConfig.EnableGeolocation
             }
             this.props.onComplete( properConfig )
         }
-    }
+	}
+	
     render( ) {
         return (
             <div className="row">

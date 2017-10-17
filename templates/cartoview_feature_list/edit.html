@@ -25,20 +25,42 @@
 {% block extra_script %}
     <script src="{{ STATIC_URL }}cartoview_feature_list/dist/config.bundle.js"></script>
     <script>
-
-  {% if instance %}
-  var appConfig = {{ instance.config|escape|safe }};
-  var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
-  var title = "{{ instance.title }}";
-  var map_id={{instance.map_id}};
-  var instance_id={{instance.id}};
-  var geoserver_url = "{{ GEOSERVER_BASE_URL }}";
-  var abstract = " {% spaceless %}{{ instance.abstract|title }}{% endspaceless %} ";
-  {% endif %}
-    var username="{{instance.owner.username}}"
-    var viewer=new Viewer('root',{'instance':{map:{id:map_id,title:title,abstract:abstract},id:instance_id,config:appConfig},'urls':{'resources_url':"/api/maps","view":"/apps/cartoview_feature_list/"+instance_id+"/view/","mapLayers":"/apps/maplayers/api","layerAttributes":"/apps/rest/app_manager/geonodelayerattribute/"},'limit':9},username);
-    viewer.view();
+      
+        {% if instance %}
+      
+        const urls={
+                  resources_url: "{% url 'api_dispatch_list' api_name='api' resource_name='maps' %}",
+                  appInstance: "{% url 'api_dispatch_detail' api_name='api' resource_name='appinstances' pk=instance.id %}",
+                  proxy: "{{ PROXY_URL }}",
+                  geoserverUrl : "{{ GEOSERVER_BASE_URL }}",
+                  static: "{{ STATIC_URL }}",
+                  media: "{{ MEDIA_URL }}",
+                  rest: "{% url 'app_manager_base_url' %}rest/app_manager/",
+                  geonodeRest: "{% url 'api_api_top_level' 'api' %}",
+                  appLogo:'{% static 'cartoview_feature_list/logo.png' %}',
+                  layerAttributes:"{% url 'app_manager_base_url' %}rest/app_manager/geonodelayerattribute/",
+                  mapLayers:"{% url "cartoview_map_layers" %}",
+                  newURL:"{% url "cartoview_feature_list.new" %}",
+                  editURL:function(id){
+                    return "/apps/cartoview_feature_list/"+id+"/edit/"
+                  },
+                  viewURL:function(id){
+                    return "/apps/cartoview_feature_list/"+id+"/view/"
+                  },
+                  detailsURL:function(id){
+                    return "/apps/appinstance/"+id+"/"
+                  },
+                  describeFeatureType: function(typename){
+                    return "{{ GEOSERVER_BASE_URL }}wfs?service=wfs&version=2.0.0&request=DescribeFeatureType&typeName="+typename+"&outputFormat=application/json"
+                  }
+      
+              }
+        {% endif %}
+          var username="{{instance.owner.username}}"
+          var viewer=new Viewer('root',username,urls);
+          viewer.view();
     </script>
+  
 <div id="myModal" class="modal fade" role="dialog">
 <div class="modal-dialog">
 
