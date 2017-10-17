@@ -191,7 +191,9 @@ class FeatureListContainer extends Component {
     addStyleToFeature = (features) => {
 
         this.featureCollection.clear()
-        this.featureCollection.extend(features)
+        if(features && features.length>0){
+            this.featureCollection.extend(features)
+        }
 
     }
     featureIdentify = (map, coordinate) => {

@@ -31,7 +31,7 @@ class ContentGrid extends Component {
     render( ) {
         const { classes, map, childrenProps } = this.props
         return (
-            <Grid className={classes.root} container  align={"stretch"} spacing={0}>
+            <Grid className={classes.root} container  alignItems={"stretch"} spacing={0}>
                 <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
                     <MapPanel useHistory={false} className={classes.mapPanel} map={map}></MapPanel>
                     <LoadingPanel map={map}></LoadingPanel>

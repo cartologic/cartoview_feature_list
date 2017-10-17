@@ -49,8 +49,8 @@ class ItemDetails extends React.Component {
                 <Typography type="title" color="inherit" className={classes.flex}>
                     Feature Details
                 </Typography>
-                <Grid style={{ marginTop: 40 }} container align={'center'} justify={'center'} spacing={0}>
-                    {searchFilesById(selectedFeature.getId()).length > 0 && <Grid item xs={8} sm={8} md={8} xl={8} >
+                <Grid style={{ marginTop: 40 }} container alignItems={'center'} justify={'center'} spacing={0}>
+                    {searchFilesById(selectedFeature.getId()).length > 0 && <Grid item xs={10} sm={10} md={10} lg={10} xl={10} >
                         <Carousel showArrows={true}>
                             {searchFilesById(selectedFeature.getId()).map(
                                 (imageObj, i) => {

@@ -4,16 +4,16 @@ import Avatar from 'material-ui/Avatar'
 import Button from 'material-ui/Button';
 import Divider from 'material-ui/Divider'
 import ItemDetails from "./ItemDetails"
+import {Loader} from './statelessComponents'
 import PropTypes from 'prop-types'
 import React from 'react'
 import SearchInput from './SearchInput'
-import Spinner from "react-spinkit"
 import Typography from 'material-ui/Typography'
 import UltimatePaginationMaterialUi from './MaterialPagination'
 import noImage from '../../img/no-img.png'
 import { withStyles } from 'material-ui/styles'
 
-const styles = theme => ( {
+const styles = theme => ({
     root: {
         background: theme.palette.background.paper,
         padding: theme.spacing.unit * 2
@@ -29,15 +29,15 @@ const styles = theme => ( {
         textAlign: 'center'
     },
     pagination: {
-        [ theme.breakpoints.down( 'md' ) ]: {
+        [theme.breakpoints.down('md')]: {
             marginBottom: 40,
         },
-    }
-} )
-const loader = ( spinnerClass ) => {
-    return <div><Spinner className={spinnerClass} name="line-scale-party" color="steelblue" /></div>
-}
-const Message = ( props ) => {
+    },
+    progress: {
+        margin: `0 ${theme.spacing.unit * 2}px`,
+    },
+})
+const Message = (props) => {
     return <Typography type={props.type} align="center" color="inherit" className={props.classes.flex}>{props.message}</Typography>
 }
 class CartoviewList extends React.Component {
@@ -47,23 +47,26 @@ class CartoviewList extends React.Component {
         detailsOfFeature: null
     }
     back = () => {
-        const { selectionModeEnabled, featureIdentifyResult,
-            addStyleToFeature } = this.props
-        this.setState( { detailsModeEnabled: false, detailsOfFeature: null } )
-        if ( selectionModeEnabled ) {
-            addStyleToFeature( featureIdentifyResult )
+        const {
+            selectionModeEnabled,
+            featureIdentifyResult,
+            addStyleToFeature
+        } = this.props
+        this.setState({ detailsModeEnabled: false, detailsOfFeature: null })
+        if (selectionModeEnabled) {
+            addStyleToFeature(featureIdentifyResult)
         } else {
-            addStyleToFeature( [] )
+            addStyleToFeature([])
         }
     }
-    openDetails=(state)=>{
-        this.setState({ ...state}, () => this.addStyleZoom())
+    openDetails = (state) => {
+        this.setState({ ...state }, () => this.addStyleZoom())
     }
     addStyleZoom = () => {
         const { zoomToFeature, addStyleToFeature } = this.props
         const { detailsOfFeature } = this.state
-        addStyleToFeature( [ detailsOfFeature ] )
-        zoomToFeature( detailsOfFeature )
+        addStyleToFeature([detailsOfFeature])
+        zoomToFeature(detailsOfFeature)
     }
     getFeatureListComponent = () => {
         const {
@@ -75,7 +78,7 @@ class CartoviewList extends React.Component {
             searchFilesById,
             selectionModeEnabled
         } = this.props
-        return ( !featuresIsLoading && !attachmentIsLoading && !
+        return (!featuresIsLoading && !attachmentIsLoading && !
             selectionModeEnabled ?
             <List subheader="All Features">
                 {features && features.map((feature, index) => {
@@ -89,7 +92,7 @@ class CartoviewList extends React.Component {
                     </div>
                 })}
             </List> :
-            loader( classes.loadingCenter ) )
+            <Loader classes={classes} />)
     }
     getIdentifyListComponent = () => {
         const {
@@ -100,7 +103,7 @@ class CartoviewList extends React.Component {
             featureIdentifyLoading,
             featureIdentifyResult
         } = this.props
-        return ( selectionModeEnabled && !featureIdentifyLoading &&
+        return (selectionModeEnabled && !featureIdentifyLoading &&
             featureIdentifyResult && featureIdentifyResult.length >
             0 ?
             <List subheader="Identified Features">
@@ -116,9 +119,9 @@ class CartoviewList extends React.Component {
                 })}
             </List> :
             featureIdentifyResult && featureIdentifyResult.length ==
-            0 ?
-            <Message message="No Features at this Point" classes={classes} type="body2" /> :
-            loader( classes.loadingCenter ) )
+                0 ?
+                <Message message="No Features at this Point" classes={classes} type="body2" /> :
+                <Loader classes={classes} />)
     }
     render() {
         const {
@@ -147,9 +150,9 @@ class CartoviewList extends React.Component {
                 {detailsModeEnabled && detailsOfFeature && <ItemDetails selectionModeEnabled={selectionModeEnabled} back={this.back} selectedFeature={detailsOfFeature} searchFilesById={searchFilesById} />}
                 {!selectionModeEnabled && !detailsModeEnabled && !(featuresIsLoading || attachmentIsLoading) && totalFeatures > 0 && <div className={classes.pagination}>
                     <UltimatePaginationMaterialUi
-                    totalPages={Math.ceil(totalFeatures / parseInt(config.pagination))}
-                    currentPage={this.state.currentPage}
-                    onChange={number => this.setState({ currentPage: number }, getFeatures((number - 1) * parseInt(config.pagination)))} />
+                        totalPages={Math.ceil(totalFeatures / parseInt(config.pagination))}
+                        currentPage={this.state.currentPage}
+                        onChange={number => this.setState({ currentPage: number }, getFeatures((number - 1) * parseInt(config.pagination)))} />
                 </div>}
             </div>
         )
@@ -171,4 +174,4 @@ CartoviewList.propTypes = {
     addStyleToFeature: PropTypes.func.isRequired,
     backToAllFeatures: PropTypes.func.isRequired,
 }
-export default withStyles( styles )( CartoviewList )
+export default withStyles(styles)(CartoviewList)
