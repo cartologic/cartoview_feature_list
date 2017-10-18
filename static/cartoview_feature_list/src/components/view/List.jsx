@@ -76,7 +76,7 @@ class CartoviewList extends React.Component {
         let { detailsModeEnabled, detailsOfFeature } = this.state
         return (
             <div className={classes.root}>
-                <SearchInput openDetails={this.openDetails} search={search} config={config} addStyleZoom={this.addStyleZoom} searchFilesById={searchFilesById} />
+                {config.filters && <SearchInput openDetails={this.openDetails} search={search} config={config} addStyleZoom={this.addStyleZoom} searchFilesById={searchFilesById} />}
                 {!selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="All Features" loading={featuresIsLoading} openDetails={this.openDetails} message={"No Features Found"} />}
                 {selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="Identified Features" loading={featureIdentifyLoading} features={featureIdentifyResult} openDetails={this.openDetails} message={"No Features At this Point"} />}
                 {selectionModeEnabled && !detailsModeEnabled && <div className={classes.loadingCenter}>

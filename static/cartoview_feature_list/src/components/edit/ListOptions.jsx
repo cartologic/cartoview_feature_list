@@ -9,7 +9,7 @@ const formConfig = t.struct({
     layer: t.String,
     titleAttribute: t.String,
     subtitleAttribute: t.maybe(t.String),
-    filters: t.String,
+    filters: t.maybe(t.String),
     pagination: t.String,
     zoomOnSelect:t.Boolean
 })
