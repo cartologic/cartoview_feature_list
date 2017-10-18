@@ -167,8 +167,12 @@ class FeatureListContainer extends Component {
         } )
     }
     zoomToFeature = ( feature ) => {
-        this.map.getView().fit( feature.getGeometry().getExtent(), this.map
+        const {config}=this.props
+        if(config&& config.zoomOnSelect){
+            this.map.getView().fit( feature.getGeometry().getExtent(), this.map
             .getSize(), { duration: 10000 } )
+        }
+        
     }
     singleClickListner = () => {
         this.map.on( 'singleclick', ( e ) => {

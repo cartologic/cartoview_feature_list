@@ -10,7 +10,8 @@ const formConfig = t.struct({
     titleAttribute: t.String,
     subtitleAttribute: t.maybe(t.String),
     filters: t.String,
-    pagination: t.String
+    pagination: t.String,
+    zoomOnSelect:t.Boolean
 })
 const Form = t.form.Form
 export default class ListOptions extends Component {
@@ -25,6 +26,7 @@ export default class ListOptions extends Component {
                     .subtitleAttribute : null,
                 pagination: this.props.config ? this.props.config.pagination : null,
                 filters: this.props.config ? this.props.config.filters : null,
+                zoomOnSelect: this.props.config ? this.props.config.zoomOnSelect : false,
             },
             attributeOptions: [],
             loading: false
