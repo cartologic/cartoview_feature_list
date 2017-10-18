@@ -69,11 +69,9 @@ class CartoviewList extends React.Component {
             selectionModeEnabled,
             searchFilesById,
             backToAllFeatures,
-            attachment,
-            search,
-            features,
             featureIdentifyResult,
-            featureIdentifyLoading
+            featureIdentifyLoading,
+            search
         } = this.props
         let { detailsModeEnabled, detailsOfFeature } = this.state
         return (
@@ -112,5 +110,6 @@ CartoviewList.propTypes = {
     searchFilesById: PropTypes.func.isRequired,
     addStyleToFeature: PropTypes.func.isRequired,
     backToAllFeatures: PropTypes.func.isRequired,
+    search:PropTypes.func.isRequired
 }
 export default withStyles( styles )( CartoviewList )

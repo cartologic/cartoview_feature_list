@@ -53,9 +53,9 @@ export const FeatureListComponent = (props) => {
         config,
         attachmentIsLoading,
         searchFilesById,
-        openDetails
+        openDetails,
     } = props
-    return ( !loading && !attachmentIsLoading ?
+    return ( !loading && !attachmentIsLoading && features && features.length>0 ?
         <List subheader={subheader}>
             {features && features.map((feature, index) => {
                 const attachment = searchFilesById(feature.getId())

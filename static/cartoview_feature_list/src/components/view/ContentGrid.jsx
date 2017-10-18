@@ -16,7 +16,7 @@ const styles = theme => ( {
             height: `calc(100% - 64px)`,
         },
         [ theme.breakpoints.down( 'md' ) ]: {
-            height: `calc(100% - 52px)`,
+            height: `calc(100% - 64px)`,
         }
     },
     paper: {
@@ -45,6 +45,8 @@ class ContentGrid extends Component {
 }
 ContentGrid.propTypes = {
     classes: PropTypes.object.isRequired,
+    childrenProps: PropTypes.object.isRequired,
+    map: PropTypes.object.isRequired,
     width: PropTypes.string,
 };
 export default compose( withStyles( styles ), withWidth( ) )( ContentGrid )

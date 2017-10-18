@@ -7,6 +7,7 @@ import Drawer from 'material-ui/Drawer'
 import Hidden from 'material-ui/Hidden'
 import IconButton from 'material-ui/IconButton'
 import MenuIcon from 'material-ui-icons/Menu'
+import NavigationMenu from './NavigationMenu'
 import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -63,6 +64,7 @@ class NavBar extends React.Component {
                         <Typography type="title" color="inherit" className={classes.flex}>
                             {childrenProps.config && childrenProps.config.formTitle && `${childrenProps.config.formTitle||'Feature List'}`}
                          </Typography>
+                         <NavigationMenu urls={childrenProps.urls}/>
                     </Toolbar>
                 </AppBar>
                 <Hidden mdUp>
@@ -94,5 +96,7 @@ class NavBar extends React.Component {
 }
 NavBar.propTypes = {
     classes: PropTypes.object.isRequired,
+    childrenProps: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
 }
 export default withStyles( styles, { withTheme: true } )( NavBar )

@@ -252,7 +252,7 @@ class FeatureListContainer extends Component {
             } )
     }
     render() {
-        const { config } = this.props
+        const { config,urls } = this.props
         let childrenProps = {
             config,
             ...this.state,
@@ -263,7 +263,8 @@ class FeatureListContainer extends Component {
             backToAllFeatures: this.backToAllFeatures,
             layerName: this.layerName,
             layerNameSpace: this.layerNameSpace,
-            search: this.search
+            search: this.search,
+            urls
         }
         return <FeatureList childrenProps={childrenProps} map={this.map} />
     }
