@@ -6,7 +6,7 @@ import React from 'react'
 import SearchInput from './SearchInput'
 import UltimatePaginationMaterialUi from './MaterialPagination'
 import { withStyles } from 'material-ui/styles'
-const styles = theme => ( {
+const styles = theme => ({
     root: {
         background: theme.palette.background.paper,
         padding: theme.spacing.unit * 2
@@ -22,14 +22,14 @@ const styles = theme => ( {
         textAlign: 'center'
     },
     pagination: {
-        [ theme.breakpoints.down( 'md' ) ]: {
+        [theme.breakpoints.down('md')]: {
             marginBottom: 40,
         },
     },
     progress: {
         margin: `0 ${theme.spacing.unit * 2}px`,
     },
-} )
+})
 class CartoviewList extends React.Component {
     state = {
         currentPage: 1,
@@ -42,21 +42,21 @@ class CartoviewList extends React.Component {
             featureIdentifyResult,
             addStyleToFeature
         } = this.props
-        this.setState( { detailsModeEnabled: false, detailsOfFeature: null } )
-        if ( selectionModeEnabled ) {
-            addStyleToFeature( featureIdentifyResult )
+        this.setState({ detailsModeEnabled: false, detailsOfFeature: null })
+        if (selectionModeEnabled) {
+            addStyleToFeature(featureIdentifyResult)
         } else {
-            addStyleToFeature( [] )
+            addStyleToFeature([])
         }
     }
-    openDetails = ( state ) => {
-        this.setState( { ...state }, () => this.addStyleZoom() )
+    openDetails = (state) => {
+        this.setState({ ...state }, () => this.addStyleZoom())
     }
     addStyleZoom = () => {
         const { zoomToFeature, addStyleToFeature } = this.props
         const { detailsOfFeature } = this.state
-        addStyleToFeature( [ detailsOfFeature ] )
-        zoomToFeature( detailsOfFeature )
+        addStyleToFeature([detailsOfFeature])
+        zoomToFeature(detailsOfFeature)
     }
     render() {
         const {
@@ -77,8 +77,8 @@ class CartoviewList extends React.Component {
         return (
             <div className={classes.root}>
                 <SearchInput openDetails={this.openDetails} search={search} config={config} addStyleZoom={this.addStyleZoom} searchFilesById={searchFilesById} />
-                {!selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="All Features" loading={featuresIsLoading} openDetails={this.openDetails}  message={"No Features Found"}  />}
-                {selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="Identified Features" loading={featureIdentifyLoading} features={featureIdentifyResult}  openDetails={this.openDetails}  message={"No Features At this Point"}  />}
+                {!selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="All Features" loading={featuresIsLoading} openDetails={this.openDetails} message={"No Features Found"} />}
+                {selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="Identified Features" loading={featureIdentifyLoading} features={featureIdentifyResult} openDetails={this.openDetails} message={"No Features At this Point"} />}
                 {selectionModeEnabled && !detailsModeEnabled && <div className={classes.loadingCenter}>
                     <Button onClick={() => backToAllFeatures()} color="primary" className={classes.button}>
                         All Features
@@ -110,6 +110,6 @@ CartoviewList.propTypes = {
     searchFilesById: PropTypes.func.isRequired,
     addStyleToFeature: PropTypes.func.isRequired,
     backToAllFeatures: PropTypes.func.isRequired,
-    search:PropTypes.func.isRequired
+    search: PropTypes.func.isRequired
 }
-export default withStyles( styles )( CartoviewList )
+export default withStyles(styles)(CartoviewList)
