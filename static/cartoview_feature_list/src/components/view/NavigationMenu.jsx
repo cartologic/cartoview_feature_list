@@ -3,6 +3,7 @@ import Menu, { MenuItem } from 'material-ui/Menu'
 import GridIcon from 'material-ui-icons/GridOn'
 import IconButton from 'material-ui/IconButton'
 import LayerIcon from 'material-ui-icons/Layers'
+import ListIcon from 'material-ui-icons/List'
 import MapIcon from 'material-ui-icons/Map'
 import MenuIcon from 'material-ui-icons/MoreVert'
 import ProtoTypes from 'prop-types'
@@ -21,9 +22,9 @@ class NavigationMenu extends React.Component {
     handleClick = event => {
         this.setState({ open: true, anchorEl: event.currentTarget })
     }
-    handleRequestClose = (url) => {
+    handleRequestClose = (e,url) => {
         this.setState({ open: false })
-        if(typeof(url)==="undefined"){
+        if(typeof(url)!=="undefined"){
             window.location.href=url
         }
         
@@ -44,10 +45,11 @@ class NavigationMenu extends React.Component {
                     anchorEl={this.state.anchorEl}
                     open={this.state.open}
                     onRequestClose={this.handleRequestClose}
-                >
-                    <MenuItem onClick={()=>this.handleRequestClose(urls.layers)}><LayerIcon className={classes.button} /> Layers</MenuItem>
-                    <MenuItem onClick={()=>this.handleRequestClose(urls.maps)}><MapIcon className={classes.button} /> Maps</MenuItem>
-                    <MenuItem onClick={()=>this.handleRequestClose(urls.apps)}><GridIcon className={classes.button} /> Apps</MenuItem>
+                >   
+                    <MenuItem onClick={(e)=>this.handleRequestClose(e,urls.appInstancesPage)}><ListIcon className={classes.button} /> All FeatureList apps</MenuItem>
+                    <MenuItem onClick={(e)=>this.handleRequestClose(e,urls.layers)}><LayerIcon className={classes.button} /> Layers</MenuItem>
+                    <MenuItem onClick={(e)=>this.handleRequestClose(e,urls.maps)}><MapIcon className={classes.button} /> Maps</MenuItem>
+                    <MenuItem onClick={(e)=>this.handleRequestClose(e,urls.apps)}><GridIcon className={classes.button} /> Apps</MenuItem>
                 </Menu>
             </div>
         );
