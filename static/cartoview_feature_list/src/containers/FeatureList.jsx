@@ -124,7 +124,7 @@ class FeatureListContainer extends Component {
         if ( filterType === 'number' ) {
             return ol.format.filter.equalTo( config.filters, value )
         } else {
-            return ol.format.filter.like( config.filters, value,
+            return ol.format.filter.like( config.filters, '%' + value+'%',
                 undefined, undefined, undefined, false )
         }
     }
