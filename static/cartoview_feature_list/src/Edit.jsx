@@ -9,6 +9,7 @@ import NavigationTools from './components/edit/NavigationTools.jsx'
 import Navigator from './components/edit/Navigator.jsx'
 import ResourceSelector from './components/edit/ResourceSelector.jsx'
 import { getCRSFToken } from './helpers/helpers.jsx'
+
 export default class Edit extends Component {
     constructor( props ) {
         super( props )
@@ -53,7 +54,7 @@ export default class Edit extends Component {
     }
     render() {
         let { urls, username, keywords } = this.props
-        var {
+        let {
             step,
             selectedResource,
             config,

@@ -1,23 +1,25 @@
 import React, { Component } from 'react'
 import {
-    getAccessOptions,
-    getAccessTemplate,
     getKeywordsOptions,
     getKeywordsTemplate
 } from './AutoCompleteInput'
 
 import PropTypes from 'prop-types'
 import t from 'tcomb-form'
-
 const Form = t.form.Form
-const selectAccessItem = t.struct( {
-    value: t.String,
-    label: t.String,
-    email: t.String
-} )
 const selectKeywordItem = t.struct( {
     value: t.String,
     label: t.String
+} )
+const accessOptions = t.enums( {
+    public: 'Public',
+    private: 'Private'
+} )
+const mapConfig = t.struct( {
+    title: t.String,
+    abstract: t.String,
+    access: accessOptions,
+    keywords: t.list( t.maybe( selectKeywordItem ) )
 } )
 const options = {
     fields: {
@@ -47,24 +49,14 @@ export default class General extends Component {
             },
         }
     }
-    save( ) {
-        var basicConfig = this.form.getValue( )
+    save() {
+        var basicConfig = this.form.getValue()
         if ( basicConfig ) {
             this.props.onComplete( basicConfig )
         }
     }
-    render( ) {
+    render() {
         let { onPrevious } = this.props
-        const accessOptions = t.enums({
-            public: 'Public',
-            private: 'Private'
-          });
-        let mapConfig = t.struct( {
-            title: t.String,
-            abstract: t.String,
-            access: accessOptions,
-            keywords: t.list( t.maybe( selectKeywordItem ) )
-        } )
         return (
             <div className="row">
                 <div className="row">

@@ -2,17 +2,20 @@
 import React, { Component } from 'react'
 
 import PropTypes from 'prop-types'
-import Select from 'react-select'
+import Spinner from 'react-spinkit'
 import t from 'tcomb-form'
 
+const formConfig = t.struct({
+    layer: t.String,
+    titleAttribute: t.String,
+    subtitleAttribute: t.maybe(t.String),
+    filters: t.String,
+    pagination: t.String
+})
 const Form = t.form.Form
-const paginationOptions = t.enums( {
-    public: 'Public',
-    private: 'Private'
-} );
 export default class ListOptions extends Component {
-    constructor( props ) {
-        super( props )
+    constructor(props) {
+        super(props)
         this.state = {
             layers: [],
             value: {
@@ -27,78 +30,72 @@ export default class ListOptions extends Component {
             loading: false
         }
     }
-    loadAttributes = ( typename ) => {
-        if ( typename ) {
-            fetch( this.props.urls.layerAttributes + "?layer__typename=" +
-                typename ).then( ( response ) => response.json() ).then(
-                ( data ) => {
+    loadAttributes = (typename) => {
+        this.setState({ loading: true })
+        if (typename) {
+            fetch(this.props.urls.layerAttributes + "?layer__typename=" +
+                typename).then((response) => response.json()).then(
+                (data) => {
                     let options = []
-                    data.objects.forEach( ( attribute ) => {
-                        if ( attribute.attribute_type.indexOf(
-                                "gml:" ) == -1 ) {
-                            options.push( {
+                    data.objects.forEach((attribute) => {
+                        if (attribute.attribute_type.indexOf(
+                            "gml:") == -1) {
+                            options.push({
                                 value: attribute.attribute,
                                 text: attribute.attribute
-                            } )
+                            })
                         }
-                    } )
-                    this.setState( { attributeOptions: options } )
-                } )
+                    })
+                    this.setState({ attributeOptions: options, loading: false })
+                })
         }
     }
     loadLayers() {
-        fetch( this.props.urls.mapLayers + "?id=" + this.props.map.id ).then(
-            ( response ) => response.json() ).then( ( data ) => {
-            this.setState( { layers: data.objects, loading: false } )
-        } ).catch( ( error ) => {
-            console.error( error )
-        } )
+        this.setState({ loading: true })
+        fetch(this.props.urls.mapLayers + "?id=" + this.props.map.id).then(
+            (response) => response.json()).then((data) => {
+                this.setState({ layers: data.objects, loading: false })
+            }).catch((error) => {
+                console.error(error)
+            })
     }
     getLayerOptions = () => {
         const { layers } = this.state
         let options = []
-        if ( layers && layers.length > 0 ) {
-            options = layers.map( layer => {
+        if (layers && layers.length > 0) {
+            options = layers.map(layer => {
                 return { value: layer.typename, text: layer.name }
-            } )
+            })
         }
         return options
     }
     componentDidMount() {
         const { config } = this.props
         this.loadLayers()
-        if ( config && config.layer ) {
-            this.loadAttributes( config.layer )
+        if (config && config.layer) {
+            this.loadAttributes(config.layer)
         }
     }
     save = () => {
         const value = this.form.getValue()
-        if ( value ) {
-            this.props.onComplete( {
-                config: { ...value
+        if (value) {
+            this.props.onComplete({
+                config: {
+                    ...value
                 }
-            } )
+            })
         }
     }
-    onChange = ( value ) => {
-        if ( value.layer ) {
-            this.setState( { value: value }, () => this.loadAttributes(
-                value.layer ) )
+    onChange = (value) => {
+        if (value.layer) {
+            this.setState({ value: value }, () => this.loadAttributes(
+                value.layer))
         }
     }
-    render() {
+    getFormOptions = () => {
         let {
-            loading,
             attributeOptions,
-            value
         } = this.state
-        let formConfig = t.struct( {
-            layer: t.String,
-            titleAttribute: t.String,
-            subtitleAttribute: t.String,
-            filters: t.String,
-            pagination: t.String
-        } )
         const options = {
             fields: {
                 layer: {
@@ -112,6 +109,7 @@ export default class ListOptions extends Component {
                     options: attributeOptions
                 },
                 subtitleAttribute: {
+                    label:"Subtitle Attribute (optional)",
                     factory: t.form.Select,
                     nullOption: { value: '', text: 'Choose subTitle Attribute' },
                     options: attributeOptions
@@ -132,22 +130,30 @@ export default class ListOptions extends Component {
                     ]
                 }
             }
-            
+
         }
+        return options
+    }
+    render() {
+        let {
+            loading,
+            value
+        } = this.state
+        const options = this.getFormOptions()
         return (
             <div className="row">
                 <div className="row">
                     <div className="col-xs-5 col-md-4"></div>
                     <div className="col-xs-7 col-md-8">
-                        <button
+                        {!loading && <button
                             style={{
                                 display: "inline-block",
                                 margin: "0px 3px 0px 3px"
                             }}
                             className="btn btn-primary btn-sm pull-right"
-                            onClick={()=>this.save()}>{"next "}
+                            onClick={() => this.save()}>{"next "}
                             <i className="fa fa-arrow-right"></i>
-                        </button>
+                        </button>}
                         <button
                             style={{
                                 display: "inline-block",
@@ -166,12 +172,13 @@ export default class ListOptions extends Component {
                     </div>
                 </div>
                 <hr></hr>
-                <Form
+                {!loading && <Form
                     ref={(form) => this.form = form}
                     type={formConfig}
                     value={value}
                     onChange={this.onChange}
-                    options={options} />
+                    options={options} />}
+                {loading && < Spinner name="line-scale-pulse-out" color="steelblue" />}
             </div>
         )
     }

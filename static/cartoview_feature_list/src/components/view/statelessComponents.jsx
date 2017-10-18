@@ -31,7 +31,7 @@ export const Item = (props) => {
     return <div>
         <ListItem onClick={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })} dense button className={classes.listItem}>
             <img className={classes.bigAvatar} src={attachment.length > 0 ? attachment[0].file : noImage} />
-            <ListItemText primary={`${feature.getProperties()[config.titleAttribute]}`} secondary={`${feature.getProperties()[config.subtitleAttribute]}`} />
+            <ListItemText primary={`${feature.getProperties()[config.titleAttribute]}`} secondary={`${config.subtitleAttribute?feature.getProperties()[config.subtitleAttribute]:''}`} />
         </ListItem>
         <Divider />
     </div>
