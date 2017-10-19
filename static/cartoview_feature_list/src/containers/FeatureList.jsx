@@ -232,8 +232,9 @@ class FeatureListContainer extends Component {
             featureIdentifyResult: transformedFeatures,
             activeFeatures: null,
             featureIdentifyLoading: false
-        } )
+        },()=>this.addStyleToFeature( this.state.featureIdentifyResult ) )
         document.body.style.cursor = "default"
+
     }
     addStyleToFeature = ( features ) => {
         this.featureCollection.clear()
@@ -275,7 +276,6 @@ class FeatureListContainer extends Component {
                     } )
                     document.body.style.cursor = "default"
                 }
-                this.addStyleToFeature( this.state.featureIdentifyResult )
             } )
     }
     render() {
