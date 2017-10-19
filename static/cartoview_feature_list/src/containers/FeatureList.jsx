@@ -9,7 +9,6 @@ import {
 } from './staticMethods'
 
 import FeatureList from '../components/view/cartoviewFeatureList'
-import IsLike from 'ol/format/filter/islike';
 import MapConfigService from '@boundlessgeo/sdk/services/MapConfigService'
 import MapConfigTransformService from '@boundlessgeo/sdk/services/MapConfigTransformService'
 import PropTypes from 'prop-types'
@@ -35,14 +34,43 @@ class FeatureListContainer extends Component {
             selectionModeEnabled: false,
             featureIdentifyLoading: false,
             featureIdentifyResult: null,
-            activeFeatures: null
+            activeFeatures: null,
+            filterType: null
         }
         this.map = getMap()
         this.featureCollection = new ol.Collection()
         addSelectionLayer( this.map, this.featureCollection, styleFunction )
     }
+    getFilterByName = ( attrs, attrName ) => {
+        let attributeType = null
+        if ( attrs ) {
+            attrs.forEach( attr => {
+                if ( attr.attribute === attrName ) {
+                    attributeType = attr.attribute_type
+                }
+            } )
+        }
+        return attributeType
+    }
+    getFilterType = () => {
+        const { urls, config } = this.props
+        fetch(
+            `${urls.layerAttributes}?layer__typename=${config.layer}`, {
+                method: "GET",
+                credentials: 'include'
+            } ).then( ( response ) => response.json() ).then( ( data ) => {
+            const filterType = this.getFilterByName( data.objects,
+                config.filters ).split( ":" ).pop()
+            this.setState( { filterType } )
+        } ).catch( ( error ) => {
+            throw Error( error )
+        } )
+    }
     componentWillMount() {
         const { urls, config } = this.props
+        if ( config.filters ) {
+            this.getFilterType()
+        }
         this.loadMap( urls.mapJsonUrl, urls.proxy )
         this.getFeatures( 0 )
         this.loadAttachments( urls.attachmentUploadUrl( this.layerName(
@@ -116,16 +144,16 @@ class FeatureListContainer extends Component {
         /* 
         this function should return the proper filter based on 
         filter type
-        Not Working For Now 
-        Work with string/text types
+        working with strings & numbers
+        test Needed
         */
         const { config } = this.props
-        const filterType = typeof ( value )
-        if ( filterType === 'number' ) {
+        const { filterType } = this.state
+        if ( filterType !== 'string' ) {
             return ol.format.filter.equalTo( config.filters, value )
         } else {
-            return ol.format.filter.like( config.filters, '%' + value+'%',
-                undefined, undefined, undefined, false )
+            return ol.format.filter.like( config.filters, '%' + value +
+                '%', undefined, undefined, undefined, false )
         }
     }
     search = ( text ) => {
@@ -167,12 +195,11 @@ class FeatureListContainer extends Component {
         } )
     }
     zoomToFeature = ( feature ) => {
-        const {config}=this.props
-        if(config&& config.zoomOnSelect){
-            this.map.getView().fit( feature.getGeometry().getExtent(), this.map
-            .getSize(), { duration: 10000 } )
+        const { config } = this.props
+        if ( config && config.zoomOnSelect ) {
+            this.map.getView().fit( feature.getGeometry().getExtent(),
+                this.map.getSize(), { duration: 10000 } )
         }
-        
     }
     singleClickListner = () => {
         this.map.on( 'singleclick', ( e ) => {
@@ -252,7 +279,7 @@ class FeatureListContainer extends Component {
             } )
     }
     render() {
-        const { config,urls } = this.props
+        const { config, urls } = this.props
         let childrenProps = {
             config,
             ...this.state,

@@ -5,19 +5,23 @@ import PropTypes from 'prop-types'
 import Spinner from 'react-spinkit'
 import t from 'tcomb-form'
 
-const formConfig = t.struct({
+const filter = t.struct( {
+    type: t.String,
+    name: t.String
+} )
+const formConfig = t.struct( {
     layer: t.String,
     titleAttribute: t.String,
-    subtitleAttribute: t.maybe(t.String),
-    filters: t.maybe(t.String),
+    subtitleAttribute: t.maybe( t.String ),
+    filters: t.maybe( t.String ),
     pagination: t.String,
-    zoomOnSelect:t.Boolean,
-    enableImageListView:t.Boolean
-})
+    zoomOnSelect: t.Boolean,
+    enableImageListView: t.Boolean
+} )
 const Form = t.form.Form
 export default class ListOptions extends Component {
-    constructor(props) {
-        super(props)
+    constructor( props ) {
+        super( props )
         this.state = {
             layers: [],
             value: {
@@ -28,72 +32,78 @@ export default class ListOptions extends Component {
                 pagination: this.props.config ? this.props.config.pagination : null,
                 filters: this.props.config ? this.props.config.filters : null,
                 zoomOnSelect: this.props.config ? this.props.config.zoomOnSelect : false,
-                enableImageListView: this.props.config ? this.props.config.enableImageListView : true,
+                enableImageListView: this.props.config ? this.props.config
+                    .enableImageListView : true,
             },
             attributeOptions: [],
+            attributes:[],
             loading: false
         }
     }
-    loadAttributes = (typename) => {
-        this.setState({ loading: true })
-        if (typename) {
-            fetch(this.props.urls.layerAttributes + "?layer__typename=" +
-                typename).then((response) => response.json()).then(
-                (data) => {
+    loadAttributes = ( typename ) => {
+        this.setState( { loading: true } )
+        if ( typename ) {
+            fetch( this.props.urls.layerAttributes + "?layer__typename=" +
+                typename ).then( ( response ) => response.json() ).then(
+                ( data ) => {
                     let options = []
-                    data.objects.forEach((attribute) => {
-                        if (attribute.attribute_type.indexOf(
-                            "gml:") == -1) {
-                            options.push({
+                    data.objects.forEach( ( attribute ) => {
+                        if ( attribute.attribute_type.indexOf(
+                                "gml:" ) == -1 ) {
+                            options.push( {
                                 value: attribute.attribute,
                                 text: attribute.attribute
-                            })
+                            } )
                         }
-                    })
-                    this.setState({ attributeOptions: options, loading: false })
-                })
+                    } )
+                    this.setState( {
+                        attributeOptions: options,
+                        loading: false,
+                        attributes:data.objects
+                    } )
+                } )
         }
     }
     loadLayers() {
-        this.setState({ loading: true })
-        fetch(this.props.urls.mapLayers + "?id=" + this.props.map.id).then(
-            (response) => response.json()).then((data) => {
-                this.setState({ layers: data.objects, loading: false })
-            }).catch((error) => {
-                console.error(error)
-            })
+        this.setState( { loading: true } )
+        fetch( this.props.urls.mapLayers + "?id=" + this.props.map.id ).then(
+            ( response ) => response.json() ).then( ( data ) => {
+            this.setState( { layers: data.objects, loading: false } )
+        } ).catch( ( error ) => {
+            console.error( error )
+        } )
     }
     getLayerOptions = () => {
         const { layers } = this.state
         let options = []
-        if (layers && layers.length > 0) {
-            options = layers.map(layer => {
+        if ( layers && layers.length > 0 ) {
+            options = layers.map( layer => {
                 return { value: layer.typename, text: layer.name }
-            })
+            } )
         }
         return options
     }
     componentDidMount() {
         const { config } = this.props
         this.loadLayers()
-        if (config && config.layer) {
-            this.loadAttributes(config.layer)
+        if ( config && config.layer ) {
+            this.loadAttributes( config.layer )
         }
     }
     save = () => {
         const value = this.form.getValue()
-        if (value) {
-            this.props.onComplete({
-                config: {
-                    ...value
+        if ( value ) {
+            this.props.onComplete( {
+                config: { ...value
                 }
-            })
+            } )
         }
     }
-    onChange = (value) => {
-        if (value.layer) {
-            this.setState({ value: value }, () => this.loadAttributes(
-                value.layer))
+    onChange = ( newValue ) => {
+        const { value } = this.state
+        if ( !value.layer && ( newValue.layer !== value.layer  ) ) {
+            this.setState( { value: newValue }, () => this.loadAttributes(
+                newValue.layer ) )
         }
     }
     getFormOptions = () => {
@@ -113,7 +123,7 @@ export default class ListOptions extends Component {
                     options: attributeOptions
                 },
                 subtitleAttribute: {
-                    label:"Subtitle Attribute (optional)",
+                    label: "Subtitle Attribute (optional)",
                     factory: t.form.Select,
                     nullOption: { value: '', text: 'Choose subTitle Attribute' },
                     options: attributeOptions
@@ -134,7 +144,6 @@ export default class ListOptions extends Component {
                     ]
                 }
             }
-
         }
         return options
     }

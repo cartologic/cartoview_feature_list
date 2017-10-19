@@ -65,6 +65,7 @@ class IntegrationAutosuggest extends React.Component {
         const { openDetails } = this.props
         const matches = match(suggestion.label, query)
         const parts = parse(suggestion.label, matches)
+        console.log(suggestion)
         return (
             <MenuItem onClick={()=>openDetails({detailsModeEnabled: true, detailsOfFeature: suggestion.value })} selected={isHighlighted} component="div">
                 <div>
@@ -105,7 +106,8 @@ class IntegrationAutosuggest extends React.Component {
                 json)
             const total = json.totalFeatures
             let suggestions = features.map((feature, i) => {
-                return { label: feature.getProperties()[config.filters], value: feature }
+                const filterValue=feature.getProperties()[config.filters]
+                return { label: filterValue.toString(), value: feature }
             })
             this.setState({
                 suggestions
