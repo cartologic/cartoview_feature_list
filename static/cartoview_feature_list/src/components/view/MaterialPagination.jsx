@@ -7,37 +7,41 @@ import FirstPage from 'material-ui-icons/FirstPage'
 import IconButton from 'material-ui/IconButton';
 import LastPage from 'material-ui-icons/LastPage'
 import React from 'react'
-
+import classNames from 'classnames'
 const flatButtonStyle = {
     minWidth: 36
 };
+const numbersStyle = {
+    fontSize: 18
+}
 const Page = ( { value, isActive, onClick } ) => (
-    <Button
-	style={flatButtonStyle}
-	color={isActive ? "primary" : "default"}
-	onClick={onClick}>
-	{value.toString( )}
-	</Button>
+    <IconButton
+		style={{ ...flatButtonStyle, ...numbersStyle }}
+		color={isActive ? "primary" : "default"}
+		onClick={onClick}>
+		{value.toString()}
+	</IconButton>
 )
 const Ellipsis = ( { onClick } ) => (
-    <Button style={flatButtonStyle} onClick={onClick}>{'...'}</Button> );
+    <IconButton style={flatButtonStyle} onClick={onClick}>{'...'}</IconButton>
+);
 const FirstPageLink = ( { isActive, onClick } ) => (
     <IconButton color="accent"
 		onClick={onClick}>
-		<FirstPage/>
-		</IconButton>
+		<FirstPage />
+	</IconButton>
 );
 const PreviousPageLink = ( { isActive, onClick } ) => (
     <IconButton color="accent"
 		onClick={onClick}>
 		< ChevronLeft />
-		</IconButton>
+	</IconButton>
 );
 const NextPageLink = ( { isActive, onClick } ) => (
     <IconButton color="accent"
 		onClick={onClick}>
 		< ChevronRight />
-		</IconButton>
+	</IconButton>
 );
 const LastPageLink = ( { isActive, onClick } ) => (
     <IconButton color="accent"
