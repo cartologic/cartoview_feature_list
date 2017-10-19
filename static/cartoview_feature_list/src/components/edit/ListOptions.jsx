@@ -5,105 +5,116 @@ import PropTypes from 'prop-types'
 import Spinner from 'react-spinkit'
 import t from 'tcomb-form'
 
-const filter = t.struct( {
+const filter = t.struct({
     type: t.String,
     name: t.String
-} )
-const formConfig = t.struct( {
+})
+const formConfig = t.struct({
     layer: t.String,
     titleAttribute: t.String,
-    subtitleAttribute: t.maybe( t.String ),
-    filters: t.maybe( t.String ),
+    subtitleAttribute: t.maybe(t.String),
+    filters: t.maybe(t.String),
     pagination: t.String,
     zoomOnSelect: t.Boolean,
     enableImageListView: t.Boolean
-} )
+})
 const Form = t.form.Form
+const getPropertyFromConfig = (config, property, defaultValue) => {
+    const propertyValue = config[property] ? config[property] : defaultValue
+    const nestedPropertyValue = config.config && config.config[property] ?
+        config.config[property] : propertyValue
+    return nestedPropertyValue
+}
 export default class ListOptions extends Component {
-    constructor( props ) {
-        super( props )
+    constructor(props) {
+        super(props)
+        const { config } = this.props
         this.state = {
             layers: [],
             value: {
-                layer: this.props.config ? this.props.config.layer : null,
-                titleAttribute: this.props.config ? this.props.config.titleAttribute : null,
-                subtitleAttribute: this.props.config ? this.props.config
-                    .subtitleAttribute : null,
-                pagination: this.props.config ? this.props.config.pagination : null,
-                filters: this.props.config ? this.props.config.filters : null,
-                zoomOnSelect: this.props.config ? this.props.config.zoomOnSelect : false,
-                enableImageListView: this.props.config ? this.props.config
-                    .enableImageListView : true,
+                layer: getPropertyFromConfig(config, 'layer', null),
+                titleAttribute: getPropertyFromConfig(config,
+                    'titleAttribute', null),
+                subtitleAttribute: getPropertyFromConfig(config,
+                    'subtitleAttribute', null),
+                pagination: getPropertyFromConfig(config,
+                    'pagination', 10),
+                filters: getPropertyFromConfig(config, 'filters', null),
+                zoomOnSelect: getPropertyFromConfig(config,
+                    'zoomOnSelect', true),
+                enableImageListView: getPropertyFromConfig(config,
+                    'enableImageListView', true),
             },
             attributeOptions: [],
-            attributes:[],
+            attributes: [],
             loading: false
         }
     }
-    loadAttributes = ( typename ) => {
-        this.setState( { loading: true } )
-        if ( typename ) {
-            fetch( this.props.urls.layerAttributes + "?layer__typename=" +
-                typename ).then( ( response ) => response.json() ).then(
-                ( data ) => {
+    loadAttributes = (typename) => {
+        this.setState({ loading: true })
+        if (typename) {
+            fetch(this.props.urls.layerAttributes + "?layer__typename=" +
+                typename).then((response) => response.json()).then(
+                (data) => {
                     let options = []
-                    data.objects.forEach( ( attribute ) => {
-                        if ( attribute.attribute_type.indexOf(
-                                "gml:" ) == -1 ) {
-                            options.push( {
+                    data.objects.forEach((attribute) => {
+                        if (attribute.attribute_type.indexOf(
+                            "gml:") == -1) {
+                            options.push({
                                 value: attribute.attribute,
                                 text: attribute.attribute
-                            } )
+                            })
                         }
-                    } )
-                    this.setState( {
+                    })
+                    this.setState({
                         attributeOptions: options,
                         loading: false,
-                        attributes:data.objects
-                    } )
-                } )
+                        attributes: data.objects
+                    })
+                })
         }
     }
     loadLayers() {
-        this.setState( { loading: true } )
-        fetch( this.props.urls.mapLayers + "?id=" + this.props.map.id ).then(
-            ( response ) => response.json() ).then( ( data ) => {
-            this.setState( { layers: data.objects, loading: false } )
-        } ).catch( ( error ) => {
-            console.error( error )
-        } )
+        this.setState({ loading: true })
+        fetch(this.props.urls.mapLayers + "?id=" + this.props.map.id).then(
+            (response) => response.json()).then((data) => {
+                this.setState({ layers: data.objects, loading: false })
+            }).catch((error) => {
+                console.error(error)
+            })
     }
     getLayerOptions = () => {
         const { layers } = this.state
         let options = []
-        if ( layers && layers.length > 0 ) {
-            options = layers.map( layer => {
+        if (layers && layers.length > 0) {
+            options = layers.map(layer => {
                 return { value: layer.typename, text: layer.name }
-            } )
+            })
         }
         return options
     }
     componentDidMount() {
         const { config } = this.props
         this.loadLayers()
-        if ( config && config.layer ) {
-            this.loadAttributes( config.layer )
+        if (config && config.layer) {
+            this.loadAttributes(config.layer)
         }
     }
     save = () => {
         const value = this.form.getValue()
-        if ( value ) {
-            this.props.onComplete( {
-                config: { ...value
+        if (value) {
+            this.props.onComplete({
+                config: {
+                    ...value
                 }
-            } )
+            })
         }
     }
-    onChange = ( newValue ) => {
+    onChange = (newValue) => {
         const { value } = this.state
-        if ( !value.layer && ( newValue.layer !== value.layer  ) ) {
-            this.setState( { value: newValue }, () => this.loadAttributes(
-                newValue.layer ) )
+        if (!value.layer && (newValue.layer !== value.layer)) {
+            this.setState({ value: newValue }, () => this.loadAttributes(
+                newValue.layer))
         }
     }
     getFormOptions = () => {
