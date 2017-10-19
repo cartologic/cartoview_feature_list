@@ -44,7 +44,7 @@
                 attachmentUploadUrl:function(layerName){
                     return '/apps/cartoview_attachment_manager/'+layerName+'/file'
             },
-            appInstancesPage:'?app__name={{instance.app.name}}&app__title={{instance.app.title}}',
+            appInstancesPage:"{% url 'appinstance_browse' %}?app__name={{instance.app.name}}&app__title={{instance.app.title}}",
             layers: "{% url 'layer_browse' %}",
             maps: "{% url 'maps_browse' %}",
             apps: "{% url 'app_manager_base_url' %}",
