@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack -p --progress",
-    "dev": "webpack -d --config webpack.config-dev.js --watch --progress --color"
+    "dev": "webpack -d --watch --progress --color"
   },
   "author": "cartologic",
   "license": "BSD-2-Clause",

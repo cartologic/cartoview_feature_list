@@ -1,13 +1,18 @@
-var webpack = require( 'webpack' );
-var path = require( 'path' );
-var BUILD_DIR = path.resolve( __dirname, 'dist' );
-var APP_DIR = path.resolve( __dirname, 'src' );
-var plugins = [ ];
-var filename = '[name].bundle.js';
-module.exports = {
+var webpack = require( 'webpack' )
+var path = require( 'path' )
+var BUILD_DIR = path.resolve( __dirname, 'dist' )
+var APP_DIR = path.resolve( __dirname, 'src' )
+var filename = '[name].bundle.js'
+const production = process.argv.indexOf( '-p' ) !== -1
+const plugins = [ new webpack.DefinePlugin( {
+    'process.env': {
+        'NODE_ENV': JSON.stringify( production ? 'production' : '' )
+    }
+} ), ]
+const config = {
     entry: {
         config: path.join( APP_DIR, 'AppRender.jsx' ),
-        FeatureList: path.join( APP_DIR, 'containers','FeatureList.jsx' ),
+        FeatureList: path.join( APP_DIR, 'containers', 'FeatureList.jsx' ),
     },
     output: {
         path: BUILD_DIR,
@@ -20,46 +25,45 @@ module.exports = {
     node: {
         fs: "empty"
     },
-    plugins: [
-    new webpack.DefinePlugin( {
-            'process.env': {
-                'NODE_ENV': JSON.stringify( 'production' )
-            }
-        } ),
-    new webpack.optimize.AggressiveMergingPlugin( ),
-    new webpack.optimize.DedupePlugin( ),
-    new webpack.NoEmitOnErrorsPlugin( ),
-    new webpack.optimize.UglifyJsPlugin( {
-            compress: {
-                warnings: true
-            }
-        } )
-  ],
+    plugins: plugins,
     resolve: {
         extensions: [ '*', '.js', '.jsx' ]
     },
     module: {
         loaders: [ {
-                test: /\.(js|jsx)$/,
-                loader: 'babel-loader',
-                exclude: /node_modules/
-      }, {
-                test: /\.xml$/,
-                loader: 'raw-loader'
-      }, {
-                test: /\.json$/,
-                loader: "json-loader"
-      },
-            {
-                test: /\.css$/,
-                loader: "style-loader!css-loader"
-      },
-            {
-                test: /\.(png|jpg|gif)$/,
-                loader: 'file-loader'
-		}
-    ],
+            test: /\.(js|jsx)$/,
+            loader: 'babel-loader',
+            exclude: /node_modules/
+    }, {
+            test: /\.xml$/,
+            loader: 'raw-loader'
+    }, {
+            test: /\.json$/,
+            loader: "json-loader"
+    }, {
+            test: /\.css$/,
+            loader: "style-loader!css-loader"
+    }, {
+            test: /\.(png|jpg|gif)$/,
+            loader: 'file-loader'
+    } ],
         noParse: [ /dist\/ol\.js/, /dist\/jspdf.debug\.js/,
             /dist\/js\/tether\.js/ ]
     }
-};
+}
+if ( production ) {
+    const prodPlugins = [
+        new webpack.optimize.AggressiveMergingPlugin(),
+        new webpack.optimize.DedupePlugin(),
+        new webpack.NoEmitOnErrorsPlugin(),
+        new webpack.optimize.UglifyJsPlugin( {
+            compress: {
+                warnings: true
+            }
+        } )
+    ]
+    Array.prototype.push.apply( plugins, prodPlugins )
+} else {
+    config.devtool = 'eval-cheap-module-source-map'
+}
+module.exports = config
