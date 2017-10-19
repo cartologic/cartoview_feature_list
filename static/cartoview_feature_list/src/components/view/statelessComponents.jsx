@@ -31,7 +31,7 @@ export const Item = ( props ) => {
     const { openDetails, classes, feature, attachment, config } = props
     return <div>
         <ListItem onClick={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })} button className={classes.listItem}>
-            <img className={classes.bigAvatar} src={attachment.length > 0 ? attachment[0].file : noImage} />
+            {config.enableImageListView && <img className={classes.bigAvatar} src={attachment.length > 0 ? attachment[0].file : noImage} />}
             <ListItemText primary={`${feature.getProperties()[config.titleAttribute]}`} secondary={`${config.subtitleAttribute ? feature.getProperties()[config.subtitleAttribute] : ''}`} />
         </ListItem>
         <Divider />

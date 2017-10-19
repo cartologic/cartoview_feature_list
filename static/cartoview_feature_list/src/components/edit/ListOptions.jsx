@@ -11,7 +11,8 @@ const formConfig = t.struct({
     subtitleAttribute: t.maybe(t.String),
     filters: t.maybe(t.String),
     pagination: t.String,
-    zoomOnSelect:t.Boolean
+    zoomOnSelect:t.Boolean,
+    enableImageListView:t.Boolean
 })
 const Form = t.form.Form
 export default class ListOptions extends Component {
@@ -27,6 +28,7 @@ export default class ListOptions extends Component {
                 pagination: this.props.config ? this.props.config.pagination : null,
                 filters: this.props.config ? this.props.config.filters : null,
                 zoomOnSelect: this.props.config ? this.props.config.zoomOnSelect : false,
+                enableImageListView: this.props.config ? this.props.config.enableImageListView : true,
             },
             attributeOptions: [],
             loading: false
