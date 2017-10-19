@@ -1,4 +1,5 @@
 import LayerSwitcher from '../vendor/ol3-layerswitcher/src/ol3-layerswitcher'
+import isURL from 'validator/lib/isURL'
 import ol from 'openlayers'
 export const isWMSLayer = (layer) => {
     return layer.getSource() instanceof ol.source.TileWMS || layer.getSource() instanceof ol
@@ -52,6 +53,13 @@ export const getWMSLayer = (name, layers) => {
         }
     })
     return wmsLayer
+}
+export const checkURL = ( value ) => {
+    /* validator validate strings only */
+    if ( typeof ( value ) === "string" ) {
+        return isURL( value )
+    }
+    return false
 }
 export const addSelectionLayer = (map, featureCollection, styleFunction) => {
     new ol.layer.Vector({

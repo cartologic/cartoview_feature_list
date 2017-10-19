@@ -1,19 +1,15 @@
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
+import { PropsTable, Slider } from './statelessComponents'
 
 import Button from 'material-ui/Button';
-import { Carousel } from 'react-responsive-carousel';
 import Divider from 'material-ui/Divider'
-import Grid from 'material-ui/Grid'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Typography from 'material-ui/Typography'
-import { URL } from './statelessComponents'
-import isURL from 'validator/lib/isURL'
 import { withStyles } from 'material-ui/styles'
 
-const styles = theme => ( {
+const styles = theme => ({
     root: {
         width: '100%',
     },
@@ -30,21 +26,14 @@ const styles = theme => ( {
     textCenter: {
         textAlign: 'center',
         marginBottom: 'auto',
-        [ theme.breakpoints.down( 'md' ) ]: {
+        [theme.breakpoints.down('md')]: {
             marginBottom: 40,
         },
     }
-} )
-const checkURL = ( value ) => {
-    /* validator validate strings only */
-    if ( typeof ( value ) === "string" ) {
-        return isURL( value )
-    }
-    return false
-}
+})
 class ItemDetails extends React.Component {
-    constructor( props ) {
-        super( props )
+    constructor(props) {
+        super(props)
     }
     render() {
         let {
@@ -58,40 +47,9 @@ class ItemDetails extends React.Component {
                 <Typography type="title" color="inherit" className={classes.flex}>
                     Feature Details
                 </Typography>
-                <Grid style={{ marginTop: 40 }} container alignItems={'center'} justify={'center'} spacing={0}>
-                    {searchFilesById(selectedFeature.getId()).length > 0 && <Grid item xs={10} sm={10} md={10} lg={10} xl={10} >
-                        <Carousel showArrows={true}>
-                            {searchFilesById(selectedFeature.getId()).map(
-                                (imageObj, i) => {
-                                    return <div key={i}>
-                                        <img src={imageObj.file} />
-                                        <p className="legend">{`Uploaded by ${imageObj.username}`}</p>
-                                    </div>
-                                }
-                            )}
-                        </Carousel>
-                    </Grid>}
-                </Grid>
+                <Slider attachments={searchFilesById(selectedFeature.getId())} />
                 <Divider light />
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Property</TableCell>
-                            <TableCell>Value</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {Object.keys(selectedFeature.getProperties()).map((key, i) => {
-                            const value=selectedFeature.getProperties()[key]
-                            if (key != "geometry") {
-                                return <TableRow key={i}>
-                                    <TableCell>{key}</TableCell>
-                                    <TableCell style={{ whiteSpace: 'pre-line' }}>{checkURL(value) ? <URL url={value} classes={classes}/>:value}</TableCell>
-                                </TableRow>
-                            }
-                        })}
-                    </TableBody>
-                </Table>
+                <PropsTable classes={classes} selectedFeature={selectedFeature} />
                 <div className={classes.textCenter}>
                     <Button onClick={() => back()} color="primary" className={classes.button}>
                         Back
@@ -107,4 +65,4 @@ ItemDetails.propTypes = {
     searchFilesById: PropTypes.func.isRequired,
     back: PropTypes.func.isRequired
 }
-export default withStyles( styles )( ItemDetails )
+export default withStyles(styles)(ItemDetails)

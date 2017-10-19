@@ -65,7 +65,6 @@ class IntegrationAutosuggest extends React.Component {
         const { openDetails } = this.props
         const matches = match(suggestion.label, query)
         const parts = parse(suggestion.label, matches)
-        console.log(suggestion)
         return (
             <MenuItem onClick={()=>openDetails({detailsModeEnabled: true, detailsOfFeature: suggestion.value })} selected={isHighlighted} component="div">
                 <div>
