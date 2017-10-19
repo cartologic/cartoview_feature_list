@@ -1,5 +1,6 @@
 import List, { ListItem, ListItemText } from 'material-ui/List'
 
+import Button from 'material-ui/Button';
 import { CircularProgress } from 'material-ui/Progress'
 import Divider from 'material-ui/Divider'
 import PropTypes from 'prop-types'
@@ -31,7 +32,7 @@ export const Item = ( props ) => {
     return <div>
         <ListItem onClick={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })} button className={classes.listItem}>
             <img className={classes.bigAvatar} src={attachment.length > 0 ? attachment[0].file : noImage} />
-            <ListItemText primary={`${feature.getProperties()[config.titleAttribute]}`} secondary={`${config.subtitleAttribute?feature.getProperties()[config.subtitleAttribute]:''}`} />
+            <ListItemText primary={`${feature.getProperties()[config.titleAttribute]}`} secondary={`${config.subtitleAttribute ? feature.getProperties()[config.subtitleAttribute] : ''}`} />
         </ListItem>
         <Divider />
     </div>
@@ -43,7 +44,7 @@ Item.propTypes = {
     config: PropTypes.object.isRequired,
     openDetails: PropTypes.func.isRequired
 }
-export const FeatureListComponent = (props) => {
+export const FeatureListComponent = ( props ) => {
     const {
         features,
         loading,
@@ -55,7 +56,8 @@ export const FeatureListComponent = (props) => {
         searchFilesById,
         openDetails,
     } = props
-    return ( !loading && !attachmentIsLoading && features && features.length>0 ?
+    return ( !loading && !attachmentIsLoading && features && features.length >
+        0 ?
         <List subheader={subheader}>
             {features && features.map((feature, index) => {
                 const attachment = searchFilesById(feature.getId())
@@ -71,9 +73,19 @@ FeatureListComponent.propTypes = {
     features: PropTypes.array,
     config: PropTypes.object.isRequired,
     openDetails: PropTypes.func.isRequired,
-    subheader:PropTypes.string.isRequired,
-    message:PropTypes.string.isRequired,
-    loading:PropTypes.bool.isRequired,
-    attachmentIsLoading:PropTypes.bool.isRequired,
-    searchFilesById:PropTypes.func.isRequired
+    subheader: PropTypes.string.isRequired,
+    message: PropTypes.string.isRequired,
+    loading: PropTypes.bool.isRequired,
+    attachmentIsLoading: PropTypes.bool.isRequired,
+    searchFilesById: PropTypes.func.isRequired
+}
+export const URL = ( props ) => {
+    const { classes, url } = props
+    return <Button color="accent"  href={url} className={classes.button}>
+            Link
+        </Button>
+}
+URL.propTypes = {
+    classes: PropTypes.object.isRequired,
+    url: PropTypes.string.isRequired
 }

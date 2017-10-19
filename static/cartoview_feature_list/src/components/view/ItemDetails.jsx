@@ -9,6 +9,8 @@ import Grid from 'material-ui/Grid'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Typography from 'material-ui/Typography'
+import { URL } from './statelessComponents'
+import isURL from 'validator/lib/isURL'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ( {
@@ -33,6 +35,13 @@ const styles = theme => ( {
         },
     }
 } )
+const checkURL = ( value ) => {
+    /* validator validate strings only */
+    if ( typeof ( value ) === "string" ) {
+        return isURL( value )
+    }
+    return false
+}
 class ItemDetails extends React.Component {
     constructor( props ) {
         super( props )
@@ -73,10 +82,11 @@ class ItemDetails extends React.Component {
                     </TableHead>
                     <TableBody>
                         {Object.keys(selectedFeature.getProperties()).map((key, i) => {
+                            const value=selectedFeature.getProperties()[key]
                             if (key != "geometry") {
                                 return <TableRow key={i}>
                                     <TableCell>{key}</TableCell>
-                                    <TableCell style={{ whiteSpace: 'pre-line' }}>{selectedFeature.getProperties()[key]}</TableCell>
+                                    <TableCell style={{ whiteSpace: 'pre-line' }}>{checkURL(value) ? <URL url={value} classes={classes}/>:value}</TableCell>
                                 </TableRow>
                             }
                         })}

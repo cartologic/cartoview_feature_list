@@ -38,7 +38,8 @@
     "react-ultimate-pagination": "^1.0.2",
     "slugify": "^1.1.0",
     "tcomb-form": "^0.9.17",
-    "url-assembler": "^1.2.8"
+    "url-assembler": "^1.2.8",
+    "validator": "^9.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
