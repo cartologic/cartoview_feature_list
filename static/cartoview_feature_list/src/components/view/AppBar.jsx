@@ -61,7 +61,7 @@ class NavBar extends React.Component {
                                 <MenuIcon />
                             </IconButton>
                         </Hidden>
-                        <Typography type="title" color="inherit" className={classes.flex}>
+                        <Typography noWrap={true} type="title" color="inherit" className={classes.flex}>
                             {childrenProps.config && childrenProps.config.formTitle && `${childrenProps.config.formTitle||'Feature List'}`}
                          </Typography>
                          <NavigationMenu urls={childrenProps.urls}/>
