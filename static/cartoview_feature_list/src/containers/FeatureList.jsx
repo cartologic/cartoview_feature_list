@@ -2,13 +2,12 @@ import React, { Component } from 'react'
 import {
     addSelectionLayer,
     getFeatureInfoUrl,
-    getLayers,
     getMap,
     getWMSLayer,
     wmsGetFeatureInfoFormats
 } from './staticMethods'
 
-import FeatureList from '../components/view/cartoviewFeatureList'
+import FeatureList from '../components/view/FeatureList'
 import MapConfigService from '@boundlessgeo/sdk/services/MapConfigService'
 import MapConfigTransformService from '@boundlessgeo/sdk/services/MapConfigTransformService'
 import PropTypes from 'prop-types'

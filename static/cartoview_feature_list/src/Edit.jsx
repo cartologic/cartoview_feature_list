@@ -31,7 +31,6 @@ export default class Edit extends Component {
         this.goToStep( step -= 1 )
     }
     save = ( instanceConfig ) => {
-        const { config } = this.state
         const { urls } = this.props
         const { id } = this.state
         const url = id ? urls.editURL( id ) : urls.newURL
