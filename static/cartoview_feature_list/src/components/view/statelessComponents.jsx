@@ -50,16 +50,7 @@ Item.propTypes = {
     config: PropTypes.object.isRequired,
     openDetails: PropTypes.func.isRequired
 }
-export const SubTile = (props) => {
-    const { subheader } = props
-    return (
-        <Typography type="subheading" color="inherit" >
-            {subheader}
-        </ Typography >)
-}
-SubTile.propTypes = {
-    subheader: PropTypes.string.isRequired
-}
+
 export const FeatureListComponent = (props) => {
     const {
         features,

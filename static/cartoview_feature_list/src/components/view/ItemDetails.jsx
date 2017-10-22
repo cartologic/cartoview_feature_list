@@ -1,8 +1,8 @@
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
 
 import { PropsTable, Slider } from './statelessComponents'
 
-import Button from 'material-ui/Button';
+import Button from 'material-ui/Button'
 import Collapsible from './CollapsibleItem'
 import { Message } from './statelessComponents'
 import PropTypes from 'prop-types'
