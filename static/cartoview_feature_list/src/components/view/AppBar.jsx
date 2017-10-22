@@ -1,21 +1,14 @@
 import AppBar from 'material-ui/AppBar'
-import CartoviewList from './List'
-import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
-import ChevronRightIcon from 'material-ui-icons/ChevronRight';
-import Divider from 'material-ui/Divider'
-import Drawer from 'material-ui/Drawer'
 import Hidden from 'material-ui/Hidden'
 import IconButton from 'material-ui/IconButton'
 import MenuIcon from 'material-ui-icons/Menu'
+import {MobileDrawer} from './statelessComponents'
 import NavigationMenu from './NavigationMenu'
-import Paper from 'material-ui/Paper'
-import PropTypes from 'prop-types'
 import React from 'react'
 import Toolbar from 'material-ui/Toolbar'
 import Typography from 'material-ui/Typography'
-import {upperPropTypesWithTheme} from './sharedPropTypes'
+import { upperPropTypesWithTheme } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
-
 const drawerWidth = '100%'
 const styles = theme => ( {
     root: {
@@ -32,7 +25,7 @@ const styles = theme => ( {
         width: drawerWidth
     },
     drawerHeader: {
-        background:theme.palette.primary[500],
+        background: theme.palette.primary[ 500 ],
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
@@ -54,6 +47,7 @@ class NavBar extends React.Component {
     }
     render() {
         const { classes, theme, childrenProps } = this.props
+        let {mobileOpen}=this.state
         return (
             <div className={classes.root}>
                 <AppBar position="static">
@@ -64,39 +58,17 @@ class NavBar extends React.Component {
                             </IconButton>
                         </Hidden>
                         <Typography noWrap={true} type="title" color="inherit" className={classes.flex}>
-                            {childrenProps.config && childrenProps.config.formTitle && `${childrenProps.config.formTitle||'Feature List'}`}
-                         </Typography>
-                         <NavigationMenu urls={childrenProps.urls}/>
+                            {childrenProps.config && childrenProps.config.formTitle && `${childrenProps.config.formTitle || 'Feature List'}`}
+                        </Typography>
+                        <NavigationMenu urls={childrenProps.urls} />
                     </Toolbar>
                 </AppBar>
                 <Hidden mdUp>
-                    <Drawer
-                        type="temporary"
-                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                        open={this.state.mobileOpen}
-                        classes={{
-                            paper: classes.drawerPaper,
-                        }}
-                        onRequestClose={this.handleDrawerToggle}
-                        ModalProps={{
-                            keepMounted: true,
-                        }}
-                    >
-                        <div className={classes.drawerHeader}>
-                            <IconButton onClick={this.handleDrawerClose}>
-                                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                            </IconButton>
-                        </div>
-                        <Divider />
-
-                        <Paper className={classes.paper}><CartoviewList {...childrenProps} /></Paper>
-                    </Drawer>
+                    <MobileDrawer theme={theme} classes={classes} mobileOpen={mobileOpen} childrenProps={childrenProps} handleDrawerToggle={this.handleDrawerClose} />
                 </Hidden>
             </div>
         )
     }
 }
-NavBar.propTypes = {
-    ...upperPropTypesWithTheme,
-}
+NavBar.propTypes = upperPropTypesWithTheme
 export default withStyles( styles, { withTheme: true } )( NavBar )

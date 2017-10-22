@@ -3,9 +3,15 @@ import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Ta
 
 import Button from 'material-ui/Button'
 import { Carousel } from 'react-responsive-carousel'
+import CartoviewList from './List'
+import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
+import ChevronRightIcon from 'material-ui-icons/ChevronRight'
 import { CircularProgress } from 'material-ui/Progress'
 import Divider from 'material-ui/Divider'
+import Drawer from 'material-ui/Drawer'
 import Grid from 'material-ui/Grid'
+import IconButton from 'material-ui/IconButton'
+import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Typography from 'material-ui/Typography'
@@ -149,4 +155,38 @@ export const Slider = (props) => {
 }
 Slider.propTypes = {
     attachments: PropTypes.array.isRequired
+}
+export const MobileDrawer = ( props ) => {
+    const { theme, mobileOpen, classes, handleDrawerToggle, childrenProps } =
+    props
+    return (
+        <Drawer
+            type="temporary"
+            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            open={mobileOpen}
+            classes={{
+                paper: classes.drawerPaper,
+            }}
+            onRequestClose={handleDrawerToggle}
+            ModalProps={{
+                keepMounted: true,
+            }}
+        >
+            <div className={classes.drawerHeader}>
+                <IconButton onClick={handleDrawerToggle}>
+                    {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                </IconButton>
+            </div>
+            <Divider />
+
+            <Paper className={classes.paper}><CartoviewList {...childrenProps} /></Paper>
+        </Drawer>
+    )
+}
+MobileDrawer.propTypes={
+    mobileOpen:PropTypes.bool.isRequired,
+    classes:PropTypes.object.isRequired,
+    handleDrawerToggle:PropTypes.func.isRequired,
+    childrenProps:PropTypes.object.isRequired,
+    theme:PropTypes.object.isRequired,
 }
