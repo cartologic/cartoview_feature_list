@@ -12,7 +12,7 @@ import Typography from 'material-ui/Typography'
 import { checkURL } from '../../containers/staticMethods'
 import noImage from '../../img/no-img.png'
 
-export const Loader = ( props ) => {
+export const Loader = (props) => {
     const { classes } = props
     return (
         <div className={classes.loadingCenter} >
@@ -23,15 +23,17 @@ export const Loader = ( props ) => {
 Loader.propTypes = {
     classes: PropTypes.object.isRequired
 }
-export const Message = ( props ) => {
-    return <Typography type={props.type} align="center" color="inherit" className={props.classes.flex}>{props.message}</Typography>
+export const Message = (props) => {
+    return <Typography type={props.type} align={props.align || "center"} color="inherit" className={props.classes.flex}>{props.message}</Typography>
 }
 Message.propTypes = {
     classes: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
-    message: PropTypes.string.isRequired
+    message: PropTypes.string.isRequired,
+    align: PropTypes.string
+
 }
-export const Item = ( props ) => {
+export const Item = (props) => {
     const { openDetails, classes, feature, attachment, config } = props
     return <div>
         <ListItem onClick={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })} button className={classes.listItem}>
@@ -48,7 +50,17 @@ Item.propTypes = {
     config: PropTypes.object.isRequired,
     openDetails: PropTypes.func.isRequired
 }
-export const FeatureListComponent = ( props ) => {
+export const SubTile = (props) => {
+    const { subheader } = props
+    return (
+        <Typography type="subheading" color="inherit" >
+            {subheader}
+        </ Typography >)
+}
+SubTile.propTypes = {
+    subheader: PropTypes.string.isRequired
+}
+export const FeatureListComponent = (props) => {
     const {
         features,
         loading,
@@ -60,17 +72,20 @@ export const FeatureListComponent = ( props ) => {
         searchFilesById,
         openDetails,
     } = props
-    return ( !loading && !attachmentIsLoading && features && features.length >
+    return (!loading && !attachmentIsLoading && features && features.length >
         0 ?
-        <List subheader={subheader}>
-            {features && features.map((feature, index) => {
-                const attachment = searchFilesById(feature.getId())
-                return <Item key={index} classes={classes} feature={feature} config={config} attachment={attachment} openDetails={openDetails} />
-            })}
-        </List> :
+        <div>
+            <Message align="left" message={subheader} classes={classes} type="subheading" />
+            <List>
+                {features && features.map((feature, index) => {
+                    const attachment = searchFilesById(feature.getId())
+                    return <Item key={index} classes={classes} feature={feature} config={config} attachment={attachment} openDetails={openDetails} />
+                })}
+            </List>
+        </div> :
         features && features.length == 0 ?
-        <Message message={message} classes={classes} type="body2" /> :
-        <Loader classes={classes} /> )
+            <Message message={message} classes={classes} type="body2" /> :
+            <Loader classes={classes} />)
 }
 FeatureListComponent.propTypes = {
     classes: PropTypes.object.isRequired,
@@ -83,7 +98,7 @@ FeatureListComponent.propTypes = {
     attachmentIsLoading: PropTypes.bool.isRequired,
     searchFilesById: PropTypes.func.isRequired
 }
-export const URL = ( props ) => {
+export const URL = (props) => {
     const { classes, url } = props
     return <Button color="accent" href={url} className={classes.button}>
         Link
@@ -93,7 +108,7 @@ URL.propTypes = {
     classes: PropTypes.object.isRequired,
     url: PropTypes.string.isRequired
 }
-export const PropsTable = ( props ) => {
+export const PropsTable = (props) => {
     const { classes, selectedFeature } = props
     return <Table>
         <TableHead>
@@ -105,7 +120,7 @@ export const PropsTable = ( props ) => {
         <TableBody>
             {Object.keys(selectedFeature.getProperties()).map((key, i) => {
                 const value = selectedFeature.getProperties()[key]
-                if (key != "geometry") {
+                if (key != "geometry" && key != "_layerTitle") {
                     return <TableRow key={i}>
                         <TableCell>{key}</TableCell>
                         <TableCell style={{ whiteSpace: 'pre-line' }}>{checkURL(value) ? <URL url={value} classes={classes} /> : value}</TableCell>
@@ -115,27 +130,33 @@ export const PropsTable = ( props ) => {
         </TableBody>
     </Table>
 }
-PropsTable.propTypes={
+PropsTable.propTypes = {
     classes: PropTypes.object.isRequired,
     selectedFeature: PropTypes.object.isRequired
 }
-export const Slider = ( props ) => {
+export const Slider = (props) => {
     const { attachments } = props
-    return <Grid style={{ marginTop: 40 }} container alignItems={'center'} justify={'center'} spacing={0}>
-    {attachments.length > 0 && <Grid item xs={10} sm={10} md={10} lg={10} xl={10} >
-        <Carousel showArrows={true}>
-            {attachments.map(
-                (imageObj, i) => {
-                    return <div key={i}>
-                        <img src={imageObj.file} />
-                        <p className="legend">{`Uploaded by ${imageObj.username}`}</p>
-                    </div>
-                }
-            )}
-        </Carousel>
-    </Grid>}
-</Grid>
+    return <div>
+        <Grid container alignItems={'center'} justify={'center'} spacing={0}>
+            {attachments.length > 0 && <Grid item xs={10} sm={10} md={10} lg={10} xl={10} >
+                <Carousel showArrows={true}>
+                    {attachments.map(
+                        (imageObj, i) => {
+                            return <div key={i}>
+                                <img src={imageObj.file} />
+                                <p className="legend">{`Uploaded by ${imageObj.username}`}</p>
+                            </div>
+                        }
+                    )}
+                </Carousel>
+            </Grid>}
+            <Typography align="center" paragraph type="body1" color="inherit" >
+                {'No Attachments for this feature'}
+            </Typography >
+        </Grid>
+        <Divider light />
+    </div>
 }
-Slider.propTypes={
+Slider.propTypes = {
     attachments: PropTypes.array.isRequired
 }

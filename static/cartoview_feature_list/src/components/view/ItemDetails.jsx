@@ -3,10 +3,10 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { PropsTable, Slider } from './statelessComponents'
 
 import Button from 'material-ui/Button';
-import Divider from 'material-ui/Divider'
+import Collapsible from './CollapsibleItem'
+import { Message } from './statelessComponents'
 import PropTypes from 'prop-types'
 import React from 'react'
-import Typography from 'material-ui/Typography'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
@@ -22,6 +22,9 @@ const styles = theme => ({
     },
     button: {
         margin: theme.spacing.unit,
+    },
+    flexDisplay: {
+        display: 'flex'
     },
     textCenter: {
         textAlign: 'center',
@@ -44,12 +47,13 @@ class ItemDetails extends React.Component {
         } = this.props
         return (
             <div>
-                <Typography type="title" color="inherit" className={classes.flex}>
-                    Feature Details
-                </Typography>
-                <Slider attachments={searchFilesById(selectedFeature.getId())} />
-                <Divider light />
-                <PropsTable classes={classes} selectedFeature={selectedFeature} />
+                <Message align="left" message={'Feature Details'} classes={classes} type="subheading" />
+                <Collapsible title="Feature Attachments" open={true}>
+                    <Slider attachments={searchFilesById(selectedFeature.getId())} />
+                </Collapsible>
+                <Collapsible title="Feature Attributes" open={true}>
+                    <PropsTable classes={classes} selectedFeature={selectedFeature} />
+                </Collapsible>
                 <div className={classes.textCenter}>
                     <Button onClick={() => back()} color="primary" className={classes.button}>
                         Back

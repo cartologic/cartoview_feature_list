@@ -44,13 +44,16 @@
                 geonodeRest: "{% url 'api_api_top_level' 'api' %}",
                 attachmentUploadUrl:function(layerName){
                     return '/apps/cartoview_attachment_manager/'+layerName+'/file'
-            },
-            appInstancesPage:"{% url 'appinstance_browse' %}?app__name={{instance.app.name}}&app__title={{instance.app.title}}",
-            layers: "{% url 'layer_browse' %}",
-            maps: "{% url 'maps_browse' %}",
-            apps: "{% url 'app_manager_base_url' %}",
-            viewURL: "{% url "cartoview_feature_list.view" instance_id=instance.id %}",
-            appLogo:'{% static 'cartoview_feature_list/logo.png' %}',
+                },
+                commentsUploadUrl:function(layerName){
+                    return '/apps/cartoview_attachment_manager/'+layerName+'/comment'
+                },
+                appInstancesPage:"{% url 'appinstance_browse' %}?app__name={{instance.app.name}}&app__title={{instance.app.title}}",
+                layers: "{% url 'layer_browse' %}",
+                maps: "{% url 'maps_browse' %}",
+                apps: "{% url 'app_manager_base_url' %}",
+                viewURL: "{% url "cartoview_feature_list.view" instance_id=instance.id %}",
+                appLogo:'{% static 'cartoview_feature_list/logo.png' %}'
             }
     {% endif %}
 
