@@ -6,8 +6,8 @@ import LayerIcon from 'material-ui-icons/Layers'
 import ListIcon from 'material-ui-icons/List'
 import MapIcon from 'material-ui-icons/Map'
 import MenuIcon from 'material-ui-icons/MoreVert'
-import ProtoTypes from 'prop-types'
 import React from 'react'
+import { parentProptypes } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
@@ -55,7 +55,5 @@ class NavigationMenu extends React.Component {
         );
     }
 }
-NavigationMenu.protoTypes = {
-    classes: ProtoTypes.object.isRequired
-}
+NavigationMenu.protoTypes = parentProptypes
 export default withStyles(styles)(NavigationMenu)

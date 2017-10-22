@@ -3,9 +3,9 @@ import List, { ListItem, ListItemText } from 'material-ui/List'
 import Avatar from 'material-ui/Avatar'
 import Button from 'material-ui/Button'
 import { Message } from './statelessComponents'
-import PropTypes from 'prop-types'
 import React from 'react'
 import TextField from 'material-ui/TextField'
+import { commentsPropTypes } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
@@ -48,7 +48,7 @@ class CommentsList extends React.Component {
         
     }
     render() {
-        const { classes, comments } = this.props
+        const { classes, comments,username } = this.props
         return (
             <div>
                 {comments && comments.length > 0 ?
@@ -61,7 +61,7 @@ class CommentsList extends React.Component {
                         })}
                     </List> : <Message message={'No Comments'} classes={classes} type="body2" />
                 }
-                <div className={classes.textCenter}>
+                {username !=="" && <div className={classes.textCenter}>
                     <TextField
                         id="multiline-flexible"
                         label="Comment"
@@ -76,15 +76,10 @@ class CommentsList extends React.Component {
                     <Button onClick={this.addComment} raised color="accent" className={classes.button}>
                         {'Send'}
                     </Button>
-                </div>
+                </div>}
             </div>
         )
     }
 }
-CommentsList.propTypes = {
-    comments: PropTypes.array,
-    classes: PropTypes.object.isRequired,
-    selectedFeature: PropTypes.object.isRequired,
-    addComment: PropTypes.func.isRequired,
-}
+CommentsList.propTypes = commentsPropTypes
 export default withStyles(styles)(CommentsList)

@@ -9,6 +9,7 @@ import Divider from 'material-ui/Divider'
 import { Message } from './statelessComponents'
 import PropTypes from 'prop-types'
 import React from 'react'
+import { commentsPropTypes } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ( {
@@ -47,7 +48,8 @@ class ItemDetails extends React.Component {
             classes,
             back,
             searchCommentById,
-            addComment
+            addComment,
+            username
         } = this.props
         return (
             <div>
@@ -61,7 +63,7 @@ class ItemDetails extends React.Component {
                 </Collapsible>
                 <Divider/>
                 <Collapsible key="comments" title="Comments" open={true}>
-                    <CommentsList addComment={addComment} comments={searchCommentById(selectedFeature.getId())} selectedFeature={selectedFeature} />
+                    <CommentsList username={username} addComment={addComment} comments={searchCommentById(selectedFeature.getId())} selectedFeature={selectedFeature} />
                 </Collapsible>
                 <Divider/>
                 <div className={classes.textCenter}>
@@ -74,11 +76,10 @@ class ItemDetails extends React.Component {
     }
 }
 ItemDetails.propTypes = {
-    classes: PropTypes.object.isRequired,
-    selectedFeature: PropTypes.object.isRequired,
+    ...commentsPropTypes,
     searchFilesById: PropTypes.func.isRequired,
     back: PropTypes.func.isRequired,
-    comments: PropTypes.array,
-    searchCommentById: PropTypes.func.isRequired
+    searchCommentById: PropTypes.func.isRequired,
+    username:PropTypes.string.isRequired,
 }
 export default withStyles( styles )( ItemDetails )

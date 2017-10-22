@@ -7,6 +7,7 @@ import MapPanel from '@boundlessgeo/sdk/components/MapPanel'
 import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
 import compose from 'recompose/compose'
+import {upperPropTypes} from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
 import withWidth from 'material-ui/utils/withWidth'
 
@@ -48,8 +49,7 @@ class ContentGrid extends Component {
     }
 }
 ContentGrid.propTypes = {
-    classes: PropTypes.object.isRequired,
-    childrenProps: PropTypes.object.isRequired,
+    ...upperPropTypes,
     map: PropTypes.object.isRequired,
     width: PropTypes.string,
 };

@@ -13,7 +13,9 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import Toolbar from 'material-ui/Toolbar'
 import Typography from 'material-ui/Typography'
+import {upperPropTypesWithTheme} from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
+
 const drawerWidth = '100%'
 const styles = theme => ( {
     root: {
@@ -95,8 +97,6 @@ class NavBar extends React.Component {
     }
 }
 NavBar.propTypes = {
-    classes: PropTypes.object.isRequired,
-    childrenProps: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired,
+    ...upperPropTypesWithTheme,
 }
 export default withStyles( styles, { withTheme: true } )( NavBar )

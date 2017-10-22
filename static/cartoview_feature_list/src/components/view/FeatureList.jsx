@@ -11,6 +11,7 @@ import enLocaleData from 'react-intl/locale-data/en'
 import enMessages from '@boundlessgeo/sdk/locale/en'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import { theme } from './theme.jsx'
+import {upperPropTypes} from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
@@ -36,8 +37,7 @@ class FeatureList extends Component {
     }
 }
 FeatureList.propTypes = {
-    classes: PropTypes.object.isRequired,
-    childrenProps: PropTypes.object.isRequired,
+    ...upperPropTypes,
     map: PropTypes.object.isRequired,
 }
 export default withStyles(styles)(FeatureList)

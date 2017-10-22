@@ -2,10 +2,10 @@ import Button from 'material-ui/Button'
 import Divider from 'material-ui/Divider'
 import { FeatureListComponent } from './statelessComponents'
 import ItemDetails from "./ItemDetails"
-import PropTypes from 'prop-types'
 import React from 'react'
 import SearchInput from './SearchInput'
 import UltimatePaginationMaterialUi from './MaterialPagination'
+import { cartoviewListPropTypes } from './sharedPropTypes'
 import classNames from 'classnames'
 import { withStyles } from 'material-ui/styles'
 const styles = theme => ( {
@@ -98,7 +98,7 @@ class CartoviewList extends React.Component {
                         All Features
                     </Button>
                 </div>}
-                {detailsModeEnabled && detailsOfFeature && <ItemDetails addComment={addComment} selectionModeEnabled={selectionModeEnabled} back={this.back} selectedFeature={detailsOfFeature} searchCommentById={searchCommentById} comments={comments} searchFilesById={searchFilesById} />}
+                {detailsModeEnabled && detailsOfFeature && <ItemDetails username={config.username} addComment={addComment} selectionModeEnabled={selectionModeEnabled} back={this.back} selectedFeature={detailsOfFeature} searchCommentById={searchCommentById} comments={comments} searchFilesById={searchFilesById} />}
                 {!selectionModeEnabled && !detailsModeEnabled && !(featuresIsLoading || attachmentIsLoading) && totalFeatures > 0 && <div className={classes.pagination}>
                     <UltimatePaginationMaterialUi
                         totalPages={Math.ceil(totalFeatures / parseInt(config.pagination))}
@@ -109,24 +109,5 @@ class CartoviewList extends React.Component {
         )
     }
 }
-CartoviewList.propTypes = {
-    classes: PropTypes.object.isRequired,
-    config: PropTypes.object.isRequired,
-    features: PropTypes.array,
-    featureIdentifyResult: PropTypes.array,
-    featuresIsLoading: PropTypes.bool.isRequired,
-    attachmentIsLoading: PropTypes.bool.isRequired,
-    selectionModeEnabled: PropTypes.bool.isRequired,
-    featureIdentifyLoading: PropTypes.bool.isRequired,
-    totalFeatures: PropTypes.number.isRequired,
-    getFeatures: PropTypes.func.isRequired,
-    zoomToFeature: PropTypes.func.isRequired,
-    searchFilesById: PropTypes.func.isRequired,
-    addStyleToFeature: PropTypes.func.isRequired,
-    backToAllFeatures: PropTypes.func.isRequired,
-    search: PropTypes.func.isRequired,
-    comments:PropTypes.array,
-    searchCommentById:PropTypes.func.isRequired,
-    addComment:PropTypes.func.isRequired
-}
+CartoviewList.propTypes = cartoviewListPropTypes
 export default withStyles( styles )( CartoviewList )
