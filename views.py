@@ -1,8 +1,10 @@
-from . import APP_NAME
-from cartoview.app_manager.views import StandardAppViews
 import json
+
 from cartoview.app_manager.models import App, AppInstance
+from cartoview.app_manager.views import StandardAppViews
 from django.shortcuts import HttpResponse
+
+from . import APP_NAME
 
 
 class FeatureList(StandardAppViews):

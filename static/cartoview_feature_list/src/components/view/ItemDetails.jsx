@@ -12,7 +12,7 @@ import React from 'react'
 import { commentsPropTypes } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
 
-const styles = theme => ( {
+const styles = theme => ({
     root: {
         width: '100%',
     },
@@ -32,17 +32,17 @@ const styles = theme => ( {
     textCenter: {
         textAlign: 'center',
         marginBottom: 'auto',
-        [ theme.breakpoints.down( 'md' ) ]: {
+        [theme.breakpoints.down('md')]: {
             marginBottom: 40,
         },
     }
-} )
+})
 class ItemDetails extends React.Component {
-    constructor( props ) {
-        super( props )
+    constructor(props) {
+        super(props)
     }
     render() {
-        let {
+        const {
             selectedFeature,
             searchFilesById,
             classes,
@@ -57,15 +57,15 @@ class ItemDetails extends React.Component {
                 <Collapsible key="attachments" title="Feature Attachments" open={true}>
                     <Slider attachments={searchFilesById(selectedFeature.getId())} />
                 </Collapsible>
-                <Divider/>
+                <Divider />
                 <Collapsible key="featureTable" title="Feature Attributes" open={true}>
                     <PropsTable classes={classes} selectedFeature={selectedFeature} />
                 </Collapsible>
-                <Divider/>
+                <Divider />
                 <Collapsible key="comments" title="Comments" open={true}>
                     <CommentsList username={username} addComment={addComment} comments={searchCommentById(selectedFeature.getId())} selectedFeature={selectedFeature} />
                 </Collapsible>
-                <Divider/>
+                <Divider />
                 <div className={classes.textCenter}>
                     <Button onClick={() => back()} color="primary" className={classes.button}>
                         Back
@@ -80,6 +80,6 @@ ItemDetails.propTypes = {
     searchFilesById: PropTypes.func.isRequired,
     back: PropTypes.func.isRequired,
     searchCommentById: PropTypes.func.isRequired,
-    username:PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
 }
-export default withStyles( styles )( ItemDetails )
+export default withStyles(styles)(ItemDetails)

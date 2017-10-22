@@ -14,6 +14,7 @@ import IconButton from 'material-ui/IconButton'
 import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
 import React from 'react'
+import TextField from 'material-ui/TextField'
 import Typography from 'material-ui/Typography'
 import { checkURL } from '../../containers/staticMethods'
 import noImage from '../../img/no-img.png'
@@ -37,7 +38,6 @@ Message.propTypes = {
     type: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
     align: PropTypes.string
-
 }
 export const Item = (props) => {
     const { openDetails, classes, feature, attachment, config } = props
@@ -56,7 +56,6 @@ Item.propTypes = {
     config: PropTypes.object.isRequired,
     openDetails: PropTypes.func.isRequired
 }
-
 export const FeatureListComponent = (props) => {
     const {
         features,
@@ -156,9 +155,9 @@ export const Slider = (props) => {
 Slider.propTypes = {
     attachments: PropTypes.array.isRequired
 }
-export const MobileDrawer = ( props ) => {
+export const MobileDrawer = (props) => {
     const { theme, mobileOpen, classes, handleDrawerToggle, childrenProps } =
-    props
+        props
     return (
         <Drawer
             type="temporary"
@@ -183,10 +182,49 @@ export const MobileDrawer = ( props ) => {
         </Drawer>
     )
 }
-MobileDrawer.propTypes={
-    mobileOpen:PropTypes.bool.isRequired,
-    classes:PropTypes.object.isRequired,
-    handleDrawerToggle:PropTypes.func.isRequired,
-    childrenProps:PropTypes.object.isRequired,
-    theme:PropTypes.object.isRequired,
+MobileDrawer.propTypes = {
+    mobileOpen: PropTypes.bool.isRequired,
+    classes: PropTypes.object.isRequired,
+    handleDrawerToggle: PropTypes.func.isRequired,
+    childrenProps: PropTypes.object.isRequired,
+    theme: PropTypes.object.isRequired,
+}
+export const CommentBox = (props) => {
+    const { classes, value, handleChange, addComment, hasError } = props
+    return (
+        <div className={classes.textCenter}>
+            {!hasError ? <TextField
+                id="multiline-flexible"
+                label="Comment"
+                multiline
+                rowsMax="4"
+                value={value}
+                onChange={handleChange}
+                className={classes.textField}
+                margin="normal"
+                fullWidth
+            /> : <TextField
+                    error
+                    id="multiline-flexible"
+                    label="Comment"
+                    multiline
+                    rowsMax="4"
+                    value={value}
+                    onChange={handleChange}
+                    className={classes.textField}
+                    margin="normal"
+                    fullWidth
+                />}
+            <Button onClick={addComment} raised color="accent" className={classes.button}>
+                {'Send'}
+            </Button>
+        </div>
+    )
+}
+CommentBox.propTypes = {
+    value: PropTypes.string.isRequired,
+    classes: PropTypes.object.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    addComment: PropTypes.func.isRequired,
+    hasError: PropTypes.bool.isRequired
 }
