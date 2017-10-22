@@ -14,6 +14,7 @@ import IconButton from 'material-ui/IconButton'
 import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
 import React from 'react'
+import SendIcon from 'material-ui-icons/Send'
 import TextField from 'material-ui/TextField'
 import Typography from 'material-ui/Typography'
 import { checkURL } from '../../containers/staticMethods'
@@ -216,7 +217,7 @@ export const CommentBox = (props) => {
                     fullWidth
                 />}
             <Button onClick={addComment} raised color="accent" className={classes.button}>
-                {'Send'}
+                {`Send`} <SendIcon/>
             </Button>
         </div>
     )
