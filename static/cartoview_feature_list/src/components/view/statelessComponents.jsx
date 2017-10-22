@@ -1,7 +1,7 @@
 import List, { ListItem, ListItemText } from 'material-ui/List'
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
 
-import Button from 'material-ui/Button';
+import Button from 'material-ui/Button'
 import { Carousel } from 'react-responsive-carousel'
 import { CircularProgress } from 'material-ui/Progress'
 import Divider from 'material-ui/Divider'
@@ -142,10 +142,9 @@ export const Slider = (props) => {
                 </Carousel>
             </Grid>}
             <Typography align="center" paragraph type="body1" color="inherit" >
-                {'No Attachments for this feature'}
+                {'No Attachments'}
             </Typography >
         </Grid>
-        <Divider light />
     </div>
 }
 Slider.propTypes = {

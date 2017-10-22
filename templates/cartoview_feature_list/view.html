@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>{{ instance.title }}</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1, user-scalable=no" />    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.3.2/ol.css" />
     <link rel="shortcut icon" type="image/png" href="{{ STATIC_URL }}cartoview/img/icon.png" />
     <style>
         html,body {
@@ -15,6 +14,10 @@
         }
         #root{
             height: 100%
+        }
+        body::-webkit-scrollbar {
+            width: 1em;
+            border-radius: 5%
         }
         
 

@@ -79,7 +79,10 @@ class CartoviewList extends React.Component {
             backToAllFeatures,
             featureIdentifyResult,
             featureIdentifyLoading,
-            search
+            search,
+            comments,
+            searchCommentById,
+            addComment
         } = this.props
         let { detailsModeEnabled, detailsOfFeature } = this.state
         return (
@@ -95,7 +98,7 @@ class CartoviewList extends React.Component {
                         All Features
                     </Button>
                 </div>}
-                {detailsModeEnabled && detailsOfFeature && <ItemDetails selectionModeEnabled={selectionModeEnabled} back={this.back} selectedFeature={detailsOfFeature} searchFilesById={searchFilesById} />}
+                {detailsModeEnabled && detailsOfFeature && <ItemDetails addComment={addComment} selectionModeEnabled={selectionModeEnabled} back={this.back} selectedFeature={detailsOfFeature} searchCommentById={searchCommentById} comments={comments} searchFilesById={searchFilesById} />}
                 {!selectionModeEnabled && !detailsModeEnabled && !(featuresIsLoading || attachmentIsLoading) && totalFeatures > 0 && <div className={classes.pagination}>
                     <UltimatePaginationMaterialUi
                         totalPages={Math.ceil(totalFeatures / parseInt(config.pagination))}
@@ -121,6 +124,9 @@ CartoviewList.propTypes = {
     searchFilesById: PropTypes.func.isRequired,
     addStyleToFeature: PropTypes.func.isRequired,
     backToAllFeatures: PropTypes.func.isRequired,
-    search: PropTypes.func.isRequired
+    search: PropTypes.func.isRequired,
+    comments:PropTypes.array,
+    searchCommentById:PropTypes.func.isRequired,
+    addComment:PropTypes.func.isRequired
 }
 export default withStyles( styles )( CartoviewList )

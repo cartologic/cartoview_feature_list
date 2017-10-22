@@ -4,12 +4,14 @@ import { PropsTable, Slider } from './statelessComponents'
 
 import Button from 'material-ui/Button'
 import Collapsible from './CollapsibleItem'
+import CommentsList from './CommentsList'
+import Divider from 'material-ui/Divider'
 import { Message } from './statelessComponents'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
 
-const styles = theme => ({
+const styles = theme => ( {
     root: {
         width: '100%',
     },
@@ -29,31 +31,39 @@ const styles = theme => ({
     textCenter: {
         textAlign: 'center',
         marginBottom: 'auto',
-        [theme.breakpoints.down('md')]: {
+        [ theme.breakpoints.down( 'md' ) ]: {
             marginBottom: 40,
         },
     }
-})
+} )
 class ItemDetails extends React.Component {
-    constructor(props) {
-        super(props)
+    constructor( props ) {
+        super( props )
     }
     render() {
         let {
             selectedFeature,
             searchFilesById,
             classes,
-            back
+            back,
+            searchCommentById,
+            addComment
         } = this.props
         return (
             <div>
                 <Message align="left" message={'Feature Details'} classes={classes} type="subheading" />
-                <Collapsible title="Feature Attachments" open={true}>
+                <Collapsible key="attachments" title="Feature Attachments" open={true}>
                     <Slider attachments={searchFilesById(selectedFeature.getId())} />
                 </Collapsible>
-                <Collapsible title="Feature Attributes" open={true}>
+                <Divider/>
+                <Collapsible key="featureTable" title="Feature Attributes" open={true}>
                     <PropsTable classes={classes} selectedFeature={selectedFeature} />
                 </Collapsible>
+                <Divider/>
+                <Collapsible key="comments" title="Comments" open={true}>
+                    <CommentsList addComment={addComment} comments={searchCommentById(selectedFeature.getId())} selectedFeature={selectedFeature} />
+                </Collapsible>
+                <Divider/>
                 <div className={classes.textCenter}>
                     <Button onClick={() => back()} color="primary" className={classes.button}>
                         Back
@@ -67,6 +77,8 @@ ItemDetails.propTypes = {
     classes: PropTypes.object.isRequired,
     selectedFeature: PropTypes.object.isRequired,
     searchFilesById: PropTypes.func.isRequired,
-    back: PropTypes.func.isRequired
+    back: PropTypes.func.isRequired,
+    comments: PropTypes.array,
+    searchCommentById: PropTypes.func.isRequired
 }
-export default withStyles(styles)(ItemDetails)
+export default withStyles( styles )( ItemDetails )
