@@ -17,6 +17,7 @@ import FeatureList from '../components/view/FeatureList'
 import MapConfigService from '@boundlessgeo/sdk/services/MapConfigService'
 import MapConfigTransformService from '@boundlessgeo/sdk/services/MapConfigTransformService'
 import PropTypes from 'prop-types'
+import URLS from './URLS'
 import { getCRSFToken } from '../helpers/helpers.jsx'
 import ol from 'openlayers'
 import { render } from 'react-dom'
@@ -45,6 +46,7 @@ class FeatureListContainer extends Component {
             activeFeatures: null,
             filterType: null
         }
+        this.urls=new URLS(this.props.urls)
         this.map = getMap()
         this.featureCollection = new ol.Collection()
         addSelectionLayer(this.map, this.featureCollection, styleFunction)
@@ -144,7 +146,7 @@ class FeatureListContainer extends Component {
             count: parseInt(config.pagination),
             startIndex
         })
-        fetch(requestUrl).then((response) => response.json()).then(
+        fetch(this.urls.getProxiedURL(requestUrl)).then((response) => response.json()).then(
             (data) => {
                 this.setState({ featuresIsLoading: false })
                 let features = new ol.format.GeoJSON().readFeatures(
@@ -177,7 +179,7 @@ class FeatureListContainer extends Component {
             filter: getFilter(config,filterType,text),
             maxFeatures: 20
         })
-        return fetch(urls.wfsURL, {
+        return fetch(this.urls.getProxiedURL(urls.wfsURL), {
             method: 'POST',
             credentials: 'include',
             body: new XMLSerializer().serializeToString(request)
@@ -274,7 +276,7 @@ class FeatureListContainer extends Component {
         const layer = getWMSLayer(config.layer, this.map.getLayers().getArray())
         const url = getFeatureInfoUrl(layer, coordinate, view,
             'application/json')
-        fetch(url).then((response) => response.json()).then(
+        fetch(this.urls.getProxiedURL(url)).then((response) => response.json()).then(
             (result) => {
                 if (result.features.length > 0) {
                     const features = wmsGetFeatureInfoFormats[

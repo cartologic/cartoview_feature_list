@@ -102,17 +102,17 @@ export const layerName = ( typeName ) => {
 export const layerNameSpace = ( typeName ) => {
     return typeName.split( ":" )[ 0 ]
 }
-export const getFilter = (config,filterType,value) => {
+export const getFilter = ( config, filterType, value ) => {
     /* 
     this function should return the proper filter based on 
     filter type
     working with strings & numbers
     test Needed 😈
     */
-    let olFilter = ol.format.filter.like(config.filters, '%' + value +
-        '%', undefined, undefined, undefined, false)
-    if (filterType !== 'string') {
-        olFilter = ol.format.filter.equalTo(config.filters, value)
+    let olFilter = ol.format.filter.like( config.filters, '%' + value +
+        '%', undefined, undefined, undefined, false )
+    if ( filterType !== 'string' ) {
+        olFilter = ol.format.filter.equalTo( config.filters, value )
     }
     return olFilter
 }

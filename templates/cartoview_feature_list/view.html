@@ -15,20 +15,6 @@
         #root{
             height: 100%
         }
-        /* ::-webkit-scrollbar {
-            width: .5em;
-        }
-         
-        ::-webkit-scrollbar-track {
-            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-        }
-         
-        ::-webkit-scrollbar-thumb {
-          background-color: #03acf4be;
-          border-radius: 5%;
-          outline: 1px solid rgba(255, 255, 255, 0.856);
-        } */
-
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.4/proj4.js"></script>
 </head>
@@ -37,10 +23,16 @@
 <script src="{% static 'cartoview_feature_list/dist/FeatureList.bundle.js?version=2' %}"></script>
 <script type="text/javascript">
     {% if instance %}
-            var instanceId= {{ instance.id }}
+            const instanceId= {{ instance.id }}
+            {% if PROXY_URL %}
+                const PROXY_URL='{{PROXY_URL}}'
+            {% else %}
+                const PROXY_URL=null
+            {% endif %}
+            
             const urls={
                 mapJsonUrl: "{% url 'map_json' mapid=instance.map.id %}",
-                proxy: "{{ PROXY_URL }}",
+                proxy: PROXY_URL,
                 appInstance: "{% url 'api_dispatch_detail' api_name='api' resource_name='appinstances' pk=instance.id %}",
                 geoserverUrl : "{{ GEOSERVER_BASE_URL }}",
                 {% if 'access_token' in request.session %}
@@ -68,7 +60,7 @@
             }
     {% endif %}
 
-    const props = {{ instance.config | safe }};
+    const props = {{ instance.config | safe }}
     
     props.formTitle="{{instance.title}}"
     props.formAbstract="{{instance.abstract}}"
