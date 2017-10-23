@@ -29,6 +29,10 @@ const styles = theme => ({
     }
 })
 class ContentGrid extends Component {
+    componentDidMount(){
+        const {map}=this.props
+        map.setTarget(this.mapDiv)
+    }
     componentDidUpdate(prevProps, prevState) {
         prevProps.map.updateSize()
     }
@@ -37,9 +41,7 @@ class ContentGrid extends Component {
         return (
             <Grid className={classes.root} container alignItems={"stretch"} spacing={0}>
                 <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
-                    <MapPanel useHistory={false} className={classes.mapPanel} map={map}>
-                        <LoadingPanel map={map}></LoadingPanel>
-                    </MapPanel>
+                    <div ref={(mapDiv)=>this.mapDiv=mapDiv} className={classes.mapPanel}></div>
                 </Grid>
                 <Grid item md={4} lg={4} xl={4} hidden={{ smDown: true }}>
                     <Paper className={classes.paper}><CartoviewList {...childrenProps} /></Paper>

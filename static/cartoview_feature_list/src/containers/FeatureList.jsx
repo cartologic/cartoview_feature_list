@@ -55,7 +55,8 @@ class FeatureListContainer extends Component {
         const { urls, config } = this.props
         const apiData = { ...data, username: config.username }
         const { comments } = this.state
-        return fetch(urls.commentsUploadUrl(layerName(config.layer)), {
+        const url=urls.commentsUploadUrl(layerName(config.layer))
+        return fetch(url, {
             method: 'POST',
             credentials: "same-origin",
             headers: new Headers({
