@@ -16,9 +16,6 @@ const styles = theme => ({
     root: {
         width: '100%',
     },
-    flex: {
-        flex: 1,
-    },
     menuButton: {
         marginLeft: -12,
         marginRight: 20,
@@ -53,7 +50,7 @@ class ItemDetails extends React.Component {
         } = this.props
         return (
             <div>
-                <Message align="left" message={'Feature Details'} classes={classes} type="subheading" />
+                <Message align="left" message={'Feature Details'} type="subheading" />
                 <Collapsible key="attachments" title="Feature Attachments" open={true}>
                     <Slider attachments={searchFilesById(selectedFeature.getId())} />
                 </Collapsible>

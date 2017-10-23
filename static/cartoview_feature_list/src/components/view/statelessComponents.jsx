@@ -11,6 +11,7 @@ import Divider from 'material-ui/Divider'
 import Drawer from 'material-ui/Drawer'
 import Grid from 'material-ui/Grid'
 import IconButton from 'material-ui/IconButton'
+import Img from 'react-image'
 import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -21,21 +22,18 @@ import { checkURL } from '../../containers/staticMethods'
 import noImage from '../../img/no-img.png'
 
 export const Loader = (props) => {
-    const { classes } = props
+    const style={ textAlign: 'center' }
     return (
-        <div className={classes.loadingCenter} >
-            <CircularProgress size={50} thickness={5} className={classes.progress}></CircularProgress>
+        <div style={style} >
+            <CircularProgress size={50} thickness={5} style={style}></CircularProgress>
         </div>
     )
 }
-Loader.propTypes = {
-    classes: PropTypes.object.isRequired
-}
 export const Message = (props) => {
-    return <Typography type={props.type} align={props.align || "center"} color="inherit" className={props.classes.flex}>{props.message}</Typography>
+    const { align, type, message } = props
+    return <Typography type={type} align={align || "center"} color="inherit" style={{ flex: 1 }}>{message}</Typography>
 }
 Message.propTypes = {
-    classes: PropTypes.object.isRequired,
     type: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
     align: PropTypes.string
@@ -44,7 +42,12 @@ export const Item = (props) => {
     const { openDetails, classes, feature, attachment, config } = props
     return <div>
         <ListItem onClick={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })} button className={classes.listItem}>
-            {config.enableImageListView && <img className={classes.bigAvatar} src={attachment.length > 0 ? attachment[0].file : noImage} />}
+            {config.enableImageListView && <Img className={classes.bigAvatar}
+                src={[
+                    attachment.length > 0 ? attachment[0].file : noImage
+                ]}
+                loader={<Loader />}
+            />}
             <ListItemText primary={`${feature.getProperties()[config.titleAttribute]}`} secondary={`${config.subtitleAttribute ? feature.getProperties()[config.subtitleAttribute] : ''}`} />
         </ListItem>
         <Divider />
@@ -72,7 +75,7 @@ export const FeatureListComponent = (props) => {
     return (!loading && !attachmentIsLoading && features && features.length >
         0 ?
         <div>
-            <Message align="left" message={subheader} classes={classes} type="subheading" />
+            <Message align="left" message={subheader} type="subheading" />
             <List>
                 {features && features.map((feature, index) => {
                     const attachment = searchFilesById(feature.getId())
@@ -81,8 +84,8 @@ export const FeatureListComponent = (props) => {
             </List>
         </div> :
         features && features.length == 0 ?
-            <Message message={message} classes={classes} type="body2" /> :
-            <Loader classes={classes} />)
+            <Message message={message} type="body2" /> :
+            <Loader />)
 }
 FeatureListComponent.propTypes = {
     classes: PropTypes.object.isRequired,
@@ -135,7 +138,7 @@ export const Slider = (props) => {
     const { attachments } = props
     return <div>
         <Grid container alignItems={'center'} justify={'center'} spacing={0}>
-            {attachments.length > 0 && <Grid item xs={10} sm={10} md={10} lg={10} xl={10} >
+            {attachments.length > 0 ? <Grid item xs={10} sm={10} md={10} lg={10} xl={10} >
                 <Carousel showArrows={true}>
                     {attachments.map(
                         (imageObj, i) => {
@@ -146,10 +149,10 @@ export const Slider = (props) => {
                         }
                     )}
                 </Carousel>
-            </Grid>}
-            <Typography align="center" paragraph type="body1" color="inherit" >
-                {'No Attachments'}
-            </Typography >
+            </Grid> : <Message align="center" message={'No Attachments'} type="body1" />}
+
+
+
         </Grid>
     </div>
 }
@@ -217,7 +220,7 @@ export const CommentBox = (props) => {
                     fullWidth
                 />}
             <Button onClick={addComment} raised color="accent" className={classes.button}>
-                {`Send`} <SendIcon/>
+                {`Send`} <SendIcon />
             </Button>
         </div>
     )

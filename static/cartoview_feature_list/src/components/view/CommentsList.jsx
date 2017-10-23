@@ -66,7 +66,7 @@ class CommentsList extends React.Component {
                                 <ListItemText primary={comment.username} secondary={comment.text} />
                             </ListItem>
                         })}
-                    </List> : <Message message={'No Comments'} classes={classes} type="body2" />
+                    </List> : <Message message={'No Comments'} type="body2" />
                 }
                 {username !== "" && <CommentBox value={newComment} classes={classes} hasError={hasError} handleChange={this.handleChange} addComment={this.addComment} />}
             </div>
