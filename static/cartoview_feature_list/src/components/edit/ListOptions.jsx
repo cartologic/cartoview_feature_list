@@ -38,7 +38,7 @@ export default class ListOptions extends Component {
                 subtitleAttribute: getPropertyFromConfig(config,
                     'subtitleAttribute', null),
                 pagination: getPropertyFromConfig(config,
-                    'pagination', 10),
+                    'pagination', "10"),
                 filters: getPropertyFromConfig(config, 'filters', null),
                 zoomOnSelect: getPropertyFromConfig(config,
                     'zoomOnSelect', true),
