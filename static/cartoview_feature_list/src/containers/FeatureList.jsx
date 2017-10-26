@@ -1,4 +1,5 @@
 import 'openlayers/dist/ol.css'
+import '../css/view.css'
 
 import React, { Component } from 'react'
 import {
@@ -57,8 +58,7 @@ class FeatureListContainer extends Component {
         const apiData = { ...data, username: config.username }
         const { comments } = this.state
         const url = urls.commentsUploadUrl(layerName(config.layer))
-        const proxiedURL = this.urls.getProxiedURL(url)
-        return fetch(proxiedURL, {
+        return fetch(url, {
             method: 'POST',
             credentials: "same-origin",
             headers: new Headers({

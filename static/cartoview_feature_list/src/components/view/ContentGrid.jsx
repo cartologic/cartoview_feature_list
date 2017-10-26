@@ -17,13 +17,6 @@ const styles = theme => ({
         [theme.breakpoints.down('md')]: {
             height: `calc(100% - 64px)`,
         }
-    },
-    paper: {
-        height: "100%",
-        overflowY: 'overlay'
-    },
-    mapPanel: {
-        height: '100%'
     }
 })
 class ContentGrid extends Component {
@@ -39,10 +32,10 @@ class ContentGrid extends Component {
         return (
             <Grid className={classes.root} container alignItems={"stretch"} spacing={0}>
                 <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
-                    <div ref={(mapDiv)=>this.mapDiv=mapDiv} className={classes.mapPanel}></div>
+                    <div ref={(mapDiv)=>this.mapDiv=mapDiv} className="map-panel"></div>
                 </Grid>
                 <Grid item md={4} lg={4} xl={4} hidden={{ smDown: true }}>
-                    <Paper className={classes.paper}><CartoviewList {...childrenProps} /></Paper>
+                    <Paper className="paper"><CartoviewList {...childrenProps} /></Paper>
                 </Grid>
             </Grid>
         )
@@ -52,5 +45,5 @@ ContentGrid.propTypes = {
     ...upperPropTypes,
     map: PropTypes.object.isRequired,
     width: PropTypes.string,
-};
+}
 export default compose(withStyles(styles), withWidth())(ContentGrid)

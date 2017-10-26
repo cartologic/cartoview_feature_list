@@ -23,16 +23,15 @@ import { checkURL } from '../../containers/staticMethods'
 import noImage from '../../img/no-img.png'
 
 export const Loader = (props) => {
-    const style = { textAlign: 'center' }
     return (
-        <div style={style} >
-            <CircularProgress size={50} thickness={5} style={style}></CircularProgress>
+        <div className="text-center" >
+            <CircularProgress size={50} thickness={5} className="text-center"></CircularProgress>
         </div>
     )
 }
 export const Message = (props) => {
     const { align, type, message } = props
-    return <Typography type={type} align={align || "center"} color="inherit" style={{ flex: 1 }}>{message}</Typography>
+    return <Typography type={type} align={align || "center"} color="inherit" className="element-flex">{message}</Typography>
 }
 Message.propTypes = {
     type: PropTypes.string.isRequired,
@@ -43,7 +42,7 @@ export const Item = (props) => {
     const { openDetails, classes, feature, attachment, config } = props
     return <div>
         <ListItem onClick={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })} button className={classes.listItem}>
-            {config.enableImageListView && <Img className={classes.bigAvatar}
+            {config.enableImageListView && <Img className="big-avatar"
                 src={[
                     attachment.length > 0 ? attachment[0].file : noImage
                 ]}
@@ -124,7 +123,7 @@ export const PropsTable = (props) => {
                 if (key != "geometry" && key != "_layerTitle") {
                     return <TableRow key={i}>
                         <TableCell>{key}</TableCell>
-                        <TableCell style={{ whiteSpace: 'pre-line' }}>{checkURL(value) ? <URL url={value} classes={classes} /> : value}</TableCell>
+                        <TableCell className="space-per-line">{checkURL(value) ? <URL url={value} classes={classes} /> : value}</TableCell>
                     </TableRow>
                 }
             })}
@@ -183,7 +182,7 @@ export const MobileDrawer = (props) => {
             </div>
             <Divider />
 
-            <Paper className={classes.paper}><CartoviewList {...childrenProps} /></Paper>
+            <Paper className="paper"><CartoviewList {...childrenProps} /></Paper>
         </Drawer>
     )
 }
@@ -197,7 +196,7 @@ MobileDrawer.propTypes = {
 export const CommentBox = (props) => {
     const { classes, value, handleChange, addComment, hasError } = props
     return (
-        <div className={classes.textCenter}>
+        <div className="text-center">
             {!hasError ? <TextField
                 id="multiline-flexible"
                 label="Comment"
@@ -236,7 +235,7 @@ CommentBox.propTypes = {
 export const DropZoneComponent = (props) => {
     const { classes, files,onDrop } = props
     return (
-        <div className={classes.CenterDiv}>
+        <div className="center-div">
             <Dropzone maxSize={5242880} multiple={false} accept="image/*" onDrop={onDrop}>
                 <div>
                     <Message message={"Click to select Image to upload."} type="body1" />

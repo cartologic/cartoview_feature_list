@@ -7,17 +7,6 @@ import React from 'react'
 import classnames from 'classnames'
 import { withStyles } from 'material-ui/styles'
 const styles = theme => ({
-    fillOutEmpty: {
-        flexGrow: 1
-    },
-    attrsTableTitle: {
-        alignItems: 'center',
-        display: 'flex',
-        justifyContent: 'center'
-    },
-    flexDisplay: {
-        display: 'flex'
-    },
     expand: {
         transform: 'rotate(0deg)',
         transition: theme.transitions.create('transform', {
@@ -43,11 +32,11 @@ class Collapsible extends React.Component {
         const { classes, children, title } = this.props
         return (
             <div>
-                <div className={classes.flexDisplay}>
-                    <div className={classes.attrsTableTitle}>
+                <div className="element-flex">
+                    <div className="attrs-table-title">
                         <Message align="center" message={title} classes={classes} type="body2" />
                     </div>
-                    <div className={classes.fillOutEmpty} />
+                    <div className="fill-out-empty" />
                     <IconButton
                         className={classnames(classes.expand, {
                             [classes.expandOpen]: this.state.expanded,

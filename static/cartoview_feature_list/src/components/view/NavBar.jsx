@@ -14,13 +14,6 @@ const styles = theme => ( {
     root: {
         width: '100%',
     },
-    flex: {
-        flex: 1,
-    },
-    menuButton: {
-        marginLeft: -12,
-        marginRight: 20,
-    },
     drawerPaper: {
         width: drawerWidth
     },
@@ -31,11 +24,7 @@ const styles = theme => ( {
         justifyContent: 'flex-end',
         padding: '0 8px',
         ...theme.mixins.toolbar,
-    },
-    paper: {
-        height: "100%",
-        overflowY: 'overlay'
-    },
+    }
 } )
 class NavBar extends React.Component {
     state = {
@@ -53,11 +42,11 @@ class NavBar extends React.Component {
                 <AppBar position="static">
                     <Toolbar>
                         <Hidden mdUp>
-                            <IconButton onClick={() => this.handleDrawerClose()} className={classes.menuButton} color="contrast" aria-label="Menu">
+                            <IconButton onClick={() => this.handleDrawerClose()} className="menu-button" color="contrast" aria-label="Menu">
                                 <MenuIcon />
                             </IconButton>
                         </Hidden>
-                        <Typography noWrap={true} type="title" color="inherit" className={classes.flex}>
+                        <Typography noWrap={true} type="title" color="inherit" className="element-flex">
                             {childrenProps.config && childrenProps.config.formTitle && `${childrenProps.config.formTitle || 'Feature List'}`}
                         </Typography>
                         <NavigationMenu urls={childrenProps.urls} />

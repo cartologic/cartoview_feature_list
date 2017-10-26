@@ -2,28 +2,17 @@ import { CommentBox, Message } from './statelessComponents'
 import List, { ListItem, ListItemText } from 'material-ui/List'
 
 import Avatar from 'material-ui/Avatar'
-import Button from 'material-ui/Button'
 import React from 'react'
 import { commentsPropTypes } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
-    avatar: {
-        margin: 10,
-    },
-    list: {
-        maxHeight: 250,
-        overflowY: 'overlay'
-    },
     button: {
         margin: theme.spacing.unit,
     },
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit
-    },
-    textCenter: {
-        textAlign: 'center'
     }
 })
 class CommentsList extends React.Component {
@@ -59,10 +48,10 @@ class CommentsList extends React.Component {
         return (
             <div>
                 {comments && comments.length > 0 ?
-                    <List className={classes.list}>
+                    <List className="comment-list">
                         {comments.map((comment, index) => {
                             return <ListItem key={index} button className={classes.listItem}>
-                                <Avatar className={classes.avatar}>{comment.username[0]}</Avatar>
+                                <Avatar className="avatar">{comment.username[0].toUpperCase()}</Avatar>
                                 <ListItemText primary={comment.username} secondary={comment.text} />
                             </ListItem>
                         })}

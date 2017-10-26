@@ -17,15 +17,8 @@ const styles = theme => ( {
     root: {
         width: '100%',
     },
-    menuButton: {
-        marginLeft: -12,
-        marginRight: 20,
-    },
     button: {
         margin: theme.spacing.unit,
-    },
-    flexDisplay: {
-        display: 'flex'
     },
     textCenter: {
         textAlign: 'center',

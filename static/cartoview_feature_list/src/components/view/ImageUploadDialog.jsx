@@ -12,48 +12,38 @@ import React from 'react'
 import Slide from 'material-ui/transitions/Slide'
 import { withStyles } from 'material-ui/styles'
 
-const styles = theme => ( {
+const styles = theme => ({
     button: {
         margin: theme.spacing.unit * 2,
-    },
-    flex: {
-        flex: 1,
-    },
-    CenterDiv: {
-        marginRight: "auto",
-        marginLeft: "auto"
-    },
-    textCenter: {
-        textAlign: 'center'
     }
-} )
+})
 class ImageDialog extends React.Component {
     state = {
         open: false,
         files: []
     }
     handleClickOpen = () => {
-        this.setState( { open: true } )
+        this.setState({ open: true })
     }
-    onDrop = ( files ) => {
-        this.setState( {
+    onDrop = (files) => {
+        this.setState({
             files
-        } )
+        })
     }
     handleRequestClose = () => {
-        this.setState( { open: false } )
+        this.setState({ open: false })
     }
     saveImage = () => {
         const { SaveImageBase64, featureId } = this.props
         const { files } = this.state
-        SaveImageBase64( files[ 0 ], featureId )
-        this.setState( { open: false,files:[] } )
+        SaveImageBase64(files[0], featureId)
+        this.setState({ open: false, files: [] })
     }
     render() {
         const { classes, username } = this.props
         let { files } = this.state
         return (
-            <div className={classes.textCenter}>
+            <div className="text-center">
                 {username !== "" && <Button fab color="accent" className={classes.button} onClick={this.handleClickOpen}><AddIcon /></Button>}
                 <Dialog
                     open={this.state.open}
@@ -88,4 +78,4 @@ ImageDialog.propTypes = {
     featureId: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
 }
-export default withStyles( styles )( ImageDialog )
+export default withStyles(styles)(ImageDialog)
