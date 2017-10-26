@@ -112,7 +112,7 @@ export default class ListOptions extends Component {
     }
     onChange = (newValue) => {
         const { value } = this.state
-        if (!value.layer && (newValue.layer !== value.layer)) {
+        if (!value.layer || (newValue.layer !== value.layer)) {
             this.setState({ value: newValue }, () => this.loadAttributes(
                 newValue.layer))
         }

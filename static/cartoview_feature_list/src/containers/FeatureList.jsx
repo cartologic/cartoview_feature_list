@@ -4,6 +4,8 @@ import '../css/view.css'
 import React, { Component } from 'react'
 import {
     addSelectionLayer,
+    flyTo,
+    getCenterOfExtent,
     getFeatureInfoUrl,
     getFilter,
     getFilterByName,
@@ -216,7 +218,7 @@ class FeatureListContainer extends Component {
     }
     SaveImageBase64 = (file, featureId) => {
         const { config } = this.props
-        const {attachments}=this.state
+        const { attachments } = this.state
         let promise = new Promise((resolve, reject) => {
             var reader = new FileReader()
             reader.readAsDataURL(file)
@@ -238,8 +240,8 @@ class FeatureListContainer extends Component {
             }
         })
         promise.then((apiData) => {
-            this.saveAttachment(apiData).then(result=>{
-                this.setState({attachments:[...attachments,result]})
+            this.saveAttachment(apiData).then(result => {
+                this.setState({ attachments: [...attachments, result] })
             })
         }, (error) => {
             throw (error)
@@ -261,8 +263,12 @@ class FeatureListContainer extends Component {
     zoomToFeature = (feature) => {
         const { config } = this.props
         if (config && config.zoomOnSelect) {
-            this.map.getView().fit(feature.getGeometry().getExtent(),
+            const center = ol.extent.getCenter(feature.getGeometry().getExtent())
+            flyTo(center, this.map.getView(), 14, () => { })
+            /*
+                this.map.getView().fit(feature.getGeometry().getExtent(),
                 this.map.getSize(), { duration: 10000 })
+            */
         }
     }
     singleClickListner = () => {
