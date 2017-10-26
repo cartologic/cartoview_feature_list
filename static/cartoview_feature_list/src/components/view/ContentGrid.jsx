@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 
-import CartoviewList from './List'
+import CartoviewList from './CartoviewList'
 import Grid from 'material-ui/Grid'
-import LoadingPanel from '@boundlessgeo/sdk/components/LoadingPanel'
-import MapPanel from '@boundlessgeo/sdk/components/MapPanel'
 import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
 import compose from 'recompose/compose'
@@ -37,7 +35,7 @@ class ContentGrid extends Component {
         prevProps.map.updateSize()
     }
     render() {
-        const { classes, map, childrenProps } = this.props
+        const { classes, childrenProps } = this.props
         return (
             <Grid className={classes.root} container alignItems={"stretch"} spacing={0}>
                 <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>

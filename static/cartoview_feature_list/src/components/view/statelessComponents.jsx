@@ -3,7 +3,7 @@ import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Ta
 
 import Button from 'material-ui/Button'
 import { Carousel } from 'react-responsive-carousel'
-import CartoviewList from './List'
+import CartoviewList from './CartoviewList'
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
 import ChevronRightIcon from 'material-ui-icons/ChevronRight'
 import { CircularProgress } from 'material-ui/Progress'
@@ -22,7 +22,7 @@ import { checkURL } from '../../containers/staticMethods'
 import noImage from '../../img/no-img.png'
 
 export const Loader = (props) => {
-    const style={ textAlign: 'center' }
+    const style = { textAlign: 'center' }
     return (
         <div style={style} >
             <CircularProgress size={50} thickness={5} style={style}></CircularProgress>

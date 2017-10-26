@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 
 import ContentGrid from './ContentGrid'
 import { MuiThemeProvider } from 'material-ui/styles'
-import NavBar from './AppBar.jsx'
+import NavBar from './NavBar.jsx'
 import PropTypes from 'prop-types'
 import enLocaleData from 'react-intl/locale-data/en'
 import enMessages from '@boundlessgeo/sdk/locale/en'

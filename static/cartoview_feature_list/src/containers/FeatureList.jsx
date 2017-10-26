@@ -44,9 +44,10 @@ class FeatureListContainer extends Component {
             featureIdentifyLoading: false,
             featureIdentifyResult: null,
             activeFeatures: null,
-            filterType: null
+            filterType: null,
+            ImageBase64: null
         }
-        this.urls=new URLS(this.props.urls)
+        this.urls = new URLS(this.props.urls)
         this.map = getMap()
         this.featureCollection = new ol.Collection()
         addSelectionLayer(this.map, this.featureCollection, styleFunction)
@@ -55,8 +56,9 @@ class FeatureListContainer extends Component {
         const { urls, config } = this.props
         const apiData = { ...data, username: config.username }
         const { comments } = this.state
-        const url=urls.commentsUploadUrl(layerName(config.layer))
-        return fetch(url, {
+        const url = urls.commentsUploadUrl(layerName(config.layer))
+        const proxiedURL = this.urls.getProxiedURL(url)
+        return fetch(proxiedURL, {
             method: 'POST',
             credentials: "same-origin",
             headers: new Headers({
@@ -88,8 +90,7 @@ class FeatureListContainer extends Component {
         }
         this.loadMap(urls.mapJsonUrl, urls.proxy)
         this.getFeatures(0)
-        this.loadAttachments(urls.attachmentUploadUrl(layerName(
-            config.layer)))
+        this.loadAttachments(urls.attachmentUploadUrl(layerName(config.layer)))
         this.loadComments(urls.commentsUploadUrl(layerName(config.layer)))
     }
     searchFilesById = (id) => {
@@ -112,7 +113,6 @@ class FeatureListContainer extends Component {
         })
         return result
     }
-    
     componentDidMount() {
         this.singleClickListner()
     }
@@ -147,7 +147,8 @@ class FeatureListContainer extends Component {
             count: parseInt(config.pagination),
             startIndex
         })
-        fetch(this.urls.getProxiedURL(requestUrl)).then((response) => response.json()).then(
+        fetch(this.urls.getProxiedURL(requestUrl)).then((response) =>
+            response.json()).then(
             (data) => {
                 this.setState({ featuresIsLoading: false })
                 let features = new ol.format.GeoJSON().readFeatures(
@@ -161,7 +162,6 @@ class FeatureListContainer extends Component {
                 this.setState({ features })
             })
     }
-    
     search = (text) => {
         /* 
         Openlayer build request to avoid errors
@@ -169,7 +169,7 @@ class FeatureListContainer extends Component {
         use default values
         */
         const { urls, config } = this.props
-        const {filterType}=this.state
+        const { filterType } = this.state
         this.setState({ searchResultIsLoading: true, searchModeEnable: true })
         var request = new ol.format.WFS().writeGetFeature({
             srsName: this.map.getView().getProjection().getCode(),
@@ -177,7 +177,7 @@ class FeatureListContainer extends Component {
             featurePrefix: layerNameSpace(config.layer),
             outputFormat: 'application/json',
             featureTypes: [layerName(config.layer)],
-            filter: getFilter(config,filterType,text),
+            filter: getFilter(config, filterType, text),
             maxFeatures: 20
         })
         return fetch(this.urls.getProxiedURL(urls.wfsURL), {
@@ -190,7 +190,8 @@ class FeatureListContainer extends Component {
     }
     loadAttachments = (attachmentURL) => {
         this.setState({ attachmentIsLoading: true })
-        fetch(attachmentURL).then((response) => response.json()).then(
+        const proxiedURL = this.urls.getProxiedURL(attachmentURL)
+        fetch(proxiedURL).then((response) => response.json()).then(
             (data) => {
                 this.setState({
                     attachmentIsLoading: false,
@@ -202,7 +203,8 @@ class FeatureListContainer extends Component {
     }
     loadComments = (commentsURL) => {
         this.setState({ commentsIsLoading: true })
-        fetch(commentsURL).then((response) => response.json()).then(
+        const proxiedURL = this.urls.getProxiedURL(commentsURL)
+        fetch(proxiedURL).then((response) => response.json()).then(
             (data) => {
                 this.setState({
                     commentsIsLoading: false,
@@ -212,17 +214,50 @@ class FeatureListContainer extends Component {
                 throw Error(error)
             })
     }
-    loadAttachments = (attachmentURL) => {
-        this.setState({ attachmentIsLoading: true })
-        fetch(attachmentURL).then((response) => response.json()).then(
-            (data) => {
-                this.setState({
-                    attachmentIsLoading: false,
-                    attachments: data
-                })
-            }).catch((error) => {
-                throw Error(error)
+    SaveImageBase64 = (file, featureId) => {
+        const { config } = this.props
+        const {attachments}=this.state
+        let promise = new Promise((resolve, reject) => {
+            // do a thing, possibly async, then…
+            var reader = new FileReader()
+            reader.readAsDataURL(file)
+            reader.onload = () => {
+                const data = {
+                    file: reader.result,
+                    file_name: file.name,
+                    username: config.username,
+                    is_image: true,
+                    feature_id: featureId,
+                    tags: [
+                        `feature_list_${layerName(config.layer)}`
+                    ]
+                }
+                resolve(data)
+            }
+            reader.onerror = (error) => {
+                reject(Error(error.message))
+            }
+        })
+        promise.then((apiData) => {
+            this.saveAttachment(apiData).then(result=>{
+                this.setState({attachments:[...attachments,result]})
             })
+        }, (error) => {
+            throw (error)
+        })
+    }
+    saveAttachment = (data) => {
+        const { urls, config } = this.props
+        const url = urls.attachmentUploadUrl(layerName(config.layer))
+        return fetch(url, {
+            method: 'POST',
+            credentials: "same-origin",
+            headers: new Headers({
+                "Content-Type": "application/json; charset=UTF-8",
+                "X-CSRFToken": getCRSFToken()
+            }),
+            body: JSON.stringify(data)
+        }).then((response) => response.json())
     }
     zoomToFeature = (feature) => {
         const { config } = this.props
@@ -277,7 +312,8 @@ class FeatureListContainer extends Component {
         const layer = getWMSLayer(config.layer, this.map.getLayers().getArray())
         const url = getFeatureInfoUrl(layer, coordinate, view,
             'application/json')
-        fetch(this.urls.getProxiedURL(url)).then((response) => response.json()).then(
+        fetch(this.urls.getProxiedURL(url)).then((response) =>
+            response.json()).then(
             (result) => {
                 if (result.features.length > 0) {
                     const features = wmsGetFeatureInfoFormats[
@@ -322,7 +358,8 @@ class FeatureListContainer extends Component {
             search: this.search,
             addComment: this.addComment,
             searchCommentById: this.searchCommentById,
-            urls
+            urls,
+            SaveImageBase64: this.SaveImageBase64
         }
         return <FeatureList childrenProps={childrenProps} map={this.map} />
     }

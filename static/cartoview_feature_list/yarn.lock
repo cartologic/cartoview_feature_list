@@ -4998,6 +4998,13 @@ react-dropzone@3.6.0:
   dependencies:
     attr-accept "^1.0.3"
 
+react-dropzone@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-4.2.1.tgz#695e80bd0b065f1181e69f2d0f6d1d5cc72664c9"
+  dependencies:
+    attr-accept "^1.0.3"
+    prop-types "^15.5.7"
+
 react-easy-swipe@^0.0.13:
   version "0.0.13"
   resolved "https://registry.yarnpkg.com/react-easy-swipe/-/react-easy-swipe-0.0.13.tgz#c00e90dabed8d0878e8c8313b867e01435f0f637"
@@ -6328,9 +6335,9 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "~1.0.0"
     spdx-expression-parse "~1.0.0"
 
-validator@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/validator/-/validator-9.0.0.tgz#6c1ef955e007af704adea86ae8a76da84a6c172e"
+validator@^9.1.1:
+  version "9.1.1"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-9.1.1.tgz#3bdd1065cbd28f9d96ac806dee01030d32fd97ef"
 
 vendors@^1.0.0:
   version "1.0.1"
