@@ -1,20 +1,18 @@
 import Dialog, {
     DialogActions,
     DialogContent,
-    DialogContentText,
     DialogTitle,
 } from 'material-ui/Dialog'
 
 import AddIcon from 'material-ui-icons/Add';
 import Button from 'material-ui/Button'
-import Dropzone from 'react-dropzone'
+import { DropZoneComponent } from './statelessComponents'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Slide from 'material-ui/transitions/Slide'
-import Typography from 'material-ui/Typography'
 import { withStyles } from 'material-ui/styles'
 
-const styles = theme => ({
+const styles = theme => ( {
     button: {
         margin: theme.spacing.unit * 2,
     },
@@ -28,35 +26,35 @@ const styles = theme => ({
     textCenter: {
         textAlign: 'center'
     }
-})
+} )
 class ImageDialog extends React.Component {
     state = {
         open: false,
         files: []
     }
     handleClickOpen = () => {
-        this.setState({ open: true })
+        this.setState( { open: true } )
     }
-    onDrop = (files) => {
-        this.setState({
+    onDrop = ( files ) => {
+        this.setState( {
             files
-        })
+        } )
     }
     handleRequestClose = () => {
-        this.setState({ open: false })
+        this.setState( { open: false } )
     }
     saveImage = () => {
         const { SaveImageBase64, featureId } = this.props
         const { files } = this.state
-        SaveImageBase64(files[0], featureId)
-        this.setState({ open: false })
+        SaveImageBase64( files[ 0 ], featureId )
+        this.setState( { open: false,files:[] } )
     }
     render() {
-        const { classes } = this.props
+        const { classes, username } = this.props
         let { files } = this.state
         return (
             <div className={classes.textCenter}>
-                <Button fab color="accent" className={classes.button} onClick={this.handleClickOpen}><AddIcon /></Button>
+                {username !== "" && <Button fab color="accent" className={classes.button} onClick={this.handleClickOpen}><AddIcon /></Button>}
                 <Dialog
                     open={this.state.open}
                     transition={<Slide direction="up" />}
@@ -65,17 +63,7 @@ class ImageDialog extends React.Component {
                 >
                     <DialogTitle>{"Image Uploader"}</DialogTitle>
                     <DialogContent>
-                        <DialogContentText>
-                            <div className={classes.CenterDiv}>
-                                <Dropzone maxSize={5242880} multiple={false} accept="image/*" onDrop={this.onDrop}>
-                                    <Typography type="body1" color="inherit" className={classes.flex}>
-                                        {"Click to select Image to upload."}
-                                    </Typography>
-                                    <ul> {files.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)}</ul>
-
-                                </Dropzone>
-                            </div>
-                        </DialogContentText>
+                        <DropZoneComponent files={files} onDrop={this.onDrop} classes={classes} />
                     </DialogContent>
                     <DialogActions>
                         {files.length > 0 ?
@@ -98,5 +86,6 @@ ImageDialog.propTypes = {
     classes: PropTypes.object.isRequired,
     SaveImageBase64: PropTypes.func.isRequired,
     featureId: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
 }
-export default withStyles(styles)(ImageDialog)
+export default withStyles( styles )( ImageDialog )

@@ -218,7 +218,6 @@ class FeatureListContainer extends Component {
         const { config } = this.props
         const {attachments}=this.state
         let promise = new Promise((resolve, reject) => {
-            // do a thing, possibly async, then…
             var reader = new FileReader()
             reader.readAsDataURL(file)
             reader.onload = () => {

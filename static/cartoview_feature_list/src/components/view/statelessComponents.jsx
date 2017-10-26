@@ -9,6 +9,7 @@ import ChevronRightIcon from 'material-ui-icons/ChevronRight'
 import { CircularProgress } from 'material-ui/Progress'
 import Divider from 'material-ui/Divider'
 import Drawer from 'material-ui/Drawer'
+import Dropzone from 'react-dropzone'
 import Grid from 'material-ui/Grid'
 import IconButton from 'material-ui/IconButton'
 import Img from 'react-image'
@@ -231,4 +232,22 @@ CommentBox.propTypes = {
     handleChange: PropTypes.func.isRequired,
     addComment: PropTypes.func.isRequired,
     hasError: PropTypes.bool.isRequired
+}
+export const DropZoneComponent = (props) => {
+    const { classes, files,onDrop } = props
+    return (
+        <div className={classes.CenterDiv}>
+            <Dropzone maxSize={5242880} multiple={false} accept="image/*" onDrop={onDrop}>
+                <div>
+                    <Message message={"Click to select Image to upload."} type="body1" />
+                    <ul> {files.map(f => <li key={f.name}>{f.name} - {f.size} bytes</li>)}</ul>
+                </div>
+            </Dropzone>
+        </div>
+    )
+}
+DropZoneComponent.propTypes = {
+    classes: PropTypes.object.isRequired,
+    onDrop: PropTypes.func.isRequired,
+    files: PropTypes.array.isRequired,
 }

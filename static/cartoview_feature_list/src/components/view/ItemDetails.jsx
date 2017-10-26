@@ -12,6 +12,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { commentsPropTypes } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
+
 const styles = theme => ( {
     root: {
         width: '100%',
@@ -55,7 +56,7 @@ class ItemDetails extends React.Component {
                 <Collapsible key="attachments" title="Feature Attachments" open={true}>
                     <div>
                         <Slider attachments={searchFilesById(selectedFeature.getId())} />
-                        <ImageDialog SaveImageBase64={SaveImageBase64} featureId={selectedFeature.getId()} />
+                        <ImageDialog username={username} SaveImageBase64={SaveImageBase64} featureId={selectedFeature.getId()} />
                     </div>
                 </Collapsible>
                 <Divider />
