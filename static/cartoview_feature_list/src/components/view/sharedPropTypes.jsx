@@ -19,6 +19,7 @@ export const commentsPropTypes={
     ...parentProptypes,
     comments: PropTypes.array,
     selectedFeature: PropTypes.object.isRequired,
+    commentsIsLoading: PropTypes.bool.isRequired,
     addComment: PropTypes.func.isRequired,
 }
 export const cartoviewListPropTypes={
@@ -28,6 +29,7 @@ export const cartoviewListPropTypes={
     featureIdentifyResult: PropTypes.array,
     featuresIsLoading: PropTypes.bool.isRequired,
     attachmentIsLoading: PropTypes.bool.isRequired,
+    commentsIsLoading: PropTypes.bool.isRequired,
     selectionModeEnabled: PropTypes.bool.isRequired,
     featureIdentifyLoading: PropTypes.bool.isRequired,
     totalFeatures: PropTypes.number.isRequired,

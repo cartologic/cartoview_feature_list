@@ -143,7 +143,7 @@ export const Slider = (props) => {
                     {attachments.map(
                         (imageObj, i) => {
                             return <div key={i}>
-                                <img src={imageObj.file} />
+                                <img className="img-responsive" src={imageObj.file} />
                                 <p className="legend">{`Uploaded by ${imageObj.username}`}</p>
                             </div>
                         }

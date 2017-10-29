@@ -46,6 +46,8 @@ const config = {
     }, {
             test: /\.(png|jpg|gif)$/,
             loader: 'file-loader'
+    }, { test: /\.(woff|woff2)$/, 
+        loader: 'url-loader?limit=100000' 
     } ],
         noParse: [ /dist\/ol\.js/, /dist\/jspdf.debug\.js/,
             /dist\/js\/tether\.js/ ]

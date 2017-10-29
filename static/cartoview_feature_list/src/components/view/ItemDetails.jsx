@@ -13,7 +13,7 @@ import React from 'react'
 import { commentsPropTypes } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
 
-const styles = theme => ( {
+const styles = theme => ({
     root: {
         width: '100%',
     },
@@ -23,14 +23,14 @@ const styles = theme => ( {
     textCenter: {
         textAlign: 'center',
         marginBottom: 'auto',
-        [ theme.breakpoints.down( 'md' ) ]: {
+        [theme.breakpoints.down('md')]: {
             marginBottom: 40,
         },
     }
-} )
+})
 class ItemDetails extends React.Component {
-    constructor( props ) {
-        super( props )
+    constructor(props) {
+        super(props)
     }
     render() {
         const {
@@ -41,7 +41,9 @@ class ItemDetails extends React.Component {
             searchCommentById,
             addComment,
             username,
-            SaveImageBase64
+            SaveImageBase64,
+            commentsIsLoading,
+            getImageFromURL
         } = this.props
         return (
             <div>
@@ -49,7 +51,7 @@ class ItemDetails extends React.Component {
                 <Collapsible key="attachments" title="Feature Attachments" open={true}>
                     <div>
                         <Slider attachments={searchFilesById(selectedFeature.getId())} />
-                        <ImageDialog username={username} SaveImageBase64={SaveImageBase64} featureId={selectedFeature.getId()} />
+                        <ImageDialog getImageFromURL={getImageFromURL} username={username} SaveImageBase64={SaveImageBase64} featureId={selectedFeature.getId()} />
                     </div>
                 </Collapsible>
                 <Divider />
@@ -58,7 +60,7 @@ class ItemDetails extends React.Component {
                 </Collapsible>
                 <Divider />
                 <Collapsible key="comments" title="Comments" open={true}>
-                    <CommentsList username={username} addComment={addComment} comments={searchCommentById(selectedFeature.getId())} selectedFeature={selectedFeature} />
+                    <CommentsList commentsIsLoading={commentsIsLoading} username={username} addComment={addComment} comments={searchCommentById(selectedFeature.getId())} selectedFeature={selectedFeature} />
                 </Collapsible>
                 <Divider />
                 <div className={classes.textCenter}>
@@ -70,11 +72,13 @@ class ItemDetails extends React.Component {
         )
     }
 }
-ItemDetails.propTypes = { ...commentsPropTypes,
+ItemDetails.propTypes = {
+    ...commentsPropTypes,
     searchFilesById: PropTypes.func.isRequired,
     back: PropTypes.func.isRequired,
     searchCommentById: PropTypes.func.isRequired,
     username: PropTypes.string.isRequired,
     SaveImageBase64: PropTypes.func.isRequired,
+    getImageFromURL: PropTypes.func.isRequired,
 }
-export default withStyles( styles )( ItemDetails )
+export default withStyles(styles)(ItemDetails)

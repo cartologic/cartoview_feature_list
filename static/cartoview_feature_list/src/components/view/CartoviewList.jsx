@@ -70,7 +70,9 @@ class CartoviewList extends React.Component {
             comments,
             searchCommentById,
             addComment,
-            SaveImageBase64
+            SaveImageBase64,
+            commentsIsLoading,
+            getImageFromURL
         } = this.props
         let { detailsModeEnabled, detailsOfFeature } = this.state
         return (
@@ -86,7 +88,7 @@ class CartoviewList extends React.Component {
                         All Features
                     </Button>
                 </div>}
-                {detailsModeEnabled && detailsOfFeature && <ItemDetails SaveImageBase64={SaveImageBase64} username={config.username} addComment={addComment} selectionModeEnabled={selectionModeEnabled} back={this.back} selectedFeature={detailsOfFeature} searchCommentById={searchCommentById} comments={comments} searchFilesById={searchFilesById} />}
+                {detailsModeEnabled && detailsOfFeature && <ItemDetails getImageFromURL={getImageFromURL} commentsIsLoading={commentsIsLoading} SaveImageBase64={SaveImageBase64} username={config.username} addComment={addComment} selectionModeEnabled={selectionModeEnabled} back={this.back} selectedFeature={detailsOfFeature} searchCommentById={searchCommentById} comments={comments} searchFilesById={searchFilesById} />}
                 {!selectionModeEnabled && !detailsModeEnabled && !(featuresIsLoading || attachmentIsLoading) && totalFeatures > 0 && <div className={classes.pagination}>
                     <UltimatePaginationMaterialUi
                         totalPages={Math.ceil(totalFeatures / parseInt(config.pagination))}

@@ -2,6 +2,7 @@ import { CommentBox, Message } from './statelessComponents'
 import List, { ListItem, ListItemText } from 'material-ui/List'
 
 import Avatar from 'material-ui/Avatar'
+import { Loader } from './statelessComponents'
 import React from 'react'
 import { commentsPropTypes } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
@@ -43,7 +44,7 @@ class CommentsList extends React.Component {
 
     }
     render() {
-        const { classes, comments, username } = this.props
+        const { classes, comments, username, commentsIsLoading } = this.props
         const { newComment, hasError } = this.state
         return (
             <div>
@@ -55,7 +56,7 @@ class CommentsList extends React.Component {
                                 <ListItemText primary={comment.username} secondary={comment.text} />
                             </ListItem>
                         })}
-                    </List> : <Message message={'No Comments'} type="body2" />
+                    </List> : commentsIsLoading ? <Loader /> : <Message message={'No Comments'} type="body2" />
                 }
                 {username !== "" && <CommentBox value={newComment} classes={classes} hasError={hasError} handleChange={this.handleChange} addComment={this.addComment} />}
             </div>
