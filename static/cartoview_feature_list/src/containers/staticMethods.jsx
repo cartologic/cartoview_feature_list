@@ -1,7 +1,7 @@
 import LayerSwitcher from '../vendor/ol3-layerswitcher/src/ol3-layerswitcher'
 import isURL from 'validator/lib/isURL'
 import ol from 'openlayers'
-export const isWMSLayer = (layer) => {
+export const isWMSLayer = ( layer ) => {
     return layer.getSource() instanceof ol.source.TileWMS || layer.getSource() instanceof ol
         .source.ImageWMS
 }
@@ -9,182 +9,187 @@ export const wmsGetFeatureInfoFormats = {
     'application/json': new ol.format.GeoJSON(),
     'application/vnd.ogc.gml': new ol.format.WMSGetFeatureInfo()
 }
-export const getFeatureInfoUrl = (layer, coordinate, view, infoFormat) => {
+export const getFeatureInfoUrl = ( layer, coordinate, view, infoFormat ) => {
     const resolution = view.getResolution(),
         projection = view.getProjection()
-    const url = layer.getSource().getGetFeatureInfoUrl(coordinate,
+    const url = layer.getSource().getGetFeatureInfoUrl( coordinate,
         resolution, projection, {
             'INFO_FORMAT': infoFormat
-        })
+        } )
     return `${url}&FEATURE_COUNT=10`
 }
 export const getMap = () => {
-    const map = new ol.Map({
-        interactions: ol.interaction.defaults().extend([
+    const map = new ol.Map( {
+        interactions: ol.interaction.defaults().extend( [
             new ol.interaction.DragRotateAndZoom()
-        ]),
-        layers: [new ol.layer.Tile({
+        ] ),
+        layers: [ new ol.layer.Tile( {
             title: 'OpenStreetMap',
             source: new ol.source.OSM()
-        })],
-        view: new ol.View({
+        } ) ],
+        view: new ol.View( {
             center: [
                 0, 0
             ],
             minZoom: 4,
             maxZoom: 16
-        })
-    })
+        } )
+    } )
     let layerSwitcher = new LayerSwitcher()
-    map.addControl(layerSwitcher)
+    map.addControl( layerSwitcher )
     return map
 }
-export const getFilterByName = (attrs, attrName) => {
+export const getFilterByName = ( attrs, attrName ) => {
     let attributeType = null
-    if (attrs) {
-        attrs.forEach(attr => {
-            if (attr.attribute === attrName) {
+    if ( attrs ) {
+        attrs.forEach( attr => {
+            if ( attr.attribute === attrName ) {
                 attributeType = attr.attribute_type
             }
-        })
+        } )
     }
     return attributeType
 }
-export const getWMSLayer = (name, layers) => {
+export const getWMSLayer = ( name, layers ) => {
     let wmsLayer = null
-    layers.forEach((layer) => {
-        if (layer instanceof ol.layer.Group) {
-            wmsLayer = getWMSLayer(name, layer.getLayers())
-        } else if (isWMSLayer(layer) && layer.getSource().getParams()
-            .LAYERS == name) {
+    layers.forEach( ( layer ) => {
+        if ( layer instanceof ol.layer.Group ) {
+            wmsLayer = getWMSLayer( name, layer.getLayers() )
+        } else if ( isWMSLayer( layer ) && layer.getSource().getParams()
+            .LAYERS == name ) {
             wmsLayer = layer
         }
-        if (wmsLayer) {
+        if ( wmsLayer ) {
             return false
         }
-    })
+    } )
     return wmsLayer
 }
-export const checkURL = (value) => {
+export const checkURL = ( value ) => {
     /* validator validate strings only */
-    if (typeof (value) === "string") {
-        return isURL(value)
+    if ( typeof ( value ) === "string" ) {
+        return isURL( value )
     }
     return false
 }
-export const getCenterOfExtent = (Extent) => {
-    var X = Extent[0] + (Extent[2] - Extent[0]) / 2
-    var Y = Extent[1] + (Extent[3] - Extent[1]) / 2
-    return [X, Y]
+export const getCenterOfExtent = ( extent ) => {
+    const center = ol.extent.getCenter( extent )
+    return center
 }
-export const flyTo = (location, view, zoom, done) => {
+export const flyTo = ( location, view, zoom, done ) => {
     var duration = 3000
     var parts = 2
     var called = false
 
-    function callback(complete) {
+    function callback( complete ) {
         --parts
-        if (called) {
+        if ( called ) {
             return
         }
-        if (parts === 0 || !complete) {
+        if ( parts === 0 || !complete ) {
             called = true
-            done(complete)
+            done( complete )
         }
     }
-    view.animate({
+    view.animate( {
         center: location,
         duration: duration
-    }, callback)
-    view.animate({
+    }, callback )
+    view.animate( {
         zoom: zoom - 1,
         duration: duration / 2
     }, {
-            zoom: zoom,
-            duration: duration / 2
-        }, callback)
+        zoom: zoom,
+        duration: duration / 2
+    }, callback )
 }
-const flash = (feature, map) => {
+export const checkImageSrc = ( src, good, bad ) => {
+    var img = new Image()
+    img.onload = good
+    img.onerror = bad
+    img.src = src
+}
+const flash = ( feature, map ) => {
     let start = new Date().getTime()
     var listenerKey
     const duration = 5000
 
-    function animate(event) {
+    function animate( event ) {
         var vectorContext = event.vectorContext
         var frameState = event.frameState
         var flashGeom = feature.getGeometry().clone()
         var elapsed = frameState.time - start
         var elapsedRatio = elapsed / duration
         // radius will be 5 at start and 30 at end.
-        var radius = ol.easing.easeOut(elapsedRatio) * 25 + 5
-        var opacity = ol.easing.easeOut(1 - elapsedRatio)
-        var style = new ol.style.Style({
-            image: new ol.style.Circle({
+        var radius = ol.easing.easeOut( elapsedRatio ) * 25 + 5
+        var opacity = ol.easing.easeOut( 1 - elapsedRatio )
+        var style = new ol.style.Style( {
+            image: new ol.style.Circle( {
                 radius: radius,
                 snapToPixel: false,
-                stroke: new ol.style.Stroke({
+                stroke: new ol.style.Stroke( {
                     color: 'rgba(21, 84, 75,' +
-                    opacity + ')',
+                        opacity + ')',
                     width: 0.25 + opacity
-                })
-            })
-        })
-        vectorContext.setStyle(style);
-        vectorContext.drawGeometry(flashGeom)
-        if (elapsed > duration) {
-            ol.Observable.unByKey(listenerKey)
+                } )
+            } )
+        } )
+        vectorContext.setStyle( style );
+        vectorContext.drawGeometry( flashGeom )
+        if ( elapsed > duration ) {
+            ol.Observable.unByKey( listenerKey )
             return
         }
         // tell OpenLayers to continue postcompose animation
         map.render()
     }
-    listenerKey = map.on('postcompose', animate)
+    listenerKey = map.on( 'postcompose', animate )
 }
-export const addSelectionLayer = (map, featureCollection, styleFunction) => {
-    let source = new ol.source.Vector({ features: featureCollection })
-    new ol.layer.Vector({
+export const addSelectionLayer = ( map, featureCollection, styleFunction ) => {
+    let source = new ol.source.Vector( { features: featureCollection } )
+    new ol.layer.Vector( {
         source: source,
         style: styleFunction,
         title: "Selected Features",
         zIndex: 10000,
-        format: new ol.format.GeoJSON({
+        format: new ol.format.GeoJSON( {
             defaultDataProjection: map.getView().getProjection(),
             featureProjection: map.getView().getProjection()
-        }),
+        } ),
         map: map
-    })
-    source.on('addfeature', (e) => {
-        flash(e.feature, map)
-    })
+    } )
+    source.on( 'addfeature', ( e ) => {
+        flash( e.feature, map )
+    } )
 }
-export const getLayers = (layers) => {
+export const getLayers = ( layers ) => {
     var children = []
-    layers.forEach((layer) => {
-        if (layer instanceof ol.layer.Group) {
-            children = children.concat(getLayers(layer.getLayers()))
-        } else if (layer.getVisible() && isWMSLayer(layer)) {
-            children.push(layer)
+    layers.forEach( ( layer ) => {
+        if ( layer instanceof ol.layer.Group ) {
+            children = children.concat( getLayers( layer.getLayers() ) )
+        } else if ( layer.getVisible() && isWMSLayer( layer ) ) {
+            children.push( layer )
         }
-    })
+    } )
     return children
 }
-export const layerName = (typeName) => {
-    return typeName.split(":").pop()
+export const layerName = ( typeName ) => {
+    return typeName.split( ":" ).pop()
 }
-export const layerNameSpace = (typeName) => {
-    return typeName.split(":")[0]
+export const layerNameSpace = ( typeName ) => {
+    return typeName.split( ":" )[ 0 ]
 }
-export const getFilter = (config, filterType, value) => {
+export const getFilter = ( config, filterType, value ) => {
     /* 
     this function should return the proper filter based on 
     filter type
     working with strings & numbers
     test Needed 😈
     */
-    let olFilter = ol.format.filter.like(config.filters, '%' + value +
-        '%', undefined, undefined, undefined, false)
-    if (filterType !== 'string') {
-        olFilter = ol.format.filter.equalTo(config.filters, value)
+    let olFilter = ol.format.filter.like( config.filters, '%' + value +
+        '%', undefined, undefined, undefined, false )
+    if ( filterType !== 'string' ) {
+        olFilter = ol.format.filter.equalTo( config.filters, value )
     }
     return olFilter
 }
