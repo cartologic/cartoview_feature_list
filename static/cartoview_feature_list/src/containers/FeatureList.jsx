@@ -233,6 +233,9 @@ class FeatureListContainer extends Component {
         return fetch(this.urls.getProxiedURL(urls.wfsURL), {
             method: 'POST',
             credentials: 'include',
+            headers:{
+                "X-CSRFToken": getCRSFToken()
+            },
             body: new XMLSerializer().serializeToString(request)
         }).then((response) => {
             return response.json()

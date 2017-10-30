@@ -112,8 +112,7 @@ export default class ListOptions extends Component {
         if (value) {
             this.props.onComplete({
                 config: {
-                    ...value,
-                    attachmentTags:value.attachmentTags ? value.attachmentTags.map(tag=>tag.value) : null
+                    ...value
                 }
             })
         }
