@@ -6,6 +6,7 @@ import React, { Component } from 'react'
 import {
     addSelectionLayer,
     flyTo,
+    getAttachmentTags,
     getCenterOfExtent,
     getFeatureInfoUrl,
     getFilter,
@@ -68,9 +69,7 @@ class FeatureListContainer extends Component {
                 username: config.username,
                 is_image: true,
                 feature_id: featureId,
-                tags: [
-                    `feature_list_${layerName(config.layer)}`
-                ]
+                tags: getAttachmentTags(config)
             }
             this.saveAttachment(apiData).then(result => {
                 this.setState({
@@ -78,7 +77,6 @@ class FeatureListContainer extends Component {
                         attachments, result]
                 })
             })
-
         }
         reader.onerror = (error) => {
             throw (error)
@@ -249,7 +247,8 @@ class FeatureListContainer extends Component {
         const typename = layerName(config.layer)
         const filesURL = urls.attachmentUploadUrl(typename)
         const commentsURL = urls.commentsUploadUrl(typename)
-        return Promise.all([this.loadAttachments(filesURL), this.loadAttachments(commentsURL)])
+        return Promise.all([this.loadAttachments(filesURL), this.loadAttachments(
+            commentsURL)])
     }
     saveAttachment = (data) => {
         const { urls, config } = this.props

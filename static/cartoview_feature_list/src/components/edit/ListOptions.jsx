@@ -1,22 +1,28 @@
 // import 'react-select/dist/react-select.css'
 import React, { Component } from 'react'
+import {
+    getKeywordsTemplate,
+    getTagsOptions
+} from './AutoCompleteInput'
 
 import PropTypes from 'prop-types'
 import Spinner from 'react-spinkit'
 import t from 'tcomb-form'
 
-const filter = t.struct({
-    type: t.String,
-    name: t.String
-})
+const selectTagItem = t.struct( {
+    value: t.String,
+    label: t.String
+} )
 const formConfig = t.struct({
     layer: t.String,
     titleAttribute: t.String,
     subtitleAttribute: t.maybe(t.String),
     filters: t.maybe(t.String),
     pagination: t.String,
+    attachmentTags: t.maybe( t.list( selectTagItem ) ),
     zoomOnSelect: t.Boolean,
-    enableImageListView: t.Boolean
+    enableImageListView: t.Boolean,
+    
 })
 const Form = t.form.Form
 const getPropertyFromConfig = (config, property, defaultValue) => {
@@ -44,6 +50,7 @@ export default class ListOptions extends Component {
                     'zoomOnSelect', true),
                 enableImageListView: getPropertyFromConfig(config,
                     'enableImageListView', true),
+                attachmentTags:getPropertyFromConfig(config,'attachmentTags',null)
             },
             attributeOptions: [],
             attributes: [],
@@ -105,7 +112,8 @@ export default class ListOptions extends Component {
         if (value) {
             this.props.onComplete({
                 config: {
-                    ...value
+                    ...value,
+                    attachmentTags:value.attachmentTags ? value.attachmentTags.map(tag=>tag.value) : null
                 }
             })
         }
@@ -153,6 +161,12 @@ export default class ListOptions extends Component {
                         { value: '40', text: "40" },
                         { value: '80', text: "80" }
                     ]
+                },
+                attachmentTags: {
+                    factory: t.form.Textbox,
+                    template: getKeywordsTemplate( {
+                        loadOptions: getTagsOptions
+                    } )
                 }
             }
         }

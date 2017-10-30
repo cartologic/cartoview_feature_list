@@ -109,6 +109,12 @@ export const checkImageSrc = ( src, good, bad ) => {
     img.onerror = bad
     img.src = src
 }
+export const getAttachmentTags = ( config ) => {
+    const configTags = config.attachmentTags
+    const tags = ( configTags && configTags !== [] ) ? configTags : [
+        `feature_list_${layerName(config.layer)}` ]
+    return tags
+}
 const flash = ( feature, map ) => {
     let start = new Date().getTime()
     var listenerKey

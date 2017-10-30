@@ -6,6 +6,7 @@ import {
 
 import PropTypes from 'prop-types'
 import t from 'tcomb-form'
+
 const Form = t.form.Form
 const selectKeywordItem = t.struct( {
     value: t.String,

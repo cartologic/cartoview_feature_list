@@ -5,6 +5,7 @@ import React from 'react'
 
 let users = null
 let keywords = null
+let tags = null
 export const getAccessTemplate = ( options ) => {
     function renderInput( locals ) {
         return <div style={{paddingTop:5,paddingBottom:5}} className={locals.hasError?"has-error":""}>
@@ -94,6 +95,32 @@ export const getKeywordsOptions = ( input, callback ) => {
     } else {
         callback( null, {
             options: keywords,
+            complete: true
+        } )
+    }
+
+
+}
+export const getTagsOptions = ( input, callback ) => {
+    if ( !tags ) {
+        fetch( "/apps/cartoview_attachment_manager/tags" ).then( ( response ) => response.json( ) )
+            .then( ( data ) => {
+                tags = [ ]
+                data.forEach( tag => {
+                    tags.push( {
+                        label: tag.tag,
+                        value: tag.tag,
+                    } )
+                } )
+                callback( null, {
+                    options: tags,
+                    complete: true
+                } )
+
+            } )
+    } else {
+        callback( null, {
+            options: tags,
             complete: true
         } )
     }
