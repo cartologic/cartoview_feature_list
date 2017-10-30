@@ -27,31 +27,7 @@ const styles = theme => ({
 })
 class CartoviewList extends React.Component {
     state = {
-        currentPage: 1,
-        detailsModeEnabled: false,
-        detailsOfFeature: null
-    }
-    back = () => {
-        const {
-            selectionModeEnabled,
-            featureIdentifyResult,
-            addStyleToFeature
-        } = this.props
-        this.setState({ detailsModeEnabled: false, detailsOfFeature: null })
-        if (selectionModeEnabled) {
-            addStyleToFeature(featureIdentifyResult)
-        } else {
-            addStyleToFeature([])
-        }
-    }
-    openDetails = (state) => {
-        this.setState({ ...state }, () => this.addStyleZoom())
-    }
-    addStyleZoom = () => {
-        const { zoomToFeature, addStyleToFeature } = this.props
-        const { detailsOfFeature } = this.state
-        addStyleToFeature([detailsOfFeature])
-        zoomToFeature(detailsOfFeature)
+        currentPage: 1
     }
     render() {
         const {
@@ -72,23 +48,26 @@ class CartoviewList extends React.Component {
             addComment,
             SaveImageBase64,
             commentsIsLoading,
-            getImageFromURL
+            getImageFromURL,
+            openDetails,
+            back,
+            detailsModeEnabled,
+            detailsOfFeature
         } = this.props
-        let { detailsModeEnabled, detailsOfFeature } = this.state
         return (
             <div className={classes.root}>
                 {config.filters && <div className={classes.searchMargin}>
-                    <SearchInput openDetails={this.openDetails} search={search} config={config} addStyleZoom={this.addStyleZoom} searchFilesById={searchFilesById} />
+                    <SearchInput openDetails={openDetails} search={search} config={config} searchFilesById={searchFilesById} />
                     <Divider />
                 </div>}
-                {!selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="All Features" loading={featuresIsLoading} openDetails={this.openDetails} message={"No Features Found"} />}
-                {selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="Identified Features" loading={featureIdentifyLoading} features={featureIdentifyResult} openDetails={this.openDetails} message={"No Features At this Point"} />}
+                {!selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="All Features" loading={featuresIsLoading} openDetails={openDetails} message={"No Features Found"} />}
+                {selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="Identified Features" loading={featureIdentifyLoading} features={featureIdentifyResult} openDetails={openDetails} message={"No Features At this Point"} />}
                 {selectionModeEnabled && !detailsModeEnabled && <div className="text-center">
                     <Button onClick={() => backToAllFeatures()} color="primary" className={classNames(classes.button, classes.pagination)}>
                         All Features
                     </Button>
                 </div>}
-                {detailsModeEnabled && detailsOfFeature && <ItemDetails getImageFromURL={getImageFromURL} commentsIsLoading={commentsIsLoading} SaveImageBase64={SaveImageBase64} username={config.username} addComment={addComment} selectionModeEnabled={selectionModeEnabled} back={this.back} selectedFeature={detailsOfFeature} searchCommentById={searchCommentById} comments={comments} searchFilesById={searchFilesById} />}
+                {detailsModeEnabled && detailsOfFeature && <ItemDetails getImageFromURL={getImageFromURL} commentsIsLoading={commentsIsLoading} SaveImageBase64={SaveImageBase64} username={config.username} addComment={addComment} selectionModeEnabled={selectionModeEnabled} back={back} selectedFeature={detailsOfFeature} searchCommentById={searchCommentById} comments={comments} searchFilesById={searchFilesById} />}
                 {!selectionModeEnabled && !detailsModeEnabled && !(featuresIsLoading || attachmentIsLoading) && totalFeatures > 0 && <div className={classes.pagination}>
                     <UltimatePaginationMaterialUi
                         totalPages={Math.ceil(totalFeatures / parseInt(config.pagination))}
