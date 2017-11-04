@@ -11,7 +11,7 @@ const plugins = [ new webpack.DefinePlugin( {
 } ), ]
 const config = {
     entry: {
-        config: path.join( APP_DIR, 'AppRender.jsx' ),
+        config: path.join( APP_DIR, 'EditPageEntry.jsx' ),
         FeatureList: path.join( APP_DIR, 'containers', 'FeatureList.jsx' ),
     },
     output: {

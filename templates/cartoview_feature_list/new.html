@@ -2,7 +2,7 @@
 {% load bootstrap_tags staticfiles %}
 {% load i18n %}
 
-{% block title %} {{ block.super }} - {% trans "Basic Viewer" %} {% endblock %}
+{% block title %} {{ block.super }} - {% trans "FeatureList" %} {% endblock %}
 {% block head %}
     {% include "geonode/ext_header.html" %}
     {% include "geonode/app_header.html" %}
@@ -12,70 +12,48 @@
 {% block body %}
     <div id="page-wrapper">
         <div class="container-fluid">
-          <div class="page-header">
-            <div class="row">
-              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8"><span class="h1">Feature List</span></div>
-              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#myModal">?</button></div>
-            </div>
-
-          </div>
             <div id="root"></div>
         </div>
     </div>
 
 {% endblock %}
 {% block extra_script %}
+
     <script src="{{ STATIC_URL }}cartoview_feature_list/dist/config.bundle.js"></script>
     <script>
-        const urls={
-          resources_url: "{% url 'api_dispatch_list' api_name='api' resource_name='maps' %}",
-          appInstance: null,
-          proxy: "{{ PROXY_URL }}",
-          geoserverUrl : "{{ GEOSERVER_BASE_URL }}",
-          static: "{{ STATIC_URL }}",
-          media: "{{ MEDIA_URL }}",
-          rest: "{% url 'app_manager_base_url' %}rest/app_manager/",
-          geonodeRest: "{% url 'api_api_top_level' 'api' %}",
-          appLogo:'{% static 'cartoview_feature_list/logo.png' %}',
-          layerAttributes:"{% url 'app_manager_base_url' %}rest/app_manager/geonodelayerattribute/",
-          mapLayers:"{% url "cartoview_map_layers" %}",
-          newURL:"{% url "cartoview_feature_list.new" %}",
-          editURL:function(id){
-            return "/apps/cartoview_feature_list/"+id+"/edit/"
-          },
-          viewURL:function(id){
-            return "/apps/cartoview_feature_list/"+id+"/view/"
-          },
-          detailsURL:function(id){
-            return "/apps/appinstance/"+id+"/"
-          },
-          describeFeatureType: function(typename){
-            return "{{ GEOSERVER_BASE_URL }}wfs?service=wfs&version=2.0.0&request=DescribeFeatureType&typeName="+typename+"&outputFormat=application/json"
-          }
+      const urls={
+        MapsAPI: "{% url 'api_dispatch_list' api_name='api' resource_name='maps' %}",
+        newMap:"{% url "new_map" %}",
+        keywordsAPI: "{% url 'api_dispatch_list' api_name='api' resource_name='keywords' %}",
+        profilesAPI: "{% url 'api_dispatch_list' api_name='api' resource_name='profiles' %}",
+        appInstance: null,
+        proxy: "{{ PROXY_URL }}",
+        geoserverUrl : "{{ GEOSERVER_BASE_URL }}",
+        static: "{{ STATIC_URL }}",
+        media: "{{ MEDIA_URL }}",
+        rest: "{% url 'app_manager_base_url' %}rest/app_manager/",
+        geonodeRest: "{% url 'api_api_top_level' 'api' %}",
+        appLogo:'{% static 'cartoview_feature_list/logo.png' %}',
+        layerAttributes:"{% url 'app_manager_base_url' %}rest/app_manager/geonodelayerattribute/",
+        mapLayers:"{% url "cartoview_map_layers" %}",
+        newURL:"{% url "cartoview_feature_list.new" %}",
+        tagsAPI:"{% url 'tags_list' %}",
+        editURL:function(id){
+          return "/apps/cartoview_feature_list/"+id+"/edit/"
+        },
+        viewURL:function(id){
+          return "/apps/cartoview_feature_list/"+id+"/view/"
+        },
+        detailsURL:function(id){
+          return "/apps/appinstance/"+id+"/"
+        },
+        describeFeatureType: function(typename){
+          return "{{ GEOSERVER_BASE_URL }}wfs?service=wfs&version=2.0.0&request=DescribeFeatureType&typeName="+typename+"&outputFormat=application/json"
+        }
 
-      }
-        var username="{{request.user.username}}"
-        var viewer=new Viewer('root',username,urls)
+    }
+    var username="{{request.user.username}}"
+    var viewer=new Viewer('root',username,urls)
     viewer.view();
     </script>
-    <div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Feature List</h4>
-      </div>
-      <div class="modal-body">
-        <p>Map and configurable feature list side by side. Map and feature list are connected in zoom and pan. Use for store locations or similar apps.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-{% endblock %}
+ {% endblock %}
