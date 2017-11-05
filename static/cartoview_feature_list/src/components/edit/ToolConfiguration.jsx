@@ -21,36 +21,54 @@ const options = {
 }
 const Form = t.form.Form
 export default class ToolConfiguration extends React.Component {
-    constructor( props ) {
-        super( props )
-    }
-    getFormValue = () => {
-        const { config } = this.props
-        const value = {
-            showZoombar: getPropertyFromConfig( config,
-                'showZoombar', true ),
-            showLayerSwitcher: getPropertyFromConfig( config,
-                'showLayerSwitcher', true ),
-            showBaseMapSwitcher: getPropertyFromConfig( config,
-                'showBaseMapSwitcher', true ),
-            showLegend: getPropertyFromConfig( config,
-                'showLegend', true )
+    constructor(props) {
+        super(props)
+        this.state={
+            value:this.getFormValue(this.props)
         }
+    }
+    getComponentValue = () => {
+        return this.form.getValue()
+    }
+    getFormValue = (props) => {
+        const { config } = props
+        const value = {
+            showZoombar: getPropertyFromConfig(config,
+                'showZoombar', true),
+            showLayerSwitcher: getPropertyFromConfig(config,
+                'showLayerSwitcher', true),
+            showBaseMapSwitcher: getPropertyFromConfig(config,
+                'showBaseMapSwitcher', true),
+            showLegend: getPropertyFromConfig(config,
+                'showLegend', true)
+        }
+        console.log(value)
         return value
+    }
+    componentWillReceiveProps(nextProps) {
+        const { config,instanceId } = this.props
+        if (config && !instanceId) {
+            this.setState({ value: this.getFormValue(nextProps) })
+        }
+    }
+    onChange = (newValue) => {
+        this.setState({ value: newValue })
     }
     render() {
         return (
             <div>
                 <h3>{"Navigation Tools"}</h3>
-				<Form
-					ref={(formRef) => this.form = formRef}
-					value={this.getFormValue()}
-					type={toolFormSchema()}
-					options={options} />
-			</div>
+                <Form
+                    ref={(formRef) => this.form = formRef}
+                    value={this.state.value}
+                    type={toolFormSchema()}
+                    onChange={this.onChange}
+                    options={options} />
+            </div>
         )
     }
 }
 ToolConfiguration.propTypes = {
-    config: PropTypes.object
+    config: PropTypes.object,
+    instanceId:PropTypes.number
 }

@@ -10,6 +10,16 @@ const Form = t.form.Form
 export default class AppConfiguration extends React.Component {
     constructor(props) {
         super(props)
+        this.state = {
+            value: this.getFormValue(this.props)
+        }
+    }
+    shouldComponentUpdate(nextProps, nextState) {
+        const { errors } = this.props
+        if (nextProps.errors !== errors) {
+            return false
+        }
+        return true
     }
     getKeywordsOptions = (input, callback) => {
         const { allKeywords } = this.props
@@ -21,20 +31,40 @@ export default class AppConfiguration extends React.Component {
             })
         })
         callback(null, {
-            options:keywordsOptions,
+            options: keywordsOptions,
             complete: true
         })
     }
-    getFormValue = () => {
-        const { title, selectedMap, abstract, keywords, config } =
-            this.props
+    getComponentValue = () => {
+        const value = this.form.getValue()
+        return value
+    }
+    componentWillReceiveProps(nextProps) {
+        const { selectedMap, config,instanceId } = this.props
+        if (((selectedMap !== nextProps.selectedMap) || config)&& !instanceId) {
+            this.setState({ value: this.getFormValue(nextProps) })
+        }
+    }
+    onChange = (newValue) => {
+        this.setState({ value: newValue })
+    }
+    keywordsToOptions=(keywords)=>{
+        let options=[]
+        keywords.map(keyword=>{
+            options.push({value:keyword,label:keyword})
+        })
+        return options
+    }
+    getFormValue = (props) => {
+        const { title, selectedMap, abstract, config } =
+            props
         const value = {
             title: title ? title : selectedMap ? selectedMap.title : null,
             abstract: abstract ? abstract : selectedMap ?
                 selectedMap.abstract : null,
             access: getPropertyFromConfig(config, 'access',
                 'public'),
-            keywords: keywords ? keywords : null,
+            keywords: this.keywordsToOptions(getPropertyFromConfig(config, 'keywords',[]))
         }
         return value
     }
@@ -61,7 +91,7 @@ export default class AppConfiguration extends React.Component {
                 <h3>{"General Configuration"}</h3>
                 <Form
                     ref={(form) => this.form = form}
-                    value={this.getFormValue()}
+                    value={this.state.value}
                     type={generalFormSchema()}
                     onChange={this.onChange}
                     options={this.getFormOptions()} />
@@ -70,10 +100,11 @@ export default class AppConfiguration extends React.Component {
     }
 }
 AppConfiguration.propTypes = {
-    keywords: PropTypes.array,
     allKeywords: PropTypes.array.isRequired,
     selectedMap: PropTypes.object,
     config: PropTypes.object,
     title: PropTypes.string,
-    abstract: PropTypes.string
+    abstract: PropTypes.string,
+    errors: PropTypes.array.isRequired,
+    instanceId:PropTypes.number
 }

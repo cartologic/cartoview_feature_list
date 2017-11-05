@@ -16,10 +16,10 @@ export const doPost = (url, data, extraHeaders = {}) => {
     return fetch(url, {
         method: 'POST',
         credentials: 'include',
-        headers: {
+        headers: new Headers({
             "X-CSRFToken": getCRSFToken(),
             ...extraHeaders
-        },
+        }),
         body: data
     }).then((response) => {
         return response.json()

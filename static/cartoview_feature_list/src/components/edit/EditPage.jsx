@@ -1,6 +1,92 @@
+import InfoModal from './InfoModal'
+import PropTypes from 'prop-types'
 import React from 'react'
 import classNames from 'classnames'
+const ActionBar = (props) => {
+    const { save, selectedMap, instanceId,urls } = props
+    const extraProps = {
+        disabled: selectedMap ? false : true
+    }
+    return (
+        <div className="container action-bar">
+            <button onClick={save} className="btn btn-primary btn-sm pull-right" {...extraProps}>{"Save"}</button>
+            {instanceId && <a onClick={save} href={urls.viewURL(instanceId)} className="btn btn-sm btn-primary pull-right">{"View"}</a>}
+        </div>
+    )
+}
+ActionBar.propTypes = {
+    save: PropTypes.func.isRequired,
+    selectedMap: PropTypes.object,
+    instanceId: PropTypes.number,
+    urls:PropTypes.object.isRequired
+}
+const Tabs = (props) => {
+    const {
+        childrenProps,
+        getTabClassName,
+        checkIfDisabled,
+        getContentClassName
+    } = props
+    return (
+        <div>
+            <div className="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                <ul className="list-group">
+                    {childrenProps.steps.map((step, index) => {
+                        return (
+                            <li key={index} className={getTabClassName(step.component)}>
+                                <a className="list-link" data-toggle={checkIfDisabled(step.component) ? "" : "tab"} href={checkIfDisabled(step.component) ? "#" : `#${step.component.name}`}>
+                                    {step.title}
+                                </a>
+                                {step.hasError && <i className="fa fa-exclamation-triangle text-danger pull-right" aria-hidden="true"></i>}
+                            </li>
+                        )
+                    })}
+                </ul>
+            </div>
+            <div className="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                <div className="tab-content">
+                    {childrenProps.steps.map((step, index) => {
+                        return (
+                            <div key={index} id={step.component.name} className={getContentClassName(step.component)}>
+                                <step.component errors={childrenProps.errors} ref={ComponentRef => childrenProps.setStepRef(step.ref, ComponentRef)} urls={childrenProps.urls} {...step.props} />
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
+        </div>
+    )
+}
+Tabs.propTypes = {
+    childrenProps: PropTypes.object.isRequired,
+    getTabClassName: PropTypes.func.isRequired,
+    checkIfDisabled: PropTypes.func.isRequired,
+    getContentClassName: PropTypes.func.isRequired,
+}
+const AppBar = (props) => {
+    const { handleHideModal } = props
+    return (
+        <div className="row">
+            <div className="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <h1>{"FeatureList"}</h1>
+            </div>
+            <div className="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-center">
+                <h1>
+                <button onClick={handleHideModal} className="btn btn-primary">
+                    <i className="fa fa-question-circle fa-lg" aria-hidden="true"></i>
+                </button>
+                </h1>
+            </div>
+        </div>
+    )
+}
+AppBar.propTypes = {
+    handleHideModal: PropTypes.func.isRequired
+}
 export default class EditPageComponent extends React.Component {
+    state = {
+        showModal: false
+    }
     checkIfDisabled = (component) => {
         const { childrenProps } = this.props
         return (!childrenProps.selectedMap) ? component.name ===
@@ -9,8 +95,13 @@ export default class EditPageComponent extends React.Component {
     getTabClassName = (component) => {
         return classNames({
             disabled: this.checkIfDisabled(component),
-            active: component.name === "MapSelector"
+            active: component.name === "MapSelector",
+            "list-group-item":true
         })
+    }
+    handleHideModal = () => {
+        const { showModal } = this.state
+        this.setState({ showModal: !showModal })
     }
     getContentClassName = (component) => {
         return classNames({
@@ -20,31 +111,21 @@ export default class EditPageComponent extends React.Component {
     }
     render() {
         const { childrenProps } = this.props
+        let { showModal } = this.state
         return (
-            <div className="row content">
-                <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                    <ul className="nav nav-pills nav-stacked">
-                        {childrenProps.steps.map((step, index) => {
-                            return (
-                                <li key={index} className={this.getTabClassName(step.component)}>
-                                    <a data-toggle={this.checkIfDisabled(step.component) ? "" : "tab"} href={this.checkIfDisabled(step.component) ? "#" : `#${step.component.name}`}>{step.title}</a>
-                                </li>
-                            )
-                        })}
-                    </ul>
+            <div>
+                <AppBar handleHideModal={this.handleHideModal} />
+                <hr/>
+                <ActionBar urls={childrenProps.urls} save={childrenProps.save} selectedMap={childrenProps.selectedMap} instanceId={childrenProps.instanceId} />
+                <hr/>
+                <div className="row content">
+                    <Tabs childrenProps={childrenProps} checkIfDisabled={this.checkIfDisabled} getContentClassName={this.getContentClassName} getTabClassName={this.getTabClassName} />
                 </div>
-                <div className="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-                    <div className="tab-content">
-                        {childrenProps.steps.map((step, index) => {
-                            return (
-                                <div key={index} id={step.component.name} className={this.getContentClassName(step.component)}>
-                                    <step.component urls={childrenProps.urls} {...step.props} />
-                                </div>
-                            )
-                        })}
-                    </div>
-                </div>
+                {showModal && <InfoModal handleHideModal={this.handleHideModal} />}
             </div>
         )
     }
+}
+EditPageComponent.propTypes = {
+    childrenProps: PropTypes.object.isRequired
 }

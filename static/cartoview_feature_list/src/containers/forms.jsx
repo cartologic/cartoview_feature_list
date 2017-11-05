@@ -18,28 +18,28 @@ export const listConfigFormSchema = () => {
     return formSchema
 }
 export const generalFormSchema = () => {
-    const selectKeywordItem = t.struct( {
+    const selectKeywordItem = t.struct({
         value: t.String,
         label: t.String
-    } )
-    const accessOptions = t.enums( {
+    })
+    const accessOptions = t.enums({
         public: 'Public',
         private: 'Private'
-    } )
-    const formSchema = t.struct( {
+    })
+    const formSchema = t.struct({
         title: t.String,
         abstract: t.String,
         access: accessOptions,
-        keywords: t.list( t.maybe( selectKeywordItem ) )
-    } )
+        keywords: t.list(selectKeywordItem)
+    })
     return formSchema
 }
-export const toolFormSchema=()=>{
-    const formSchema = t.struct( {
+export const toolFormSchema = () => {
+    const formSchema = t.struct({
         showZoombar: t.Boolean,
         showLayerSwitcher: t.Boolean,
         showBaseMapSwitcher: t.Boolean,
         showLegend: t.Boolean
-    } )
+    })
     return formSchema
 }

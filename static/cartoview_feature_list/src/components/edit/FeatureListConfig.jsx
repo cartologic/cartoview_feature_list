@@ -11,23 +11,23 @@ import t from 'tcomb-form'
 
 const Form = t.form.Form
 export const getPropertyFromConfig = (config, property, defaultValue) => {
-    const propertyValue = config && config[property] ? config[property] : defaultValue
-    const nestedPropertyValue = config && config.config && config.config[property] ?
+    const propertyValue = config && typeof (config[property]) !== "undefined" ? config[property] : defaultValue
+    const nestedPropertyValue = config && config.config && typeof (config.config[property]) !== "undefined" ?
         config.config[property] : propertyValue
     return nestedPropertyValue
 }
 export default class FeatureListConfig extends React.Component {
     constructor(props) {
         super(props)
-        const { mapLayers, config } = this.props
+        const { config } = this.props
         this.state = {
-            value: mapLayers.length > 0 ? this.getFormValue(config) : null,
+            value: this.getFormValue(config)
 
         }
     }
     getTagsOptions = (input, callback) => {
         const { tags } = this.props
-        let options=[]
+        let options = []
         tags.forEach(tag => {
             options.push({
                 label: tag.tag,
@@ -38,6 +38,13 @@ export default class FeatureListConfig extends React.Component {
             options,
             complete: true
         })
+    }
+    tagsToOptions=(tags)=>{
+        let options=[]
+        tags.map(tag=>{
+            options.push({value:tag,label:tag})
+        })
+        return options
     }
     getFormValue = (config) => {
 
@@ -54,13 +61,16 @@ export default class FeatureListConfig extends React.Component {
                 'zoomOnSelect', true),
             enableImageListView: getPropertyFromConfig(config,
                 'enableImageListView', true),
-            attachmentTags: getPropertyFromConfig(config, 'attachmentTags', null)
+            attachmentTags: this.tagsToOptions(getPropertyFromConfig(config, 'attachmentTags', []))
         }
         return value
     }
     componentWillReceiveProps(nextProps) {
-        const { mapLayers } = this.props
+        const { mapLayers, config } = this.props
         if (nextProps.mapLayers !== mapLayers) {
+            this.setState({ value: this.getFormValue(nextProps.config) })
+        }
+        if (nextProps.config !== config) {
             this.setState({ value: this.getFormValue(nextProps.config) })
         }
     }
@@ -73,6 +83,13 @@ export default class FeatureListConfig extends React.Component {
             })
         }
         return options
+    }
+    getComponentValue = () => {
+        const value = this.form.getValue()
+        if (value) {
+            this.setState({ value })
+        }
+        return value
     }
     getAttributesOptions = (attributes) => {
         let options = []
@@ -87,16 +104,16 @@ export default class FeatureListConfig extends React.Component {
         })
         return options
     }
-    
+
     onChange = (newValue) => {
         const { getAttributes } = this.props
         const { value } = this.state
         if (!value.layer || (newValue.layer !== value.layer)) {
             this.setState({ value: newValue }, () => {
-                if(newValue.layer){
+                if (newValue.layer) {
                     getAttributes(newValue.layer)
                 }
-            } )
+            })
         }
     }
     getFormOptions = () => {
@@ -139,7 +156,7 @@ export default class FeatureListConfig extends React.Component {
                     factory: t.form.Textbox,
                     template: getKeywordsTemplate({
                         loadOptions: this.getTagsOptions,
-                        message:"Select or Enter a Tag"
+                        message: "Select or Enter a Tag"
                     })
                 }
             }
@@ -148,7 +165,7 @@ export default class FeatureListConfig extends React.Component {
     }
     render() {
         const { loading } = this.props
-        const { value } = this.state
+        let { value } = this.state
         return (
             <div>
                 <h3>{"Feature List Configuration"}</h3>

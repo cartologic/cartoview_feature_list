@@ -39,9 +39,12 @@ export default class MapSelector extends React.Component {
     constructor(props) {
         super(props)
     }
+    getComponentValue = () => {
+        return "It's OK"
+    }
     shouldComponentUpdate(nextProps, nextState) {
-        const { userMaps, maps,selectedMap } = this.props
-        if (nextProps.userMaps === userMaps && nextProps.maps === maps && selectedMap===nextProps.selectedMap) {
+        const { userMaps, maps, selectedMap } = this.props
+        if (nextProps.userMaps === userMaps && nextProps.maps === maps && selectedMap === nextProps.selectedMap) {
             return false
         }
         return true
