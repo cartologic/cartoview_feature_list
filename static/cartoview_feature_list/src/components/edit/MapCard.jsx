@@ -10,8 +10,8 @@ export const MapCard = (props) => {
             onClick={() => selectMap(map)}
             key={map.id}
             className={(selectedMap ? selectedMap.id == map.id : false)
-                ? "row resource-box bg-success"
-                : "row resource-box"}>
+                ? "row row-fix resource-box bg-success"
+                : "row row-fix resource-box"}>
 
             <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4 resource-box-img-container">
                 <Img

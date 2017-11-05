@@ -3,14 +3,19 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import classNames from 'classnames'
 const ActionBar = (props) => {
-    const { save, selectedMap, instanceId,urls } = props
+    const { save, selectedMap, instanceId, urls } = props
     const extraProps = {
         disabled: selectedMap ? false : true
     }
     return (
-        <div className="container action-bar">
-            <button onClick={save} className="btn btn-primary btn-sm pull-right" {...extraProps}>{"Save"}</button>
+        <div className="action-bar">
+            <div className="grow"></div>
+            <p>
+                <button onClick={save} className="btn btn-primary btn-sm pull-right" {...extraProps}>{"Save"}</button>
+            </p>
+            <p>
             {instanceId && <a onClick={save} href={urls.viewURL(instanceId)} className="btn btn-sm btn-primary pull-right">{"View"}</a>}
+            </p>
         </div>
     )
 }
@@ -18,7 +23,7 @@ ActionBar.propTypes = {
     save: PropTypes.func.isRequired,
     selectedMap: PropTypes.object,
     instanceId: PropTypes.number,
-    urls:PropTypes.object.isRequired
+    urls: PropTypes.object.isRequired
 }
 const Tabs = (props) => {
     const {
@@ -72,9 +77,9 @@ const AppBar = (props) => {
             </div>
             <div className="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-center">
                 <h1>
-                <button onClick={handleHideModal} className="btn btn-primary">
-                    <i className="fa fa-question-circle fa-lg" aria-hidden="true"></i>
-                </button>
+                    <button onClick={handleHideModal} className="btn btn-primary">
+                        <i className="fa fa-question-circle fa-lg" aria-hidden="true"></i>
+                    </button>
                 </h1>
             </div>
         </div>
@@ -96,7 +101,7 @@ export default class EditPageComponent extends React.Component {
         return classNames({
             disabled: this.checkIfDisabled(component),
             active: component.name === "MapSelector",
-            "list-group-item":true
+            "list-group-item": true
         })
     }
     handleHideModal = () => {
@@ -115,9 +120,9 @@ export default class EditPageComponent extends React.Component {
         return (
             <div>
                 <AppBar handleHideModal={this.handleHideModal} />
-                <hr/>
+                <hr />
                 <ActionBar urls={childrenProps.urls} save={childrenProps.save} selectedMap={childrenProps.selectedMap} instanceId={childrenProps.instanceId} />
-                <hr/>
+                <hr />
                 <div className="row content">
                     <Tabs childrenProps={childrenProps} checkIfDisabled={this.checkIfDisabled} getContentClassName={this.getContentClassName} getTabClassName={this.getTabClassName} />
                 </div>

@@ -28,7 +28,7 @@ UserMapSwitch.propTypes = {
 }
 export const Loader = (props) => {
     return (
-        <div className="row">
+        <div className="row row-fix">
             <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-md-offset-3 text-center">
                 <Spinner name="line-scale-pulse-out" color="steelblue" />
             </div>
@@ -58,8 +58,8 @@ export default class MapSelector extends React.Component {
     render() {
         const { loading, selectedMap, selectMap, maps, getMaps, userMaps, totalMaps, UserMapsChanged, limit, urls } = this.props
         return (
-            <div>
-                <div className="row">
+            <div className="grid">
+                <div className="row row-fix">
                     <UserMapSwitch UserMapsChanged={UserMapsChanged} userMaps={userMaps} getMaps={getMaps} />
                 </div>
                 <hr />
@@ -84,7 +84,7 @@ export default class MapSelector extends React.Component {
                     marginPagesDisplayed={2}
                     pageRangeDisplayed={5}
                     onPageChange={this.handlePageClick}
-                    containerClassName={"pagination"}
+                    containerClassName={"pagination center-div"}
                     subContainerClassName={"pages pagination"}
                     activeClassName={"active"} />
             </div>

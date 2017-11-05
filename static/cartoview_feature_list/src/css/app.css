@@ -6,13 +6,26 @@
     border: 1px solid darkgray;
     border-radius: 5px;
     margin-bottom: 20px;
+    margin-left: 10px !important;
+    margin-right: 10px !important;
 }
 
 .map-details-button {
     margin: 5px;
     float: right
 }
-
+.center-div{
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+.tab-content{
+    border: 1px #e2e2e2 solid;
+    border-radius: 5px;
+    padding: 10px;
+}
+.grid{
+    display: grid;    
+}
 .right-panel {
     padding-left: 40px
 }
@@ -25,7 +38,10 @@
 .switch.on {
     background: #2c689c!important;
 }
-
+.row-fix{
+    margin-left: 0px ;
+    margin-right: 0px;
+}
 .ol-control button {
     background-color: rgb(78, 188, 212) !important;
 }
@@ -57,11 +73,21 @@
     padding-top: 30px
 }
 .action-bar{
+    display: flex;
     margin-top: 10px;
     padding: 5px;
 }
+.action-bar p{
+    padding: 5px
+}
 .list-link{
     color: #333333;
+}
+.list-group-item,.active > .list-link{
+    color: white;
+}
+.grow{
+    flex-grow: 1
 }
 @media screen and (max-width: 480px) {
     .resource-box-img {
