@@ -17,7 +17,7 @@ export default class TabsContent extends React.Component {
                     <div className="tab-content">
                         {childrenProps.steps.map((step, index) => {
                             return (
-                                <div key={index} id={step.component.name} className={getContentClassName(step.component)}>
+                                <div key={index} id={step.component.name} className={getContentClassName(index)}>
                                     <step.component ref={ComponentRef => childrenProps.setStepRef(step.ref, ComponentRef)} urls={childrenProps.urls} {...step.props} />
                                 </div>
                             )

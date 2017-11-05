@@ -42,7 +42,6 @@ export default class ToolConfiguration extends React.Component {
             showLegend: getPropertyFromConfig(config,
                 'showLegend', true)
         }
-        console.log(value)
         return value
     }
     componentWillReceiveProps(nextProps) {

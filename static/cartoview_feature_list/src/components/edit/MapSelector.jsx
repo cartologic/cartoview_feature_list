@@ -13,7 +13,7 @@ const UserMapSwitch = (props) => {
     return (
         <div className="col-xs-8 col-sm-4 col-md-4 col-lg-4 col-xs-offset-2 col-sm-offset-4 col-md-offset-4 col-lg-offset-4">
             <div className="flex-display">
-                <p>{'My Maps'}</p>
+                <p>{'All Maps'}</p>
                 <div>
                     <Switch on={userMaps} onClick={UserMapsChanged} />
                 </div>
@@ -71,7 +71,9 @@ export default class MapSelector extends React.Component {
                 {(!loading && maps.length == 0 && userMaps) && <div className="row">
                     <div
                         className="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3 text-center">
-                        <h3>{'You have created  0 Maps! please create a Map from '} <a href={`${urls.newMap}`}>{'here'}</a> </h3>
+                        <h3>{`This Application requires a `}<a href={`${urls.newMap}`}>Map</a>{` and a `}<a href="https://docs.qgis.org/2.8/en/docs/training_manual/create_vector_data/create_new_vector.html">Layer</a>{`. you will need to upload layer.Once you have a Layer you can create a Map with this layer`}</h3>
+                        <hr/>
+                        <h3>{"Alternatively you can work with other Maps and Layers that are shared with you or shared to Public.To view your Shared Maps click the Switcher on the top of page"}</h3>
 
                     </div>
                 </div>}

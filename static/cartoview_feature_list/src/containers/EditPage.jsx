@@ -231,10 +231,10 @@ class EditPage extends React.Component {
 
     }
     sendConfiguration = () => {
-        this.setState({ saving: true })
         const { urls } = this.props
         const { instanceId, errors } = this.state
         if (errors.length == 0) {
+            this.setState({ saving: true })
             const url = instanceId ? urls.editURL(instanceId) : urls.newURL
             const data = JSON.stringify(this.prepareServerData())
             doPost(url, data, { "Content-Type": "application/json; charset=UTF-8" }).then(result => {
@@ -242,7 +242,6 @@ class EditPage extends React.Component {
                     instanceId: result.id,
                     saving: false
                 })
-                // window.location.href=urls.editURL(result.id)
             })
 
         }
@@ -275,7 +274,9 @@ class EditPage extends React.Component {
     }
     render() {
         return (
-            <EditPageComponent childrenProps={this.getChildrenProps()} />
+            <div>
+                <EditPageComponent childrenProps={this.getChildrenProps()} />
+            </div>
         )
     }
 }

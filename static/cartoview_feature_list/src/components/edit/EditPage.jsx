@@ -3,18 +3,21 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import classNames from 'classnames'
 const ActionBar = (props) => {
-    const { save, selectedMap, instanceId, urls } = props
+    const { save, selectedMap, instanceId, urls, saving } = props
     const extraProps = {
-        disabled: selectedMap ? false : true
+        disabled: selectedMap && !saving ? false : true
     }
     return (
         <div className="action-bar">
             <div className="grow"></div>
+            <div>
+                {saving && <i className="fa fa-circle-o-notch fa-spin fa-lg fa-fw"></i>}
+            </div>
             <p>
                 <button onClick={save} className="btn btn-primary btn-sm pull-right" {...extraProps}>{"Save"}</button>
             </p>
             <p>
-            {instanceId && <a onClick={save} href={urls.viewURL(instanceId)} className="btn btn-sm btn-primary pull-right">{"View"}</a>}
+                {instanceId && <a onClick={save} href={urls.viewURL(instanceId)} className="btn btn-sm btn-primary pull-right">{"View"}</a>}
             </p>
         </div>
     )
@@ -23,6 +26,7 @@ ActionBar.propTypes = {
     save: PropTypes.func.isRequired,
     selectedMap: PropTypes.object,
     instanceId: PropTypes.number,
+    saving: PropTypes.bool.isRequired,
     urls: PropTypes.object.isRequired
 }
 const Tabs = (props) => {
@@ -38,8 +42,8 @@ const Tabs = (props) => {
                 <ul className="list-group">
                     {childrenProps.steps.map((step, index) => {
                         return (
-                            <li key={index} className={getTabClassName(step.component)}>
-                                <a className="list-link" data-toggle={checkIfDisabled(step.component) ? "" : "tab"} href={checkIfDisabled(step.component) ? "#" : `#${step.component.name}`}>
+                            <li key={index} className={getTabClassName(index)}>
+                                <a className="list-link" data-toggle={checkIfDisabled(index) ? "" : "tab"} href={checkIfDisabled(step) ? "#" : `#component-${index}`}>
                                     {step.title}
                                 </a>
                                 {step.hasError && <i className="fa fa-exclamation-triangle text-danger pull-right" aria-hidden="true"></i>}
@@ -52,7 +56,7 @@ const Tabs = (props) => {
                 <div className="tab-content">
                     {childrenProps.steps.map((step, index) => {
                         return (
-                            <div key={index} id={step.component.name} className={getContentClassName(step.component)}>
+                            <div key={index} id={`component-${index}`} className={getContentClassName(index)}>
                                 <step.component errors={childrenProps.errors} ref={ComponentRef => childrenProps.setStepRef(step.ref, ComponentRef)} urls={childrenProps.urls} {...step.props} />
                             </div>
                         )
@@ -92,15 +96,14 @@ export default class EditPageComponent extends React.Component {
     state = {
         showModal: false
     }
-    checkIfDisabled = (component) => {
+    checkIfDisabled = (index) => {
         const { childrenProps } = this.props
-        return (!childrenProps.selectedMap) ? component.name ===
-            "MapSelector" ? false : true : false
+        return (!childrenProps.selectedMap) ? index === 0 ? false : true : false
     }
-    getTabClassName = (component) => {
+    getTabClassName = (index) => {
         return classNames({
-            disabled: this.checkIfDisabled(component),
-            active: component.name === "MapSelector",
+            disabled: this.checkIfDisabled(index),
+            active: index === 0,
             "list-group-item": true
         })
     }
@@ -108,9 +111,9 @@ export default class EditPageComponent extends React.Component {
         const { showModal } = this.state
         this.setState({ showModal: !showModal })
     }
-    getContentClassName = (component) => {
+    getContentClassName = (index) => {
         return classNames({
-            "active": component.name === "MapSelector",
+            "active": index === 0,
             "tab-pane fade in": true
         })
     }
@@ -121,7 +124,7 @@ export default class EditPageComponent extends React.Component {
             <div>
                 <AppBar handleHideModal={this.handleHideModal} />
                 <hr />
-                <ActionBar urls={childrenProps.urls} save={childrenProps.save} selectedMap={childrenProps.selectedMap} instanceId={childrenProps.instanceId} />
+                <ActionBar saving={childrenProps.saving} urls={childrenProps.urls} save={childrenProps.save} selectedMap={childrenProps.selectedMap} instanceId={childrenProps.instanceId} />
                 <hr />
                 <div className="row content">
                     <Tabs childrenProps={childrenProps} checkIfDisabled={this.checkIfDisabled} getContentClassName={this.getContentClassName} getTabClassName={this.getTabClassName} />
