@@ -88,6 +88,9 @@ const URLBox = (props) => {
         />}
     </div>
 }
+function Transition(props) {
+    return <Slide direction="up" {...props} />;
+}
 URLBox.propTypes = {
     fromURL: PropTypes.bool.isRequired,
     ImageURLValid: PropTypes.bool.isRequired,
@@ -162,7 +165,7 @@ class ImageDialog extends React.Component {
                 {username !== "" && <Button fab color="accent" className={classes.button} onClick={this.handleClickOpen}><AddIcon /></Button>}
                 <Dialog
                     open={this.state.open}
-                    transition={<Slide direction="up" />}
+                    transition={Transition}
                     keepMounted
                     onRequestClose={this.handleRequestClose}
                 >

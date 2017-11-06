@@ -10,11 +10,20 @@ class URLS {
     getParamterizedURL = (url, query) => {
         return UrlAssembler(url).query(query).toString()
     }
-    getMapApiURL = (username, userMaps = false, limit, offset) => {
+    getMapApiURL = (username, userMaps = false, limit, offset,query={}) => {
         let params = {
             'limit': limit,
-            'offset': offset
+            'offset': offset,
+            ...query
         }
+        if (userMaps) {
+            params['owner__username'] = username
+        }
+        const url = UrlAssembler(this.urls.MapsAPI).query(params).toString()
+        return url
+    }
+    getMapApiSearchURL = (username, userMaps = false,text) => {
+        let params = {'title__contains':text}
         if (userMaps) {
             params['owner__username'] = username
         }

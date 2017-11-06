@@ -32,12 +32,13 @@ class EditPage extends React.Component {
             keywords: [],
             saving: false,
             errors: [],
-            instanceId: config ? config.id : null
+            instanceId: config ? config.id : null,
+            searchEnabled:false
         }
     }
     componentWillMount() {
-        const { userMaps,selectedMap,config } = this.state
-        this.getMaps(userMaps)
+        const { selectedMap,config } = this.state
+        this.getMaps()
         if(selectedMap){
             this.getMapLayers()
         }
@@ -49,8 +50,7 @@ class EditPage extends React.Component {
     }
     UserMapsChanged = () => {
         const { userMaps } = this.state
-        this.setState({ userMaps: !userMaps }, this.getMaps(!
-            userMaps))
+        this.setState({ userMaps: !userMaps }, this.getMaps)
     }
     getMapLayers() {
         this.setState({ loading: true })
@@ -65,9 +65,10 @@ class EditPage extends React.Component {
             })
         })
     }
-    getMaps = (userMaps, offset = 0, limit = limit) => {
+    getMaps = (offset = 0, limit = limit) => {
         this.setState({ loading: true })
         const { username } = this.props
+        const { userMaps } = this.state
         const url = this.urls.getMapApiURL(username, userMaps, limit,
             offset)
         doGet(url).then(result => {
@@ -88,6 +89,21 @@ class EditPage extends React.Component {
             }
         }
         return result
+    }
+    handleSearchMode=(bool)=>{
+        this.setState({searchEnabled:bool})
+    }
+    search=(text) => {
+        this.setState({ loading: true,searchEnabled:true })
+        const { username } = this.props
+        const { userMaps } = this.state
+        const url = this.urls.getMapApiSearchURL(username, userMaps,text)
+        doGet(url).then(result => {
+            this.setState({
+                maps: result.objects,
+                loading: false
+            })
+        })
     }
     getAttributes = (typename) => {
         this.setState({ loading: true })
@@ -137,7 +153,8 @@ class EditPage extends React.Component {
             title,
             abstract,
             keywords,
-            instanceId
+            instanceId,
+            searchEnabled
         } = this.state
         let steps = [
             {
@@ -154,7 +171,10 @@ class EditPage extends React.Component {
                     userMaps,
                     totalMaps,
                     UserMapsChanged: this.UserMapsChanged,
-                    limit
+                    limit,
+                    search:this.search,
+                    handleSearchMode:this.handleSearchMode,
+                    searchEnabled
                 }
             },
             {

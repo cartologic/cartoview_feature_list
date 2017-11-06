@@ -5,10 +5,14 @@ var APP_DIR = path.resolve( __dirname, 'src' )
 var filename = '[name].bundle.js'
 const production = process.argv.indexOf( '-p' ) !== -1
 const plugins = [ new webpack.DefinePlugin( {
-    'process.env': {
-        'NODE_ENV': JSON.stringify( production ? 'production' : '' )
-    }
-} ), ]
+        'process.env': {
+            'NODE_ENV': JSON.stringify( production ? 'production' : '' )
+        },
+    } ),
+    new webpack.optimize.CommonsChunkPlugin( {
+        name: "commons",
+        filename: "commons.js",
+    } ) ]
 const config = {
     entry: {
         config: path.join( APP_DIR, 'EditPageEntry.jsx' ),
@@ -46,8 +50,9 @@ const config = {
     }, {
             test: /\.(png|jpg|gif)$/,
             loader: 'file-loader'
-    }, { test: /\.(woff|woff2)$/, 
-        loader: 'url-loader?limit=100000' 
+    }, {
+            test: /\.(woff|woff2)$/,
+            loader: 'url-loader?limit=100000'
     } ],
         noParse: [ /dist\/ol\.js/, /dist\/jspdf.debug\.js/,
             /dist\/js\/tether\.js/ ]
