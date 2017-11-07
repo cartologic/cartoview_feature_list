@@ -1,36 +1,40 @@
-import Menu, { MenuItem } from 'material-ui/Menu'
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 
+import Drawer from 'material-ui/Drawer';
 import GridIcon from 'material-ui-icons/GridOn'
 import IconButton from 'material-ui/IconButton'
 import LayerIcon from 'material-ui-icons/Layers'
 import ListIcon from 'material-ui-icons/List'
 import MapIcon from 'material-ui-icons/Map'
-import MenuIcon from 'material-ui-icons/MoreVert'
+import MenuIcon from 'material-ui-icons/Menu'
+import PropTypes from 'prop-types'
 import React from 'react'
 import { parentProptypes } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
     button: {
-        margin: theme.spacing.unit,
+        marginLeft: "auto",
+        marginRight: "auto",
+        height: "100% !important"
     },
 })
 class NavigationMenu extends React.Component {
     state = {
         open: false,
     }
-    handleClick = event => {
-        this.setState({ open: true, anchorEl: event.currentTarget })
+    handleClick = () => {
+        const {open}=this.state
+        this.setState({ open: !open })
     }
-    handleRequestClose = (e,url) => {
-        this.setState({ open: false })
-        if(typeof(url)!=="undefined"){
-            window.location.href=url
+    handleRequestClose = (e, url) => {
+        if (typeof (url) !== "undefined") {
+            window.location.href = url
         }
-        
+        this.handleClick()
     }
     render() {
-        const { classes,urls } = this.props
+        const { classes, urls } = this.props
         return (
             <div>
                 <IconButton
@@ -40,20 +44,50 @@ class NavigationMenu extends React.Component {
                     aria-label="Menu">
                     <MenuIcon />
                 </IconButton>
-                <Menu
-                    id="nav-menu"
-                    anchorEl={this.state.anchorEl}
+                <Drawer
+                    anchor="right"
                     open={this.state.open}
-                    onRequestClose={this.handleRequestClose}
-                >   
-                    <MenuItem onClick={(e)=>this.handleRequestClose(e,urls.appInstancesPage)}><ListIcon className={classes.button} /> All FeatureList apps</MenuItem>
-                    <MenuItem onClick={(e)=>this.handleRequestClose(e,urls.layers)}><LayerIcon className={classes.button} /> Layers</MenuItem>
-                    <MenuItem onClick={(e)=>this.handleRequestClose(e,urls.maps)}><MapIcon className={classes.button} /> Maps</MenuItem>
-                    <MenuItem onClick={(e)=>this.handleRequestClose(e,urls.apps)}><GridIcon className={classes.button} /> Apps</MenuItem>
-                </Menu>
+                    onRequestClose={() => this.handleClick()}>
+                    <div
+                        tabIndex={0}
+                        role="button"
+                        onClick={this.handleClick}
+                        onKeyDown={this.handleClick}>
+                        <List>
+                            <ListItem onClick={(e) => this.handleRequestClose(e, urls.appInstancesPage)} button>
+                                <ListItemIcon>
+                                    <ListIcon className={classes.button} />
+                                </ListItemIcon>
+                                <ListItemText primary="All FeatureList apps" />
+                            </ListItem >
+                            <ListItem onClick={(e) => this.handleRequestClose(e, urls.layers)} button>
+                                <ListItemIcon>
+                                    <LayerIcon className={classes.button} />
+                                </ListItemIcon>
+                                <ListItemText primary="Layers" />
+                            </ListItem>
+                            <ListItem onClick={(e) => this.handleRequestClose(e, urls.maps)} button>
+                                <ListItemIcon>
+                                    <MapIcon className={classes.button} />
+                                </ListItemIcon>
+                                <ListItemText primary="Maps" />
+                            </ListItem>
+                            <ListItem onClick={(e) => this.handleRequestClose(e, urls.apps)} button>
+                                <ListItemIcon>
+                                    <GridIcon className={classes.button} />
+                                </ListItemIcon>
+                                <ListItemText primary="Apps" />
+                            </ListItem>
+                        </List>
+                    </div>
+                </Drawer>
             </div>
-        );
+        )
     }
 }
-NavigationMenu.protoTypes = parentProptypes
+NavigationMenu.propTypes = {
+    ...parentProptypes,
+    classes: PropTypes.object.isRequired,
+    urls: PropTypes.object.isRequired,
+}
 export default withStyles(styles)(NavigationMenu)

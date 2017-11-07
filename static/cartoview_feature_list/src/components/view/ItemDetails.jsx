@@ -37,7 +37,6 @@ class ItemDetails extends React.Component {
             selectedFeature,
             searchFilesById,
             classes,
-            back,
             searchCommentById,
             addComment,
             username,
@@ -63,11 +62,6 @@ class ItemDetails extends React.Component {
                     <CommentsList commentsIsLoading={commentsIsLoading} username={username} addComment={addComment} comments={searchCommentById(selectedFeature.getId())} selectedFeature={selectedFeature} />
                 </Collapsible>
                 <Divider />
-                <div className={classes.textCenter}>
-                    <Button onClick={() => back()} color="primary" className={classes.button}>
-                        Back
-                </Button>
-                </div>
             </div>
         )
     }

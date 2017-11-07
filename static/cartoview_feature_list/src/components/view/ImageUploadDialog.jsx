@@ -8,6 +8,7 @@ import { checkImageSrc, checkURL } from '../../containers/staticMethods'
 import AddIcon from 'material-ui-icons/Add'
 import Button from 'material-ui/Button'
 import { DropZoneComponent } from './statelessComponents'
+import FileUpload from 'material-ui-icons/FileUpload';
 import { FormControlLabel } from 'material-ui/Form'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -18,13 +19,15 @@ import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
     button: {
-        margin: theme.spacing.unit * 2,
+        margin: theme.spacing.unit,
     },
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
         width: 200,
-    }
+    }, rightIcon: {
+        marginLeft: theme.spacing.unit,
+    },
 })
 const UploaderActions = (props) => {
     const { files, saveImage, handleRequestClose, ImageURLValid } = props
@@ -162,7 +165,11 @@ class ImageDialog extends React.Component {
         let { files, fromURL, ImageURL, ImageURLValid } = this.state
         return (
             <div className="text-center">
-                {username !== "" && <Button fab color="accent" className={classes.button} onClick={this.handleClickOpen}><AddIcon /></Button>}
+
+                {username !== "" && <Button onClick={this.handleClickOpen} className={classes.button} color="primary">
+                    {"Upload"}
+                    <FileUpload className={classes.rightIcon} />
+                </Button>}
                 <Dialog
                     open={this.state.open}
                     transition={Transition}

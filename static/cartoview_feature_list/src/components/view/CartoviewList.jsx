@@ -6,7 +6,6 @@ import Paper from 'material-ui/Paper'
 import React from 'react'
 import UltimatePaginationMaterialUi from './MaterialPagination'
 import { cartoviewListPropTypes } from './sharedPropTypes'
-import classNames from 'classnames'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
@@ -16,7 +15,6 @@ const styles = theme => ({
         overflowY:'overlay'
     },
     root:{
-        background: theme.palette.background.paper,
         height: "100%"
     },
     pagination: {
@@ -42,7 +40,6 @@ class CartoviewList extends React.Component {
             getFeatures,
             selectionModeEnabled,
             searchFilesById,
-            backToAllFeatures,
             featureIdentifyResult,
             featureIdentifyLoading,
             comments,
@@ -57,17 +54,11 @@ class CartoviewList extends React.Component {
             detailsOfFeature
         } = this.props
         return (
-            <div className={classes.root}>
+            <Paper elevation={1} className={classes.root}>
                 <NavBar childrenProps={this.props} />
-                <Paper className={classes.list}>
-
+                <Paper elevation={0} className={classes.list}>
                     {!selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="All Features" loading={featuresIsLoading} openDetails={openDetails} message={"No Features Found"} />}
                     {selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="Identified Features" loading={featureIdentifyLoading} features={featureIdentifyResult} openDetails={openDetails} message={"No Features At this Point"} />}
-                    {selectionModeEnabled && !detailsModeEnabled && <div className="text-center">
-                        <Button onClick={() => backToAllFeatures()} color="primary" className={classNames(classes.button, classes.pagination)}>
-                            All Features
-                    </Button>
-                    </div>}
                     {detailsModeEnabled && detailsOfFeature && <ItemDetails getImageFromURL={getImageFromURL} commentsIsLoading={commentsIsLoading} SaveImageBase64={SaveImageBase64} username={config.username} addComment={addComment} selectionModeEnabled={selectionModeEnabled} back={back} selectedFeature={detailsOfFeature} searchCommentById={searchCommentById} comments={comments} searchFilesById={searchFilesById} />}
                     {!selectionModeEnabled && !detailsModeEnabled && !(featuresIsLoading || attachmentIsLoading) && totalFeatures > 0 && <div className={classes.pagination}>
                         <UltimatePaginationMaterialUi
@@ -76,7 +67,7 @@ class CartoviewList extends React.Component {
                             onChange={number => this.setState({ currentPage: number }, getFeatures((number - 1) * parseInt(config.pagination)))} />
                     </div>}
                 </Paper>
-            </div>
+            </Paper>
         )
     }
 }

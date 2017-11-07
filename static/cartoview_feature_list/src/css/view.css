@@ -42,8 +42,9 @@
     margin-left: auto
 }
 .menu-button{
-    margin-left: -12px;
-    margin-right: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto !important;
 }
 .img-responsive{
     height: auto;
@@ -51,6 +52,7 @@
 }
 .search-paper{
     padding: 5px;
+    display: flex
 }
 .nav-toolbar{
     padding-left: 16px !important;

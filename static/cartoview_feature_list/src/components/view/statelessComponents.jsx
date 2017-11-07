@@ -137,7 +137,7 @@ PropsTable.propTypes = {
 export const Slider = (props) => {
     const { attachments } = props
     return <div>
-        <Grid container alignItems={'center'} justify={'center'} spacing={0}>
+        <Grid container  justify={'center'} spacing={0}>
             {attachments.length > 0 ? <Grid item xs={10} sm={10} md={10} lg={10} xl={10} >
                 <Carousel showArrows={true}>
                     {attachments.map(
@@ -150,9 +150,6 @@ export const Slider = (props) => {
                     )}
                 </Carousel>
             </Grid> : <Message align="center" message={'No Attachments'} type="body1" />}
-
-
-
         </Grid>
     </div>
 }
