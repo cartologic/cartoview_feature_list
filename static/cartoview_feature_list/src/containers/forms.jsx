@@ -28,7 +28,7 @@ export const generalFormSchema = () => {
     })
     const formSchema = t.struct({
         title: t.String,
-        abstract: t.String,
+        abstract: t.maybe(t.String),
         access: accessOptions,
         keywords: t.list(selectKeywordItem)
     })

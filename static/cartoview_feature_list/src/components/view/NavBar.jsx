@@ -2,15 +2,17 @@ import AppBar from 'material-ui/AppBar'
 import Hidden from 'material-ui/Hidden'
 import IconButton from 'material-ui/IconButton'
 import MenuIcon from 'material-ui-icons/Menu'
-import {MobileDrawer} from './statelessComponents'
-import NavigationMenu from './NavigationMenu'
+import { MobileDrawer } from './statelessComponents'
+// import NavigationMenu from './NavigationMenu'
 import React from 'react'
+import SearchInput from './SearchInput'
 import Toolbar from 'material-ui/Toolbar'
-import Typography from 'material-ui/Typography'
+// import Typography from 'material-ui/Typography'
 import { upperPropTypesWithTheme } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
+
 const drawerWidth = '100%'
-const styles = theme => ( {
+const styles = theme => ({
     root: {
         width: '100%',
     },
@@ -18,38 +20,37 @@ const styles = theme => ( {
         width: drawerWidth
     },
     drawerHeader: {
-        background: theme.palette.primary[ 500 ],
+        background: theme.palette.primary[500],
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
         padding: '0 8px',
         ...theme.mixins.toolbar,
     }
-} )
+})
 class NavBar extends React.Component {
     state = {
         mobileOpen: false,
     }
     handleDrawerClose = () => {
         const { mobileOpen } = this.state
-        this.setState( { mobileOpen: !mobileOpen } )
+        this.setState({ mobileOpen: !mobileOpen })
     }
     render() {
         const { classes, theme, childrenProps } = this.props
-        let {mobileOpen}=this.state
+        let { mobileOpen } = this.state
         return (
             <div className={classes.root}>
                 <AppBar position="static">
-                    <Toolbar>
-                        <Hidden mdUp>
-                            <IconButton onClick={() => this.handleDrawerClose()} className="menu-button" color="contrast" aria-label="Menu">
-                                <MenuIcon />
-                            </IconButton>
-                        </Hidden>
-                        <Typography noWrap={true} type="title" color="inherit" className="element-flex">
+                    <Toolbar className="nav-toolbar">
+                        {/* <IconButton onClick={() => this.handleDrawerClose()} className="menu-button" color="contrast" aria-label="Menu">
+                            <MenuIcon />
+                        </IconButton> */}
+                        {/* <Typography noWrap={true} type="title" color="inherit" className="element-flex">
                             {childrenProps.config && childrenProps.config.formTitle && `${childrenProps.config.formTitle || 'Feature List'}`}
-                        </Typography>
-                        <NavigationMenu urls={childrenProps.urls} />
+                        </Typography> */}
+                        {childrenProps.config.filters && <SearchInput openDetails={childrenProps.openDetails} search={childrenProps.search} config={childrenProps.config} searchFilesById={childrenProps.searchFilesById} />}
+                        {/* <NavigationMenu urls={childrenProps.urls} /> */}
                     </Toolbar>
                 </AppBar>
                 <Hidden mdUp>
@@ -60,4 +61,4 @@ class NavBar extends React.Component {
     }
 }
 NavBar.propTypes = upperPropTypesWithTheme
-export default withStyles( styles, { withTheme: true } )( NavBar )
+export default withStyles(styles, { withTheme: true })(NavBar)

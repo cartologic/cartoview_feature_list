@@ -5,7 +5,6 @@ import React, { Component } from 'react'
 
 import ContentGrid from './ContentGrid'
 import { MuiThemeProvider } from 'material-ui/styles'
-import NavBar from './NavBar.jsx'
 import PropTypes from 'prop-types'
 import enLocaleData from 'react-intl/locale-data/en'
 import enMessages from '@boundlessgeo/sdk/locale/en'
@@ -28,7 +27,6 @@ class FeatureList extends Component {
             <IntlProvider locale='en' messages={enMessages}>
                 <MuiThemeProvider theme={theme}>
                     <div className={classes.root}>
-                        <NavBar childrenProps={childrenProps} />
                         <ContentGrid childrenProps={childrenProps} map={map} />
                     </div>
                 </MuiThemeProvider>

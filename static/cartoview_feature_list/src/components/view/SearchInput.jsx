@@ -14,18 +14,20 @@ import { withStyles } from 'material-ui/styles'
 function renderInput(inputProps) {
     const { classes, autoFocus, value, ref, ...other } = inputProps
     return (
-        <TextField
-            autoFocus={autoFocus}
-            className={classes.textField}
-            value={value}
-            inputRef={ref}
-            InputProps={{
-                classes: {
-                    input: classes.input,
-                },
-                ...other,
-            }}
-        />
+        <Paper className="search-paper" elevation={1}>
+            <TextField
+                autoFocus={autoFocus}
+                className={classes.textField}
+                value={value}
+                inputRef={ref}
+                InputProps={{
+                    classes: {
+                        input: classes.input,
+                    },
+                    ...other,
+                }}
+            />
+        </Paper>
     )
 }
 
@@ -35,7 +37,7 @@ const styles = theme => ({
     container: {
         flexGrow: 1,
         position: 'relative',
-        height: 50,
+        height: 'auto',
     },
     suggestionsContainerOpen: {
         position: 'absolute',
@@ -66,7 +68,7 @@ class IntegrationAutosuggest extends React.Component {
         const matches = match(suggestion.label, query)
         const parts = parse(suggestion.label, matches)
         return (
-            <MenuItem onClick={()=>openDetails({detailsModeEnabled: true, detailsOfFeature: suggestion.value })} selected={isHighlighted} component="div">
+            <MenuItem onClick={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: suggestion.value })} selected={isHighlighted} component="div">
                 <div>
                     {parts.map((part, index) => {
                         return part.highlight ? (
@@ -105,7 +107,7 @@ class IntegrationAutosuggest extends React.Component {
                 json)
             const total = json.totalFeatures
             let suggestions = features.map((feature, i) => {
-                const filterValue=feature.getProperties()[config.filters]
+                const filterValue = feature.getProperties()[config.filters]
                 return { label: filterValue.toString(), value: feature }
             })
             this.setState({
@@ -125,7 +127,7 @@ class IntegrationAutosuggest extends React.Component {
         })
     }
     render() {
-        const { classes,config } = this.props
+        const { classes, config } = this.props
         return (
             <Autosuggest
                 theme={{
@@ -154,8 +156,8 @@ class IntegrationAutosuggest extends React.Component {
 }
 IntegrationAutosuggest.propTypes = {
     classes: PropTypes.object.isRequired,
-    search:PropTypes.func.isRequired,
-    config:PropTypes.object.isRequired,
-    openDetails:PropTypes.func.isRequired
+    search: PropTypes.func.isRequired,
+    config: PropTypes.object.isRequired,
+    openDetails: PropTypes.func.isRequired
 }
 export default withStyles(styles)(IntegrationAutosuggest)

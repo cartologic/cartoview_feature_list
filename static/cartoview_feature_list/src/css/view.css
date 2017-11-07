@@ -49,3 +49,10 @@
     height: auto;
     width: 100%
 }
+.search-paper{
+    padding: 5px;
+}
+.nav-toolbar{
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+}
