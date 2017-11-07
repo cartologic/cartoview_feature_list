@@ -15,7 +15,8 @@ import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
     root: {
-        width: '100%',
+        height:"100%",
+        padding: theme.spacing.unit,
     },
     button: {
         margin: theme.spacing.unit,
@@ -45,8 +46,10 @@ class ItemDetails extends React.Component {
             getImageFromURL
         } = this.props
         return (
-            <div>
-                <Message align="left" message={'Feature Details'} type="subheading" />
+            <div className={classes.root}>
+                <div className="list-header">
+                    <Message align="left" message={"Feature Details"} type="headline" />
+                </div>
                 <Collapsible key="attachments" title="Feature Attachments" open={true}>
                     <div>
                         <Slider attachments={searchFilesById(selectedFeature.getId())} />

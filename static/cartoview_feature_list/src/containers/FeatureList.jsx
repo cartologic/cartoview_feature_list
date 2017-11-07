@@ -256,6 +256,7 @@ class FeatureListContainer extends Component {
             },
             body: new XMLSerializer().serializeToString(request)
         }).then((response) => {
+            this.setState({searchResultIsLoading:false})
             return response.json()
         })
     }

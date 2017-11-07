@@ -3,58 +3,120 @@
     flex: 1
 }
 
+.list-item {
+    display: flex;
+    max-height: 115px;
+    padding: 10px
+}
+
+.list-item-text {
+    display: block;
+    flex-grow: 1;
+}
+
 .text-center {
     text-align: center
 }
 
 .big-avatar {
-    width: 80px;
+    width: 115px;
+    margin-right: 10px;
     height: auto;
+}
+
+.list-header {
+    padding: 10px
 }
 
 .space-per-line {
     white-space: pre-line
 }
-.attrs-table-title{
+
+.attrs-table-title {
     align-items: center;
     display: flex;
     justify-content: center
 }
+
 .fill-out-empty {
     flex-grow: 1
 }
-.map-panel{
+
+.map-panel {
     height: 100%
 }
-.paper{
+
+.paper {
     height: 100%;
     overflow-y: overlay
 }
-.comment-list{
+
+.comment-list {
     max-height: 250px;
     overflow-y: overlay
 }
-.avatar{
+
+.avatar {
     margin: 10px
 }
-.center-div{
+
+.center-div {
     margin-right: auto;
     margin-left: auto
 }
-.menu-button{
+
+.menu-button {
     margin-left: auto;
     margin-right: auto;
     height: auto !important;
 }
-.img-responsive{
+
+.img-responsive {
     height: auto;
     width: 100%
 }
-.search-paper{
+
+.search-paper {
     padding: 5px;
     display: flex
 }
-.nav-toolbar{
+
+.nav-toolbar {
     padding-left: 16px !important;
     padding-right: 16px !important;
+}
+
+.ol-zoom {
+    bottom: 3em;
+    right: .5em;
+    top: auto;
+    left: auto;
+}
+.drawer-button-container{
+    background-color: #f7f6f6bf;
+    position: absolute !important;
+    z-index: 0;
+    top: 8px;
+    left: 100%;
+}
+.drawer-button {
+    width: auto !important;
+    z-index: 123123123
+}
+
+.layer-switcher {
+    position: absolute;
+    top: .5em !important;
+    left: auto !important;
+    right: .5em !important;
+    text-align: left;
+}
+
+@media screen and (max-width: 1024px) {
+    .big-avatar {
+        width: 85px
+    }
+    .list-item {
+        max-height: 85px;
+    }
 }

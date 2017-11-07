@@ -11,6 +11,9 @@ const styles = theme => ({
     button: {
         margin: theme.spacing.unit,
     },
+    root:{
+        padding:theme.spacing.unit*2
+    },
     textField: {
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit
@@ -47,7 +50,7 @@ class CommentsList extends React.Component {
         const { classes, comments, username, commentsIsLoading } = this.props
         const { newComment, hasError } = this.state
         return (
-            <div>
+            <div className={classes.root}>
                 {comments && comments.length > 0 ?
                     <List className="comment-list">
                         {comments.map((comment, index) => {

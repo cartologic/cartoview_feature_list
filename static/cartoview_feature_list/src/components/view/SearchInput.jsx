@@ -1,8 +1,7 @@
 import ArrowBackIcon from 'material-ui-icons/ArrowBack'
 import Autosuggest from 'react-autosuggest'
-import ExitToAppIcon from 'material-ui-icons/ExitToApp'
 import IconButton from 'material-ui/IconButton'
-import MenuIcon from 'material-ui-icons/Menu'
+import {Loader} from './statelessComponents'
 import { MenuItem } from 'material-ui/Menu'
 import NavigationMenu from './NavigationMenu'
 import Paper from 'material-ui/Paper'
@@ -15,16 +14,13 @@ import parse from 'autosuggest-highlight/parse'
 import { withStyles } from 'material-ui/styles'
 
 function renderInput(inputProps) {
-    const { classes, autoFocus, value, ref, handleDrawerClose,selectionModeEnabled,backToAllFeatures,urls, back, detailsModeEnabled, detailsOfFeature, ...other } =
+    const { classes, autoFocus, value, ref, searchResultIsLoading, selectionModeEnabled, backToAllFeatures, urls, back, detailsModeEnabled, detailsOfFeature, ...other } =
         inputProps
     return (
         <Paper className="search-paper" elevation={1}>
-            {/* <IconButton  onClick={handleDrawerClose} className="menu-button" aria-label="Menu">
-                <MenuIcon />
-            </IconButton> */}
-            {!selectionModeEnabled&&!detailsModeEnabled && <NavigationMenu urls={urls} />}
+            {!selectionModeEnabled && !detailsModeEnabled && <NavigationMenu urls={urls} />}
             {detailsModeEnabled && detailsOfFeature && <IconButton onClick={back} className="menu-button" aria-label="Menu">
-                <ExitToAppIcon />
+                <ArrowBackIcon />
             </IconButton>}
             {selectionModeEnabled && !detailsModeEnabled && <IconButton onClick={backToAllFeatures} className="menu-button" aria-label="Menu">
                 <ArrowBackIcon />
@@ -41,6 +37,7 @@ function renderInput(inputProps) {
                     ...other,
                 }}
             />
+            {searchResultIsLoading && <Loader size={30} thickness={3} />}
         </Paper>
     )
 }
@@ -49,6 +46,8 @@ const styles = theme => ({
         flexGrow: 1,
         position: 'relative',
         height: 'auto',
+        margin: "15px",
+        width: "100%"
     },
     suggestionsContainerOpen: {
         position: 'absolute',
@@ -142,8 +141,8 @@ class IntegrationAutosuggest extends React.Component {
         })
     }
     render() {
-        const { classes, config, handleDrawerClose, back,
-            detailsModeEnabled, detailsOfFeature,selectionModeEnabled,backToAllFeatures,urls } = this.props
+        const { classes, config, back,
+            detailsModeEnabled, detailsOfFeature, selectionModeEnabled, backToAllFeatures, urls, searchResultIsLoading } = this.props
         return (
             <Autosuggest
                 theme={{
@@ -165,10 +164,10 @@ class IntegrationAutosuggest extends React.Component {
                     placeholder: `Search by ${config.filters}`,
                     value: this.state.value,
                     onChange: this.handleChange,
-                    handleDrawerClose,
                     back, detailsModeEnabled, detailsOfFeature,
                     backToAllFeatures,
                     selectionModeEnabled,
+                    searchResultIsLoading,
                     urls
                 }}
             />
@@ -180,10 +179,10 @@ IntegrationAutosuggest.propTypes = {
     search: PropTypes.func.isRequired,
     config: PropTypes.object.isRequired,
     openDetails: PropTypes.func.isRequired,
-    handleDrawerClose: PropTypes.func.isRequired,
     backToAllFeatures: PropTypes.func.isRequired,
     detailsModeEnabled: PropTypes.bool.isRequired,
     selectionModeEnabled: PropTypes.bool.isRequired,
+    searchResultIsLoading: PropTypes.bool.isRequired,
     detailsOfFeature: PropTypes.object,
     urls: PropTypes.object.isRequired,
     back: PropTypes.func.isRequired,
