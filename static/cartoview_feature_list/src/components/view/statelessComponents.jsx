@@ -171,40 +171,6 @@ export const Slider = (props) => {
 Slider.propTypes = {
     attachments: PropTypes.array.isRequired
 }
-export const MobileDrawer = (props) => {
-    const { theme, mobileOpen, classes, handleDrawerToggle, childrenProps } =
-        props
-    return (
-        <Drawer
-            type="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={mobileOpen}
-            classes={{
-                paper: classes.drawerPaper,
-            }}
-            onRequestClose={handleDrawerToggle}
-            ModalProps={{
-                keepMounted: true,
-            }}
-        >
-            <div className={classes.drawerHeader}>
-                <IconButton onClick={handleDrawerToggle}>
-                    {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                </IconButton>
-            </div>
-            <Divider />
-
-            <Paper className="paper"><CartoviewList {...childrenProps} /></Paper>
-        </Drawer>
-    )
-}
-MobileDrawer.propTypes = {
-    mobileOpen: PropTypes.bool.isRequired,
-    classes: PropTypes.object.isRequired,
-    handleDrawerToggle: PropTypes.func.isRequired,
-    childrenProps: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired,
-}
 export const CommentBox = (props) => {
     const { classes, value, handleChange, addComment, hasError } = props
     return (
