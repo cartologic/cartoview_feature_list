@@ -1,5 +1,7 @@
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 
+import ArrowBack from 'material-ui-icons/ArrowBack'
+import Divider from 'material-ui/Divider'
 import Drawer from 'material-ui/Drawer';
 import GridIcon from 'material-ui-icons/GridOn'
 import IconButton from 'material-ui/IconButton'
@@ -24,7 +26,7 @@ class NavigationMenu extends React.Component {
         open: false,
     }
     handleClick = () => {
-        const {open}=this.state
+        const { open } = this.state
         this.setState({ open: !open })
     }
     handleRequestClose = (e, url) => {
@@ -33,48 +35,64 @@ class NavigationMenu extends React.Component {
         }
         this.handleClick()
     }
+    shouldComponentUpdate(nextProps, nextState) {
+        const { classes, urls } = this.props
+        const { open } = this.state
+        if (urls === nextProps.urls && classes === nextProps.classes && nextState.open === open) {
+            return false
+        }
+        return true
+    }
     render() {
         const { classes, urls } = this.props
         return (
             <div>
                 <IconButton
-                    aria-owns={this.state.open ? 'nav-menu' : null}
                     onTouchTap={this.handleClick}
                     className={classes.button}
-                    aria-label="Menu">
+                >
                     <MenuIcon />
                 </IconButton>
                 <Drawer
-                    anchor="right"
-                    open={this.state.open}
-                    onRequestClose={() => this.handleClick()}>
+                    type="temporary"
+                    anchor="left"
+                    open={this.state.open}>
                     <div
                         tabIndex={0}
                         role="button"
                         onTouchTap={this.handleClick}
                         onKeyDown={this.handleClick}>
+                        <div className="element-flex text-center nav-drawer-close">
+                            <IconButton
+                                onTouchTap={this.handleClick}
+                                className={classes.button}
+                            >
+                                <ArrowBack />
+                            </IconButton>
+                        </div>
+                        <Divider/>
                         <List>
                             <ListItem onTouchTap={(e) => this.handleRequestClose(e, urls.appInstancesPage)} button>
                                 <ListItemIcon>
-                                    <ListIcon className={classes.button} />
+                                    <ListIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="All FeatureList apps" />
                             </ListItem >
                             <ListItem onTouchTap={(e) => this.handleRequestClose(e, urls.layers)} button>
                                 <ListItemIcon>
-                                    <LayerIcon className={classes.button} />
+                                    <LayerIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Layers" />
                             </ListItem>
                             <ListItem onTouchTap={(e) => this.handleRequestClose(e, urls.maps)} button>
                                 <ListItemIcon>
-                                    <MapIcon className={classes.button} />
+                                    <MapIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Maps" />
                             </ListItem>
                             <ListItem onTouchTap={(e) => this.handleRequestClose(e, urls.apps)} button>
                                 <ListItemIcon>
-                                    <GridIcon className={classes.button} />
+                                    <GridIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Apps" />
                             </ListItem>

@@ -23,7 +23,7 @@ const styles = theme => ({
     drawer: {
         width: "30%",
         height: "100%",
-        zIndex: "1199",
+        zIndex: "1150",
         position: "fixed",
         [theme.breakpoints.down('md')]: {
             width: "90%"
@@ -32,7 +32,7 @@ const styles = theme => ({
     drawerClose: {
         width: "0%",
         height: "100%",
-        zIndex: "123123123",
+        zIndex: "1150",
         position: "fixed"
     },
     drawerContainer: {
