@@ -126,12 +126,6 @@ URL.propTypes = {
 export const PropsTable = (props) => {
     const { classes, selectedFeature } = props
     return <Table>
-        <TableHead>
-            <TableRow>
-                <TableCell>Property</TableCell>
-                <TableCell>Value</TableCell>
-            </TableRow>
-        </TableHead>
         <TableBody>
             {Object.keys(selectedFeature.getProperties()).map((key, i) => {
                 const value = selectedFeature.getProperties()[key]
