@@ -51,7 +51,10 @@ class ContentGrid extends Component {
         map.setTarget(this.mapDiv)
     }
     componentDidUpdate(prevProps, prevState) {
-        prevProps.map.updateSize()
+        const { width } = this.props
+        if (prevProps.width !== width) {
+            prevProps.map.updateSize()
+        }
     }
     toggleDrawer = () => {
         const { open } = this.state
