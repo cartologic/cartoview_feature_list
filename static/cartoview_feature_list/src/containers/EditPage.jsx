@@ -33,16 +33,16 @@ class EditPage extends React.Component {
             saving: false,
             errors: [],
             instanceId: config ? config.id : null,
-            searchEnabled:false
+            searchEnabled: false
         }
     }
     componentWillMount() {
-        const { selectedMap,config } = this.state
+        const { selectedMap, config } = this.state
         this.getMaps()
-        if(selectedMap){
+        if (selectedMap) {
             this.getMapLayers()
         }
-        if(config && config.layer){
+        if (config && config.layer) {
             this.getAttributes(config.layer)
         }
         this.getKeywords()
@@ -90,14 +90,14 @@ class EditPage extends React.Component {
         }
         return result
     }
-    handleSearchMode=(bool)=>{
-        this.setState({searchEnabled:bool})
+    handleSearchMode = (bool) => {
+        this.setState({ searchEnabled: bool })
     }
-    search=(text) => {
-        this.setState({ loading: true,searchEnabled:true })
+    search = (text) => {
+        this.setState({ loading: true, searchEnabled: true })
         const { username } = this.props
         const { userMaps } = this.state
-        const url = this.urls.getMapApiSearchURL(username, userMaps,text)
+        const url = this.urls.getMapApiSearchURL(username, userMaps, text)
         doGet(url).then(result => {
             this.setState({
                 maps: result.objects,
@@ -172,8 +172,8 @@ class EditPage extends React.Component {
                     totalMaps,
                     UserMapsChanged: this.UserMapsChanged,
                     limit,
-                    search:this.search,
-                    handleSearchMode:this.handleSearchMode,
+                    search: this.search,
+                    handleSearchMode: this.handleSearchMode,
                     searchEnabled
                 }
             },
@@ -223,14 +223,17 @@ class EditPage extends React.Component {
     }
     toArray = (arrayOfStructs) => {
         let arr = []
-        arrayOfStructs.forEach((struct) => {
-            arr.push(struct.value)
-        }, this)
+        if (arrayOfStructs) {
+            arrayOfStructs.forEach((struct) => {
+                arr.push(struct.value)
+            }, this)
+        }
         return arr
     }
     prepareServerData = () => {
         const keywords = this.generalStep.getComponentValue().keywords
-        const tags = this.featureListConfigurationStep.getComponentValue().attachmentTags
+        let tags = this.featureListConfigurationStep.getComponentValue().attachmentTags
+        let attributes = this.featureListConfigurationStep.getComponentValue().attributesToDisplay
         const { selectedMap } = this.state
         let finalConfiguration = {
             map: selectedMap.id,
@@ -243,9 +246,10 @@ class EditPage extends React.Component {
             keywords: this.toArray(keywords)
 
         }
-        if (tags) {
-            finalConfiguration.config.attachmentTags = this.toArray(tags)
-        }
+        tags = this.toArray(tags)
+        attributes = this.toArray(attributes)
+        finalConfiguration.config.attachmentTags = tags
+        finalConfiguration.config.attributesToDisplay = attributes
 
         return finalConfiguration
 
@@ -282,8 +286,8 @@ class EditPage extends React.Component {
         this.showComponentsErrors(this.sendConfiguration)
 
     }
-    validate=()=>{
-        this.showComponentsErrors(()=>{})
+    validate = () => {
+        this.showComponentsErrors(() => { })
     }
     getChildrenProps = () => {
         const props = {
@@ -292,7 +296,7 @@ class EditPage extends React.Component {
             steps: this.getSteps(),
             setStepRef: this.setStepRef,
             save: this.save,
-            validate:this.validate
+            validate: this.validate
         }
         return props
     }

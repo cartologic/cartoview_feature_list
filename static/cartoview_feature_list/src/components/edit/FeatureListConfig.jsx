@@ -1,19 +1,23 @@
 import 'react-select/dist/react-select.css'
 
+import {
+    getAttributesTemplate,
+    getKeywordsTemplate
+} from './AutoCompleteInput'
+
 import { Loader } from './MapSelector'
 import PropTypes from 'prop-types'
 import React from 'react'
-import {
-    getKeywordsTemplate
-} from './AutoCompleteInput'
 import { listConfigFormSchema } from '../../containers/forms'
 import t from 'tcomb-form'
 
 const Form = t.form.Form
 export const getPropertyFromConfig = (config, property, defaultValue) => {
-    const propertyValue = config && typeof (config[property]) !== "undefined" ? config[property] : defaultValue
-    const nestedPropertyValue = config && config.config && typeof (config.config[property]) !== "undefined" ?
-        config.config[property] : propertyValue
+    const propertyValue = config && typeof (config[property]) !==
+        "undefined" ? config[property] : defaultValue
+    const nestedPropertyValue = config && config.config && typeof (config
+        .config[property]) !== "undefined" ? config.config[
+        property] : propertyValue
     return nestedPropertyValue
 }
 export default class FeatureListConfig extends React.Component {
@@ -22,7 +26,6 @@ export default class FeatureListConfig extends React.Component {
         const { config } = this.props
         this.state = {
             value: this.getFormValue(config)
-
         }
     }
     getTagsOptions = (input, callback) => {
@@ -39,15 +42,14 @@ export default class FeatureListConfig extends React.Component {
             complete: true
         })
     }
-    tagsToOptions=(tags)=>{
-        let options=[]
-        tags.map(tag=>{
-            options.push({value:tag,label:tag})
+    tagsToOptions = (tags) => {
+        let options = []
+        tags.map(tag => {
+            options.push({ value: tag, label: tag })
         })
         return options
     }
     getFormValue = (config) => {
-
         const value = {
             layer: getPropertyFromConfig(config, 'layer', null),
             titleAttribute: getPropertyFromConfig(config,
@@ -56,12 +58,18 @@ export default class FeatureListConfig extends React.Component {
                 'subtitleAttribute', null),
             pagination: getPropertyFromConfig(config,
                 'pagination', "10"),
-            filters: getPropertyFromConfig(config, 'filters', null),
+            filters: getPropertyFromConfig(config, 'filters',
+                null),
             zoomOnSelect: getPropertyFromConfig(config,
                 'zoomOnSelect', true),
             enableImageListView: getPropertyFromConfig(config,
                 'enableImageListView', true),
-            attachmentTags: this.tagsToOptions(getPropertyFromConfig(config, 'attachmentTags', []))
+            attachmentTags: this.tagsToOptions(
+                getPropertyFromConfig(config,
+                    'attachmentTags', [])),
+            attributesToDisplay: this.tagsToOptions(
+                getPropertyFromConfig(config,
+                    'attributesToDisplay', []))
         }
         return value
     }
@@ -94,8 +102,8 @@ export default class FeatureListConfig extends React.Component {
     getAttributesOptions = (attributes) => {
         let options = []
         attributes.forEach((attribute) => {
-            if (attribute.attribute_type.indexOf(
-                "gml:") == -1) {
+            if (attribute.attribute_type.indexOf("gml:") ==
+                -1) {
                 options.push({
                     value: attribute.attribute,
                     text: attribute.attribute
@@ -104,7 +112,19 @@ export default class FeatureListConfig extends React.Component {
         })
         return options
     }
-
+    getMultiSelectAttributesOptions = (attributes) => {
+        let options = []
+        attributes.forEach((attribute) => {
+            if (attribute.attribute_type.indexOf("gml:") ==
+                -1) {
+                options.push({
+                    value: attribute.attribute,
+                    label: attribute.attribute
+                })
+            }
+        })
+        return options
+    }
     onChange = (newValue) => {
         const { getAttributes } = this.props
         const { value } = this.state
@@ -118,7 +138,10 @@ export default class FeatureListConfig extends React.Component {
     }
     getFormOptions = () => {
         const { layerAttributes } = this.props
-        const attributeOptions = this.getAttributesOptions(layerAttributes)
+        const attributeOptions = this.getAttributesOptions(
+            layerAttributes)
+        const multiSelectAttributesOptions = this.getMultiSelectAttributesOptions(
+            layerAttributes)
         const options = {
             fields: {
                 layer: {
@@ -158,7 +181,14 @@ export default class FeatureListConfig extends React.Component {
                         loadOptions: this.getTagsOptions,
                         message: "Select or Enter a Tag"
                     })
-                }
+                },
+                attributesToDisplay: {
+                    factory: t.form.Textbox,
+                    template: getAttributesTemplate({
+                        options: multiSelectAttributesOptions,
+                        message: "Select Attributes you want to Display"
+                    })
+                },
             }
         }
         return options

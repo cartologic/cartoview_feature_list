@@ -80,7 +80,7 @@ class ContentGrid extends Component {
                         <div ref={(mapDiv) => this.mapDiv = mapDiv} className="map-panel"></div>
                     </Grid>
                 </Grid>
-                <CartoviewSnackBar open={childrenProps.featureIdentifyLoading} message={"Search For Features at this Point"} />
+                <CartoviewSnackBar open={childrenProps.featureIdentifyLoading} message={"Searching For Features at this Point"} />
             </div>
         )
     }

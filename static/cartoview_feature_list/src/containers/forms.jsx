@@ -11,6 +11,7 @@ export const listConfigFormSchema = () => {
         filters: t.maybe(t.String),
         pagination: t.String,
         attachmentTags: t.maybe(t.list(selectTagItem)),
+        attributesToDisplay: t.maybe(t.list(selectTagItem)),
         zoomOnSelect: t.Boolean,
         enableImageListView: t.Boolean,
 

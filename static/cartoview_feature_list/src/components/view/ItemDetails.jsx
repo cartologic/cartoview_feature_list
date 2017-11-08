@@ -43,7 +43,8 @@ class ItemDetails extends React.Component {
             username,
             SaveImageBase64,
             commentsIsLoading,
-            getImageFromURL
+            getImageFromURL,
+            attributesToDisplay
         } = this.props
         return (
             <div className={classes.root}>
@@ -58,7 +59,7 @@ class ItemDetails extends React.Component {
                 </Collapsible>
                 <Divider />
                 <Collapsible key="featureTable" title="Feature Attributes" open={true}>
-                    <PropsTable classes={classes} selectedFeature={selectedFeature} />
+                    <PropsTable attributesToDisplay={attributesToDisplay}  classes={classes} selectedFeature={selectedFeature} />
                 </Collapsible>
                 <Divider />
                 <Collapsible key="comments" title="Comments" open={true}>
@@ -77,5 +78,6 @@ ItemDetails.propTypes = {
     username: PropTypes.string.isRequired,
     SaveImageBase64: PropTypes.func.isRequired,
     getImageFromURL: PropTypes.func.isRequired,
+    attributesToDisplay:PropTypes.array.isRequired
 }
 export default withStyles(styles)(ItemDetails)

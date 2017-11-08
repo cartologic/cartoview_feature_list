@@ -24,7 +24,7 @@ import Typography from 'material-ui/Typography'
 import { checkURL } from '../../containers/staticMethods'
 import noImage from '../../img/no-img.png'
 
-export const Loader = (props) => {
+export const Loader = ( props ) => {
     const { size, thickness } = props
     return (
         <div className="text-center" >
@@ -36,7 +36,7 @@ Loader.propTypes = {
     size: PropTypes.number,
     thickness: PropTypes.number
 }
-export const Message = (props) => {
+export const Message = ( props ) => {
     const { align, type, message, color } = props
     return <Typography type={type} align={align || "center"} noWrap={message.length > 70 ? true : false} color={color ? color : "inherit"} className="element-flex">{message}</Typography>
 }
@@ -46,10 +46,10 @@ Message.propTypes = {
     align: PropTypes.string,
     color: PropTypes.string,
 }
-const PaperListItem = (props) => {
+const PaperListItem = ( props ) => {
     return <ListItem button {...props}></ListItem>
 }
-export const Item = (props) => {
+export const Item = ( props ) => {
     const { openDetails, feature, attachment, config } = props
     return <div>
         <Paper component={PaperListItem} onTouchTap={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })} elevation={0} className="list-item">
@@ -74,7 +74,7 @@ Item.propTypes = {
     config: PropTypes.object.isRequired,
     openDetails: PropTypes.func.isRequired
 }
-export const FeatureListComponent = (props) => {
+export const FeatureListComponent = ( props ) => {
     const {
         features,
         loading,
@@ -86,7 +86,7 @@ export const FeatureListComponent = (props) => {
         searchFilesById,
         openDetails,
     } = props
-    return (!loading && !attachmentIsLoading && features && features.length >
+    return ( !loading && !attachmentIsLoading && features && features.length >
         0 ?
         <div>
             <div className="list-header">
@@ -99,8 +99,7 @@ export const FeatureListComponent = (props) => {
             })}
         </div> :
         features && features.length == 0 ?
-            <Message message={message} type="body2" /> :
-            <Loader />)
+        <Message message={message} type="body2" /> : <Loader /> )
 }
 FeatureListComponent.propTypes = {
     classes: PropTypes.object.isRequired,
@@ -113,7 +112,7 @@ FeatureListComponent.propTypes = {
     attachmentIsLoading: PropTypes.bool.isRequired,
     searchFilesById: PropTypes.func.isRequired
 }
-export const URL = (props) => {
+export const URL = ( props ) => {
     const { classes, url } = props
     return <Button color="accent" href={url} className={classes.button}>
         Link
@@ -123,11 +122,12 @@ URL.propTypes = {
     classes: PropTypes.object.isRequired,
     url: PropTypes.string.isRequired
 }
-export const PropsTable = (props) => {
-    const { classes, selectedFeature } = props
+export const PropsTable = ( props ) => {
+    const { classes, selectedFeature, attributesToDisplay } = props
+    const keys= attributesToDisplay.length ==0 ? Object.keys(selectedFeature.getProperties()): attributesToDisplay
     return <Table>
         <TableBody>
-            {Object.keys(selectedFeature.getProperties()).map((key, i) => {
+            {keys.map((key, i) => {
                 const value = selectedFeature.getProperties()[key]
                 if (key != "geometry" && key != "_layerTitle") {
                     return <TableRow key={i}>
@@ -141,9 +141,10 @@ export const PropsTable = (props) => {
 }
 PropsTable.propTypes = {
     classes: PropTypes.object.isRequired,
-    selectedFeature: PropTypes.object.isRequired
+    selectedFeature: PropTypes.object.isRequired,
+    attributesToDisplay: PropTypes.array.isRequired
 }
-export const Slider = (props) => {
+export const Slider = ( props ) => {
     const { attachments } = props
     return <div>
         <Grid container justify={'center'} spacing={0}>
@@ -165,7 +166,7 @@ export const Slider = (props) => {
 Slider.propTypes = {
     attachments: PropTypes.array.isRequired
 }
-export const CommentBox = (props) => {
+export const CommentBox = ( props ) => {
     const { classes, value, handleChange, addComment, hasError } = props
     return (
         <div className="text-center fill-out-empty">
@@ -204,7 +205,7 @@ CommentBox.propTypes = {
     addComment: PropTypes.func.isRequired,
     hasError: PropTypes.bool.isRequired
 }
-export const DropZoneComponent = (props) => {
+export const DropZoneComponent = ( props ) => {
     const { classes, files, onDrop } = props
     return (
         <div className="center-div">
@@ -222,23 +223,21 @@ DropZoneComponent.propTypes = {
     onDrop: PropTypes.func.isRequired,
     files: PropTypes.array.isRequired,
 }
-export const CartoviewSnackBar = (props) => {
-    const {handleClose,open,message}=props
+export const CartoviewSnackBar = ( props ) => {
+    const { handleClose, open, message } = props
     return (
         <Snackbar
             open={open}
-            onRequestClose={handleClose ? handleClose:()=>{}}
+            onRequestClose={handleClose ? handleClose : () => { }}
             transition={Fade}
             SnackbarContentProps={{
                 'aria-describedby': 'message-id',
             }}
-            message={<span className="element-flex" id="message-id"><Loader size={20} thickness={4}/> {message}</span>}
-        />
-    )
+            message={<span className="element-flex" id="message-id"><Loader size={20} thickness={4} /> { message } <
+        /span>} / > )
 }
-CartoviewSnackBar.propTypes={
-    handleClose:PropTypes.func,
-    open:PropTypes.bool.isRequired,
-    message:PropTypes.string.isRequired
-
+CartoviewSnackBar.propTypes = {
+    handleClose: PropTypes.func,
+    open: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired
 }
