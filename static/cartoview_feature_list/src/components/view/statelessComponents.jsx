@@ -52,7 +52,7 @@ const PaperListItem = (props) => {
 export const Item = (props) => {
     const { openDetails, feature, attachment, config } = props
     return <div>
-        <Paper component={PaperListItem} onClick={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })} elevation={0} className="list-item">
+        <Paper component={PaperListItem} onTouchTap={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })} elevation={0} className="list-item">
             <div className="list-item-text">
                 <Message type="subheading" align="left" message={`${feature.getProperties()[config.titleAttribute]}`} />
                 <Message type="body2" color="secondary" align="left" message={`${config.subtitleAttribute ? feature.getProperties()[config.subtitleAttribute] : ''}`} />
@@ -197,7 +197,7 @@ export const CommentBox = (props) => {
                     margin="normal"
                     fullWidth
                 />}
-            <Button onClick={addComment} raised color="accent" className={classes.button}>
+            <Button onTouchTap={addComment} raised color="accent" className={classes.button}>
                 {`Send`} <SendIcon />
             </Button>
         </div>

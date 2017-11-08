@@ -10,7 +10,7 @@ import enLocaleData from 'react-intl/locale-data/en'
 import enMessages from '@boundlessgeo/sdk/locale/en'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 import { theme } from './theme.jsx'
-import {upperPropTypes} from './sharedPropTypes'
+import { upperPropTypes } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({

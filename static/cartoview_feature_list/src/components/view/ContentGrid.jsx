@@ -64,7 +64,7 @@ class ContentGrid extends Component {
             <div className={classes.root}>
                 <div className={classnames({ [classes.drawer]: open ? true : false, [classes.drawerClose]: open ? false : true })}>
                     <Paper className={classnames({ "drawer-button-container": true, [classes.drawerContainer]: open ? false : true })}>
-                        <IconButton onClick={this.toggleDrawer} color="default" aria-label="add" className={"drawer-button"}>
+                        <IconButton onTouchTap={this.toggleDrawer} color="default" aria-label="add" className={"drawer-button"}>
                             {open ? <ArrowLeft /> : <ArrowRight />}
                         </IconButton>
                     </Paper>

@@ -19,10 +19,10 @@ function renderInput(inputProps) {
     return (
         <Paper className="search-paper" elevation={1}>
             {!selectionModeEnabled && !detailsModeEnabled && <NavigationMenu urls={urls} />}
-            {detailsModeEnabled && detailsOfFeature && <IconButton onClick={back} className="menu-button" aria-label="Menu">
+            {detailsModeEnabled && detailsOfFeature && <IconButton onTouchTap={back} className="menu-button" aria-label="Menu">
                 <ArrowBackIcon />
             </IconButton>}
-            {selectionModeEnabled && !detailsModeEnabled && <IconButton onClick={backToAllFeatures} className="menu-button" aria-label="Menu">
+            {selectionModeEnabled && !detailsModeEnabled && <IconButton onTouchTap={backToAllFeatures} className="menu-button" aria-label="Menu">
                 <ArrowBackIcon />
             </IconButton>}
             <TextField
@@ -78,7 +78,7 @@ class IntegrationAutosuggest extends React.Component {
         const matches = match(suggestion.label, query)
         const parts = parse(suggestion.label, matches)
         return (
-            <MenuItem onClick={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: suggestion.value })} selected={isHighlighted} component="div">
+            <MenuItem onTouchTap={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: suggestion.value })} selected={isHighlighted} component="div">
                 <div>
                     {parts.map((part, index) => {
                         return part.highlight ? (

@@ -39,7 +39,7 @@ class NavigationMenu extends React.Component {
             <div>
                 <IconButton
                     aria-owns={this.state.open ? 'nav-menu' : null}
-                    onClick={this.handleClick}
+                    onTouchTap={this.handleClick}
                     className={classes.button}
                     aria-label="Menu">
                     <MenuIcon />
@@ -51,28 +51,28 @@ class NavigationMenu extends React.Component {
                     <div
                         tabIndex={0}
                         role="button"
-                        onClick={this.handleClick}
+                        onTouchTap={this.handleClick}
                         onKeyDown={this.handleClick}>
                         <List>
-                            <ListItem onClick={(e) => this.handleRequestClose(e, urls.appInstancesPage)} button>
+                            <ListItem onTouchTap={(e) => this.handleRequestClose(e, urls.appInstancesPage)} button>
                                 <ListItemIcon>
                                     <ListIcon className={classes.button} />
                                 </ListItemIcon>
                                 <ListItemText primary="All FeatureList apps" />
                             </ListItem >
-                            <ListItem onClick={(e) => this.handleRequestClose(e, urls.layers)} button>
+                            <ListItem onTouchTap={(e) => this.handleRequestClose(e, urls.layers)} button>
                                 <ListItemIcon>
                                     <LayerIcon className={classes.button} />
                                 </ListItemIcon>
                                 <ListItemText primary="Layers" />
                             </ListItem>
-                            <ListItem onClick={(e) => this.handleRequestClose(e, urls.maps)} button>
+                            <ListItem onTouchTap={(e) => this.handleRequestClose(e, urls.maps)} button>
                                 <ListItemIcon>
                                     <MapIcon className={classes.button} />
                                 </ListItemIcon>
                                 <ListItemText primary="Maps" />
                             </ListItem>
-                            <ListItem onClick={(e) => this.handleRequestClose(e, urls.apps)} button>
+                            <ListItem onTouchTap={(e) => this.handleRequestClose(e, urls.apps)} button>
                                 <ListItemIcon>
                                     <GridIcon className={classes.button} />
                                 </ListItemIcon>
