@@ -267,7 +267,7 @@ class EditPage extends React.Component {
         }
 
     }
-    showComponentsErrors = () => {
+    showComponentsErrors = (callBack) => {
         let errors = []
         const steps = this.getSteps()
         steps.map((step, index) => {
@@ -276,11 +276,14 @@ class EditPage extends React.Component {
                 errors.push(index)
             }
         })
-        this.setState({ errors }, this.sendConfiguration)
+        this.setState({ errors }, callBack)
     }
     save = () => {
-        this.showComponentsErrors()
+        this.showComponentsErrors(this.sendConfiguration)
 
+    }
+    validate=()=>{
+        this.showComponentsErrors(()=>{})
     }
     getChildrenProps = () => {
         const props = {
@@ -288,7 +291,8 @@ class EditPage extends React.Component {
             ...this.props,
             steps: this.getSteps(),
             setStepRef: this.setStepRef,
-            save: this.save
+            save: this.save,
+            validate:this.validate
         }
         return props
     }

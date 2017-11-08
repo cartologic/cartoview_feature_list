@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import classNames from 'classnames'
 const ActionBar = (props) => {
-    const { save, selectedMap, instanceId, urls, saving } = props
+    const { save, selectedMap, instanceId, urls, saving,validate } = props
     const extraProps = {
         disabled: selectedMap && !saving ? false : true
     }
@@ -17,6 +17,9 @@ const ActionBar = (props) => {
                 <button onClick={save} className="btn btn-primary btn-sm pull-right" {...extraProps}>{"Save"}</button>
             </p>
             <p>
+                <button onClick={validate} className="btn btn-primary btn-sm pull-right" {...extraProps}>{"Validate"}</button>
+            </p>
+            <p>
                 {instanceId && <a onClick={save} href={urls.viewURL(instanceId)} className="btn btn-sm btn-primary pull-right">{"View"}</a>}
             </p>
         </div>
@@ -24,6 +27,7 @@ const ActionBar = (props) => {
 }
 ActionBar.propTypes = {
     save: PropTypes.func.isRequired,
+    validate: PropTypes.func.isRequired,
     selectedMap: PropTypes.object,
     instanceId: PropTypes.number,
     saving: PropTypes.bool.isRequired,
@@ -124,7 +128,7 @@ export default class EditPageComponent extends React.Component {
             <div>
                 <AppBar handleHideModal={this.handleHideModal} />
                 <hr />
-                <ActionBar saving={childrenProps.saving} urls={childrenProps.urls} save={childrenProps.save} selectedMap={childrenProps.selectedMap} instanceId={childrenProps.instanceId} />
+                <ActionBar validate={childrenProps.validate} saving={childrenProps.saving} urls={childrenProps.urls} save={childrenProps.save} selectedMap={childrenProps.selectedMap} instanceId={childrenProps.instanceId} />
                 <hr />
                 <div className="row content">
                     <Tabs childrenProps={childrenProps} checkIfDisabled={this.checkIfDisabled} getContentClassName={this.getContentClassName} getTabClassName={this.getTabClassName} />

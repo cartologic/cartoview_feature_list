@@ -70,7 +70,7 @@ class NavigationMenu extends React.Component {
                                 <ArrowBack />
                             </IconButton>
                         </div>
-                        <Divider/>
+                        <Divider />
                         <List>
                             <ListItem onTouchTap={(e) => this.handleRequestClose(e, urls.appInstancesPage)} button>
                                 <ListItemIcon>

@@ -359,7 +359,7 @@ class FeatureListContainer extends Component {
         let selectionProperties={
             selectionModeEnabled
         }
-        if(featureIdentifyResult.length==1){
+        if(featureIdentifyResult&&featureIdentifyResult.length==1){
             selectionProperties.selectionModeEnabled=false
         }
         this.setState( { detailsModeEnabled: false, detailsOfFeature: null,...selectionProperties },
