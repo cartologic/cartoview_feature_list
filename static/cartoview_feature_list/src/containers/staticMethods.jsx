@@ -111,7 +111,7 @@ export const checkImageSrc = ( src, good, bad ) => {
 }
 export const getAttachmentTags = ( config ) => {
     const configTags = config.attachmentTags
-    const tags = ( configTags && configTags !== [] ) ? configTags.map(tag=>tag.value) : [
+    const tags = ( configTags && configTags.length>0 ) ? configTags : [
         `feature_list_${layerName(config.layer)}` ]
     return tags
 }

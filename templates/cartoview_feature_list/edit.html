@@ -11,25 +11,23 @@
 {% block body %}
     <div id="page-wrapper">
         <div class="container-fluid">
-          <div class="page-header">
-            <div class="row">
-              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8"><span class="h1">Feature List</span></div>
-              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4"><button type="button" class="btn btn-info pull-right" data-toggle="modal" data-target="#myModal">?</button></div>
-            </div>
-          </div>
             <div id="root"></div>
         </div>
     </div>
 
 {% endblock %}
 {% block extra_script %}
+<script src="{{ STATIC_URL }}cartoview_feature_list/dist/commons.js"></script>
     <script src="{{ STATIC_URL }}cartoview_feature_list/dist/config.bundle.js"></script>
     <script>
       
         {% if instance %}
       
         const urls={
-                  resources_url: "{% url 'api_dispatch_list' api_name='api' resource_name='maps' %}",
+                  MapsAPI: "{% url 'api_dispatch_list' api_name='api' resource_name='maps' %}",
+                  keywordsAPI: "{% url 'api_dispatch_list' api_name='api' resource_name='keywords' %}",
+                  profilesAPI: "{% url 'api_dispatch_list' api_name='api' resource_name='profiles' %}",
+                  tagsAPI:"{% url 'tags_list' %}",
                   appInstance: "{% url 'api_dispatch_detail' api_name='api' resource_name='appinstances' pk=instance.id %}",
                   proxy: "{{ PROXY_URL }}",
                   geoserverUrl : "{{ GEOSERVER_BASE_URL }}",
@@ -60,24 +58,6 @@
           var viewer=new Viewer('root',username,urls);
           viewer.view();
     </script>
-  
-<div id="myModal" class="modal fade" role="dialog">
-<div class="modal-dialog">
-
-<!-- Modal content-->
-<div class="modal-content">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <h4 class="modal-title">Feature List</h4>
-  </div>
-  <div class="modal-body">
-    <p>Map and configurable feature list side by side. Map and feature list are connected in zoom and pan. Use for store locations or similar apps.</p>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-  </div>
-</div>
-
 </div>
 </div>
 

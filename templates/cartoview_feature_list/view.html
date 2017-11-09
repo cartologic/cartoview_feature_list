@@ -10,7 +10,6 @@
         html,body {
             height: 100%;
             margin: 0px;
-            overflow: hidden
         }
         #root{
             height: 100%
@@ -20,6 +19,7 @@
 </head>
 <body>
 <div style="height: 100%;" id="root"></div>
+<script src="{{ STATIC_URL }}cartoview_feature_list/dist/commons.js"></script>
 <script src="{% static 'cartoview_feature_list/dist/FeatureList.bundle.js?version=2' %}"></script>
 <script type="text/javascript">
     {% if instance %}

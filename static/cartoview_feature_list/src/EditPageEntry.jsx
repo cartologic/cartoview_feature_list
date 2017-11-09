@@ -1,4 +1,4 @@
-import Edit from './Edit.jsx'
+import EditPage from './containers/EditPage'
 import React from 'react'
 import { getCRSFToken } from './helpers/helpers.jsx'
 import { render } from 'react-dom'
@@ -32,12 +32,12 @@ class Viewer {
                 }
                 this.currentlayer=res.config.layer
                 render(
-                    <Edit urls={this.urls} config={this.config} username={this.username}/>,
+                    <EditPage urls={this.urls} config={this.config} username={this.username}/>,
                     document.getElementById( this.domId ) )
             } )
         } else {
             render(
-                <Edit urls={this.urls} config={this.config} username={this.username}/>,
+                <EditPage urls={this.urls} config={this.config} username={this.username}/>,
                 document.getElementById( this.domId ) )
         }
     }

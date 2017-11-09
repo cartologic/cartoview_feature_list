@@ -2,7 +2,6 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'
 
 import { PropsTable, Slider } from './statelessComponents'
 
-import Button from 'material-ui/Button'
 import Collapsible from './CollapsibleItem'
 import CommentsList from './CommentsList'
 import Divider from 'material-ui/Divider'
@@ -15,7 +14,8 @@ import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
     root: {
-        width: '100%',
+        height:"100%",
+        padding: theme.spacing.unit,
     },
     button: {
         margin: theme.spacing.unit,
@@ -37,17 +37,19 @@ class ItemDetails extends React.Component {
             selectedFeature,
             searchFilesById,
             classes,
-            back,
             searchCommentById,
             addComment,
             username,
             SaveImageBase64,
             commentsIsLoading,
-            getImageFromURL
+            getImageFromURL,
+            attributesToDisplay
         } = this.props
         return (
-            <div>
-                <Message align="left" message={'Feature Details'} type="subheading" />
+            <div className={classes.root}>
+                <div className="list-header">
+                    <Message align="left" message={"Feature Details"} type="headline" />
+                </div>
                 <Collapsible key="attachments" title="Feature Attachments" open={true}>
                     <div>
                         <Slider attachments={searchFilesById(selectedFeature.getId())} />
@@ -56,18 +58,13 @@ class ItemDetails extends React.Component {
                 </Collapsible>
                 <Divider />
                 <Collapsible key="featureTable" title="Feature Attributes" open={true}>
-                    <PropsTable classes={classes} selectedFeature={selectedFeature} />
+                    <PropsTable attributesToDisplay={attributesToDisplay}  classes={classes} selectedFeature={selectedFeature} />
                 </Collapsible>
                 <Divider />
                 <Collapsible key="comments" title="Comments" open={true}>
                     <CommentsList commentsIsLoading={commentsIsLoading} username={username} addComment={addComment} comments={searchCommentById(selectedFeature.getId())} selectedFeature={selectedFeature} />
                 </Collapsible>
                 <Divider />
-                <div className={classes.textCenter}>
-                    <Button onClick={() => back()} color="primary" className={classes.button}>
-                        Back
-                </Button>
-                </div>
             </div>
         )
     }
@@ -80,5 +77,6 @@ ItemDetails.propTypes = {
     username: PropTypes.string.isRequired,
     SaveImageBase64: PropTypes.func.isRequired,
     getImageFromURL: PropTypes.func.isRequired,
+    attributesToDisplay:PropTypes.array.isRequired
 }
 export default withStyles(styles)(ItemDetails)

@@ -11,6 +11,7 @@ class FeatureList(StandardAppViews):
     def save(self, request, instance_id=None):
         res_json = dict(success=False)
         data = json.loads(request.body)
+        print(type(data))
         config = data.get('config', None)
         map_id = data.get('map', None)
         title = data.get('title', "")
@@ -64,8 +65,8 @@ class FeatureList(StandardAppViews):
 
         # update the instance keywords
         if hasattr(instance_obj, 'keywords') and keywords:
-            new_keywords = [k.get('value', None) for k in keywords if k.get(
-                'value', None) not in instance_obj.keyword_list()]
+            new_keywords = [
+                k for k in keywords if k not in instance_obj.keyword_list()]
             instance_obj.keywords.add(*new_keywords)
 
         res_json.update(dict(success=True, id=instance_obj.id))

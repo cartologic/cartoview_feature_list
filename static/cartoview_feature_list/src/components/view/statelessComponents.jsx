@@ -1,55 +1,64 @@
-import List, { ListItem, ListItemText } from 'material-ui/List'
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
 
 import Button from 'material-ui/Button'
 import { Carousel } from 'react-responsive-carousel'
-import CartoviewList from './CartoviewList'
-import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
-import ChevronRightIcon from 'material-ui-icons/ChevronRight'
 import { CircularProgress } from 'material-ui/Progress'
 import Divider from 'material-ui/Divider'
-import Drawer from 'material-ui/Drawer'
 import Dropzone from 'react-dropzone'
+import Fade from 'material-ui/transitions/Fade'
 import Grid from 'material-ui/Grid'
-import IconButton from 'material-ui/IconButton'
 import Img from 'react-image'
+import { ListItem } from 'material-ui/List'
 import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
 import React from 'react'
 import SendIcon from 'material-ui-icons/Send'
+import Snackbar from 'material-ui/Snackbar';
 import TextField from 'material-ui/TextField'
 import Typography from 'material-ui/Typography'
 import { checkURL } from '../../containers/staticMethods'
 import noImage from '../../img/no-img.png'
 
-export const Loader = (props) => {
+export const Loader = ( props ) => {
+    const { size, thickness } = props
     return (
         <div className="text-center" >
-            <CircularProgress size={50} thickness={5} className="text-center"></CircularProgress>
+            <CircularProgress size={size ? size : 50} thickness={thickness ? thickness : 5} className="text-center"></CircularProgress>
         </div>
     )
 }
-export const Message = (props) => {
-    const { align, type, message } = props
-    return <Typography type={type} align={align || "center"} color="inherit" className="element-flex">{message}</Typography>
+Loader.propTypes = {
+    size: PropTypes.number,
+    thickness: PropTypes.number
+}
+export const Message = ( props ) => {
+    const { align, type, message, color } = props
+    return <Typography type={type} align={align || "center"} noWrap={message.length > 70 ? true : false} color={color ? color : "inherit"} className="element-flex">{message}</Typography>
 }
 Message.propTypes = {
     type: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
-    align: PropTypes.string
+    align: PropTypes.string,
+    color: PropTypes.string,
 }
-export const Item = (props) => {
-    const { openDetails, classes, feature, attachment, config } = props
+const PaperListItem = ( props ) => {
+    return <ListItem button {...props}></ListItem>
+}
+export const Item = ( props ) => {
+    const { openDetails, feature, attachment, config } = props
     return <div>
-        <ListItem onClick={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })} button className={classes.listItem}>
+        <Paper component={PaperListItem} onTouchTap={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })} elevation={0} className="list-item">
+            <div className="list-item-text">
+                <Message type="subheading" align="left" message={`${feature.getProperties()[config.titleAttribute]}`} />
+                <Message type="body2" color="secondary" align="left" message={`${config.subtitleAttribute ? feature.getProperties()[config.subtitleAttribute] : ''}`} />
+            </div>
             {config.enableImageListView && <Img className="big-avatar"
                 src={[
                     attachment.length > 0 ? attachment[0].file : noImage
                 ]}
                 loader={<Loader />}
             />}
-            <ListItemText primary={`${feature.getProperties()[config.titleAttribute]}`} secondary={`${config.subtitleAttribute ? feature.getProperties()[config.subtitleAttribute] : ''}`} />
-        </ListItem>
+        </Paper>
         <Divider />
     </div>
 }
@@ -60,7 +69,7 @@ Item.propTypes = {
     config: PropTypes.object.isRequired,
     openDetails: PropTypes.func.isRequired
 }
-export const FeatureListComponent = (props) => {
+export const FeatureListComponent = ( props ) => {
     const {
         features,
         loading,
@@ -72,20 +81,20 @@ export const FeatureListComponent = (props) => {
         searchFilesById,
         openDetails,
     } = props
-    return (!loading && !attachmentIsLoading && features && features.length >
+    return ( !loading && !attachmentIsLoading && features && features.length >
         0 ?
         <div>
-            <Message align="left" message={subheader} type="subheading" />
-            <List>
-                {features && features.map((feature, index) => {
-                    const attachment = searchFilesById(feature.getId())
-                    return <Item key={index} classes={classes} feature={feature} config={config} attachment={attachment} openDetails={openDetails} />
-                })}
-            </List>
+            <div className="list-header">
+                <Message align="left" message={subheader} type="headline" />
+            </div>
+            <Divider />
+            {features && features.map((feature, index) => {
+                const attachment = searchFilesById(feature.getId())
+                return <Item key={index} classes={classes} feature={feature} config={config} attachment={attachment} openDetails={openDetails} />
+            })}
         </div> :
         features && features.length == 0 ?
-            <Message message={message} type="body2" /> :
-            <Loader />)
+        <Message message={message} type="body2" /> : <Loader /> )
 }
 FeatureListComponent.propTypes = {
     classes: PropTypes.object.isRequired,
@@ -98,7 +107,7 @@ FeatureListComponent.propTypes = {
     attachmentIsLoading: PropTypes.bool.isRequired,
     searchFilesById: PropTypes.func.isRequired
 }
-export const URL = (props) => {
+export const URL = ( props ) => {
     const { classes, url } = props
     return <Button color="accent" href={url} className={classes.button}>
         Link
@@ -108,17 +117,12 @@ URL.propTypes = {
     classes: PropTypes.object.isRequired,
     url: PropTypes.string.isRequired
 }
-export const PropsTable = (props) => {
-    const { classes, selectedFeature } = props
+export const PropsTable = ( props ) => {
+    const { classes, selectedFeature, attributesToDisplay } = props
+    const keys= attributesToDisplay.length ==0 ? Object.keys(selectedFeature.getProperties()): attributesToDisplay
     return <Table>
-        <TableHead>
-            <TableRow>
-                <TableCell>Property</TableCell>
-                <TableCell>Value</TableCell>
-            </TableRow>
-        </TableHead>
         <TableBody>
-            {Object.keys(selectedFeature.getProperties()).map((key, i) => {
+            {keys.map((key, i) => {
                 const value = selectedFeature.getProperties()[key]
                 if (key != "geometry" && key != "_layerTitle") {
                     return <TableRow key={i}>
@@ -132,12 +136,13 @@ export const PropsTable = (props) => {
 }
 PropsTable.propTypes = {
     classes: PropTypes.object.isRequired,
-    selectedFeature: PropTypes.object.isRequired
+    selectedFeature: PropTypes.object.isRequired,
+    attributesToDisplay: PropTypes.array.isRequired
 }
-export const Slider = (props) => {
+export const Slider = ( props ) => {
     const { attachments } = props
     return <div>
-        <Grid container alignItems={'center'} justify={'center'} spacing={0}>
+        <Grid container justify={'center'} spacing={0}>
             {attachments.length > 0 ? <Grid item xs={10} sm={10} md={10} lg={10} xl={10} >
                 <Carousel showArrows={true}>
                     {attachments.map(
@@ -150,53 +155,16 @@ export const Slider = (props) => {
                     )}
                 </Carousel>
             </Grid> : <Message align="center" message={'No Attachments'} type="body1" />}
-
-
-
         </Grid>
     </div>
 }
 Slider.propTypes = {
     attachments: PropTypes.array.isRequired
 }
-export const MobileDrawer = (props) => {
-    const { theme, mobileOpen, classes, handleDrawerToggle, childrenProps } =
-        props
-    return (
-        <Drawer
-            type="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={mobileOpen}
-            classes={{
-                paper: classes.drawerPaper,
-            }}
-            onRequestClose={handleDrawerToggle}
-            ModalProps={{
-                keepMounted: true,
-            }}
-        >
-            <div className={classes.drawerHeader}>
-                <IconButton onClick={handleDrawerToggle}>
-                    {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                </IconButton>
-            </div>
-            <Divider />
-
-            <Paper className="paper"><CartoviewList {...childrenProps} /></Paper>
-        </Drawer>
-    )
-}
-MobileDrawer.propTypes = {
-    mobileOpen: PropTypes.bool.isRequired,
-    classes: PropTypes.object.isRequired,
-    handleDrawerToggle: PropTypes.func.isRequired,
-    childrenProps: PropTypes.object.isRequired,
-    theme: PropTypes.object.isRequired,
-}
-export const CommentBox = (props) => {
+export const CommentBox = ( props ) => {
     const { classes, value, handleChange, addComment, hasError } = props
     return (
-        <div className="text-center">
+        <div className="text-center fill-out-empty">
             {!hasError ? <TextField
                 id="multiline-flexible"
                 label="Comment"
@@ -205,7 +173,7 @@ export const CommentBox = (props) => {
                 value={value}
                 onChange={handleChange}
                 className={classes.textField}
-                margin="normal"
+                margin="none"
                 fullWidth
             /> : <TextField
                     error
@@ -219,7 +187,7 @@ export const CommentBox = (props) => {
                     margin="normal"
                     fullWidth
                 />}
-            <Button onClick={addComment} raised color="accent" className={classes.button}>
+            <Button onTouchTap={addComment} raised color="accent" className={classes.button}>
                 {`Send`} <SendIcon />
             </Button>
         </div>
@@ -232,8 +200,8 @@ CommentBox.propTypes = {
     addComment: PropTypes.func.isRequired,
     hasError: PropTypes.bool.isRequired
 }
-export const DropZoneComponent = (props) => {
-    const { classes, files,onDrop } = props
+export const DropZoneComponent = ( props ) => {
+    const { classes, files, onDrop } = props
     return (
         <div className="center-div">
             <Dropzone maxSize={5242880} multiple={false} accept="image/*" onDrop={onDrop}>
@@ -249,4 +217,22 @@ DropZoneComponent.propTypes = {
     classes: PropTypes.object.isRequired,
     onDrop: PropTypes.func.isRequired,
     files: PropTypes.array.isRequired,
+}
+export const CartoviewSnackBar = ( props ) => {
+    const { handleClose, open, message } = props
+    return (
+        <Snackbar
+            open={open}
+            onRequestClose={handleClose ? handleClose : () => { }}
+            transition={Fade}
+            SnackbarContentProps={{
+                'aria-describedby': 'message-id',
+            }}
+            message={<span className="element-flex" id="message-id"><Loader size={20} thickness={4} /> { message } <
+        /span>} / > )
+}
+CartoviewSnackBar.propTypes = {
+    handleClose: PropTypes.func,
+    open: PropTypes.bool.isRequired,
+    message: PropTypes.string.isRequired
 }
