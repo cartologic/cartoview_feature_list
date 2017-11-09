@@ -2,16 +2,11 @@ import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Ta
 
 import Button from 'material-ui/Button'
 import { Carousel } from 'react-responsive-carousel'
-import CartoviewList from './CartoviewList'
-import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
-import ChevronRightIcon from 'material-ui-icons/ChevronRight'
 import { CircularProgress } from 'material-ui/Progress'
 import Divider from 'material-ui/Divider'
-import Drawer from 'material-ui/Drawer'
 import Dropzone from 'react-dropzone'
-import Fade from 'material-ui/transitions/Fade';
+import Fade from 'material-ui/transitions/Fade'
 import Grid from 'material-ui/Grid'
-import IconButton from 'material-ui/IconButton'
 import Img from 'react-image'
 import { ListItem } from 'material-ui/List'
 import Paper from 'material-ui/Paper'

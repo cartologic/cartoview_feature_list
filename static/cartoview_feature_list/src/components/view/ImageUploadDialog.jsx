@@ -5,7 +5,6 @@ import Dialog, {
 } from 'material-ui/Dialog'
 import { checkImageSrc, checkURL } from '../../containers/staticMethods'
 
-import AddIcon from 'material-ui-icons/Add'
 import Button from 'material-ui/Button'
 import { DropZoneComponent } from './statelessComponents'
 import FileUpload from 'material-ui-icons/FileUpload';
