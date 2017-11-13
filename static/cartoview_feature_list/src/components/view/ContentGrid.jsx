@@ -43,9 +43,6 @@ function Transition(props) {
     return <Slide direction="left" {...props} />
 }
 class ContentGrid extends Component {
-    state = {
-        open: true
-    }
     componentDidMount() {
         const { map } = this.props
         map.setTarget(this.mapDiv)
@@ -56,23 +53,18 @@ class ContentGrid extends Component {
             prevProps.map.updateSize()
         }
     }
-    toggleDrawer = () => {
-        const { open } = this.state
-        this.setState({ open: !open })
-    }
     render() {
         const { classes, childrenProps } = this.props
-        const { open } = this.state
         return (
             <div className={classes.root}>
-                <div className={classnames({ [classes.drawer]: open ? true : false, [classes.drawerClose]: open ? false : true })}>
-                    <Paper className={classnames({ "drawer-button-container": true, [classes.drawerContainer]: open ? false : true })}>
-                        <IconButton onTouchTap={this.toggleDrawer} color="default" aria-label="add" className={"drawer-button"}>
-                            {open ? <ArrowLeft /> : <ArrowRight />}
+                <div className={classnames({ [classes.drawer]: childrenProps.drawerOpen ? true : false, [classes.drawerClose]: childrenProps.drawerOpen ? false : true })}>
+                    <Paper className={classnames({ "drawer-button-container": true, [classes.drawerContainer]: childrenProps.drawerOpen ? false : true })}>
+                        <IconButton onTouchTap={childrenProps.toggleDrawer} color="default" aria-label="add" className={"drawer-button"}>
+                            {childrenProps.drawerOpen ? <ArrowLeft /> : <ArrowRight />}
                         </IconButton>
                     </Paper>
-                    <Transition in={open} direction={"right"}>
-                        <CartoviewList {...childrenProps} open={open} />
+                    <Transition in={childrenProps.drawerOpen} direction={"right"}>
+                        <CartoviewList {...childrenProps} open={childrenProps.drawerOpen} />
                     </Transition>
                 </div>
                 <Grid className={classes.root} container alignItems={"stretch"} spacing={0}>

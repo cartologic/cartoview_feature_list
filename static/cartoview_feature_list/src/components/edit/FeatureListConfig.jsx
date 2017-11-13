@@ -1,10 +1,5 @@
 import 'react-select/dist/react-select.css'
 
-import {
-    getAttributesTemplate,
-    getKeywordsTemplate
-} from './AutoCompleteInput'
-
 import { Loader } from './MapSelector'
 import PropTypes from 'prop-types'
 import React from 'react'
@@ -160,6 +155,5 @@ FeatureListConfig.propTypes = {
     layerAttributes: PropTypes.array.isRequired,
     getAttributes: PropTypes.func.isRequired,
     loading: PropTypes.bool.isRequired,
-    config: PropTypes.object,
-    tags: PropTypes.array.isRequired
+    config: PropTypes.object
 }
