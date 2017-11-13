@@ -16,9 +16,9 @@ const ActionBar = (props) => {
             <p>
                 <button onClick={save} className="btn btn-primary btn-sm pull-right" {...extraProps}>{"Save"}</button>
             </p>
-            <p>
+            {/* <p>
                 <button onClick={validate} className="btn btn-primary btn-sm pull-right" {...extraProps}>{"Validate"}</button>
-            </p>
+            </p> */}
             <p>
                 {instanceId && <a onClick={save} href={urls.viewURL(instanceId)} className="btn btn-sm btn-primary pull-right">{"View"}</a>}
             </p>
