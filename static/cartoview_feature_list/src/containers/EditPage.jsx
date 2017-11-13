@@ -4,6 +4,7 @@ import { doGet, doPost } from './utils'
 
 import AppConfiguration from '../components/edit/AppConfiguration'
 import EditPageComponent from '../components/edit/EditPage'
+import FeatureDetailsPanel from '../components/edit/FeatureDetailsPanel'
 import FeatureListConfig from '../components/edit/FeatureListConfig'
 import MapSelector from '../components/edit/MapSelector'
 import PropTypes from 'prop-types'
@@ -206,6 +207,18 @@ class EditPage extends React.Component {
                 }
             },
             {
+                title: "Feature Details Configuration",
+                component: FeatureDetailsPanel,
+                ref: 'featureDetailsConfigurationStep',
+                hasErrors: false,
+                props: {
+                    layerAttributes,
+                    loading,
+                    config,
+                    tags
+                }
+            },
+            {
                 title: "Navigation Tools",
                 component: ToolConfiguration,
                 ref: 'toolsStep',
@@ -232,8 +245,8 @@ class EditPage extends React.Component {
     }
     prepareServerData = () => {
         const keywords = this.generalStep.getComponentValue().keywords
-        let tags = this.featureListConfigurationStep.getComponentValue().attachmentTags
-        let attributes = this.featureListConfigurationStep.getComponentValue().attributesToDisplay
+        let tags = this.featureDetailsConfigurationStep.getComponentValue().attachmentTags
+        let attributes = this.featureDetailsConfigurationStep.getComponentValue().attributesToDisplay
         const { selectedMap } = this.state
         let finalConfiguration = {
             map: selectedMap.id,

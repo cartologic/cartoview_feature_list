@@ -10,10 +10,20 @@ export const listConfigFormSchema = () => {
         subtitleAttribute: t.maybe(t.String),
         filters: t.maybe(t.String),
         pagination: t.String,
-        attachmentTags: t.maybe(t.list(selectTagItem)),
-        attributesToDisplay: t.maybe(t.list(selectTagItem)),
         zoomOnSelect: t.Boolean,
         enableImageListView: t.Boolean,
+
+    })
+    return formSchema
+}
+export const detailsConfigFormSchema = () => {
+    const selectTagItem = t.struct({
+        value: t.String,
+        label: t.String
+    })
+    const formSchema = t.struct({
+        attachmentTags: t.maybe(t.list(selectTagItem)),
+        attributesToDisplay: t.maybe(t.list(selectTagItem))
 
     })
     return formSchema

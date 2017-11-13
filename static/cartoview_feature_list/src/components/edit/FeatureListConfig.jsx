@@ -28,27 +28,6 @@ export default class FeatureListConfig extends React.Component {
             value: this.getFormValue(config)
         }
     }
-    getTagsOptions = (input, callback) => {
-        const { tags } = this.props
-        let options = []
-        tags.forEach(tag => {
-            options.push({
-                label: tag.tag,
-                value: tag.tag,
-            })
-        })
-        callback(null, {
-            options,
-            complete: true
-        })
-    }
-    tagsToOptions = (tags) => {
-        let options = []
-        tags.map(tag => {
-            options.push({ value: tag, label: tag })
-        })
-        return options
-    }
     getFormValue = (config) => {
         const value = {
             layer: getPropertyFromConfig(config, 'layer', null),
@@ -63,13 +42,7 @@ export default class FeatureListConfig extends React.Component {
             zoomOnSelect: getPropertyFromConfig(config,
                 'zoomOnSelect', true),
             enableImageListView: getPropertyFromConfig(config,
-                'enableImageListView', true),
-            attachmentTags: this.tagsToOptions(
-                getPropertyFromConfig(config,
-                    'attachmentTags', [])),
-            attributesToDisplay: this.tagsToOptions(
-                getPropertyFromConfig(config,
-                    'attributesToDisplay', []))
+                'enableImageListView', true)
         }
         return value
     }
@@ -112,19 +85,6 @@ export default class FeatureListConfig extends React.Component {
         })
         return options
     }
-    getMultiSelectAttributesOptions = (attributes) => {
-        let options = []
-        attributes.forEach((attribute) => {
-            if (attribute.attribute_type.indexOf("gml:") ==
-                -1) {
-                options.push({
-                    value: attribute.attribute,
-                    label: attribute.attribute
-                })
-            }
-        })
-        return options
-    }
     onChange = (newValue) => {
         const { getAttributes } = this.props
         const { value } = this.state
@@ -139,8 +99,6 @@ export default class FeatureListConfig extends React.Component {
     getFormOptions = () => {
         const { layerAttributes } = this.props
         const attributeOptions = this.getAttributesOptions(
-            layerAttributes)
-        const multiSelectAttributesOptions = this.getMultiSelectAttributesOptions(
             layerAttributes)
         const options = {
             fields: {
@@ -174,21 +132,7 @@ export default class FeatureListConfig extends React.Component {
                         { value: '40', text: "40" },
                         { value: '80', text: "80" }
                     ]
-                },
-                attachmentTags: {
-                    factory: t.form.Textbox,
-                    template: getKeywordsTemplate({
-                        loadOptions: this.getTagsOptions,
-                        message: "Select or Enter a Tag"
-                    })
-                },
-                attributesToDisplay: {
-                    factory: t.form.Textbox,
-                    template: getAttributesTemplate({
-                        options: multiSelectAttributesOptions,
-                        message: "Select Attributes you want to Display"
-                    })
-                },
+                }
             }
         }
         return options
