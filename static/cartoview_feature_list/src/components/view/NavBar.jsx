@@ -26,7 +26,7 @@ class NavBar extends React.Component {
         return (
             <div className={classes.root}>
                 <AppBar className={classes.drawerHeader} position="static">
-                    {childrenProps.config.filters&& open && <SearchInput
+                    {open && <SearchInput
                         urls={childrenProps.urls}
                         backToAllFeatures={childrenProps.backToAllFeatures}
                         selectionModeEnabled={childrenProps.selectionModeEnabled}
