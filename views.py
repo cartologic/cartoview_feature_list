@@ -11,7 +11,6 @@ class FeatureList(StandardAppViews):
     def save(self, request, instance_id=None):
         res_json = dict(success=False)
         data = json.loads(request.body)
-        print(type(data))
         config = data.get('config', None)
         map_id = data.get('map', None)
         title = data.get('title', "")

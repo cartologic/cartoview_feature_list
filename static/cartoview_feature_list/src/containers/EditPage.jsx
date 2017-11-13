@@ -178,20 +178,6 @@ class EditPage extends React.Component {
                 }
             },
             {
-                title: "FeatureList Configuration",
-                component: FeatureListConfig,
-                ref: 'featureListConfigurationStep',
-                hasErrors: false,
-                props: {
-                    mapLayers,
-                    layerAttributes,
-                    getAttributes: this.getAttributes,
-                    loading,
-                    config,
-                    tags
-                }
-            },
-            {
                 title: "General",
                 component: AppConfiguration,
                 ref: 'generalStep',
@@ -203,6 +189,20 @@ class EditPage extends React.Component {
                     config,
                     allKeywords: keywords,
                     instanceId
+                }
+            },
+            {
+                title: "FeatureList Configuration",
+                component: FeatureListConfig,
+                ref: 'featureListConfigurationStep',
+                hasErrors: false,
+                props: {
+                    mapLayers,
+                    layerAttributes,
+                    getAttributes: this.getAttributes,
+                    loading,
+                    config,
+                    tags
                 }
             },
             {
