@@ -14,18 +14,16 @@ import compose from 'recompose/compose'
 import { upperPropTypes } from './sharedPropTypes'
 import { withStyles } from 'material-ui/styles'
 import withWidth from 'material-ui/utils/withWidth'
-
-const styles = theme => ({
+const styles = theme => ( {
     root: {
         height: "100%"
     },
-
     drawer: {
         width: "30%",
         height: "100%",
         zIndex: "1150",
         position: "fixed",
-        [theme.breakpoints.down('md')]: {
+        [ theme.breakpoints.down( 'md' ) ]: {
             width: "90%"
         },
     },
@@ -38,18 +36,19 @@ const styles = theme => ({
     drawerContainer: {
         left: "0px !important"
     }
-})
-function Transition(props) {
+} )
+
+function Transition( props ) {
     return <Slide direction="left" {...props} />
 }
 class ContentGrid extends Component {
     componentDidMount() {
         const { map } = this.props
-        map.setTarget(this.mapDiv)
+        map.setTarget( this.mapDiv )
     }
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate( prevProps, prevState ) {
         const { width } = this.props
-        if (prevProps.width !== width) {
+        if ( prevProps.width !== width ) {
             prevProps.map.updateSize()
         }
     }
@@ -64,7 +63,7 @@ class ContentGrid extends Component {
                         </IconButton>
                     </Paper>
                     <Transition in={childrenProps.drawerOpen} direction={"right"}>
-                        <CartoviewList {...childrenProps} open={childrenProps.drawerOpen} />
+                        <CartoviewList {...childrenProps} />
                     </Transition>
                 </div>
                 <Grid className={classes.root} container alignItems={"stretch"} spacing={0}>
@@ -77,9 +76,8 @@ class ContentGrid extends Component {
         )
     }
 }
-ContentGrid.propTypes = {
-    ...upperPropTypes,
+ContentGrid.propTypes = { ...upperPropTypes,
     map: PropTypes.object.isRequired,
     width: PropTypes.string,
 }
-export default compose(withStyles(styles), withWidth())(ContentGrid)
+export default compose( withStyles( styles ), withWidth() )( ContentGrid )

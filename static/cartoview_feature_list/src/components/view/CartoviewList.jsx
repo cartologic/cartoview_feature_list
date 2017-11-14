@@ -45,11 +45,11 @@ class CartoviewList extends React.Component {
             back,
             detailsModeEnabled,
             detailsOfFeature,
-            open
+            drawerOpen
         } = this.props
         return (
             <Paper elevation={6} className={classes.root}>
-                <NavBar open={open} childrenProps={this.props} />
+                <NavBar open={drawerOpen} childrenProps={this.props} />
                 <Paper elevation={0} className={classes.list}>
                     {!selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="All Features" loading={featuresIsLoading} openDetails={openDetails} message={"No Features Found"} />}
                     {selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="Identified Features" loading={featureIdentifyLoading} features={featureIdentifyResult} openDetails={openDetails} message={"No Features At this Point"} />}
