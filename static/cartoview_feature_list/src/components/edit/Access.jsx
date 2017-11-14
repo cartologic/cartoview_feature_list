@@ -43,19 +43,24 @@ export default class AppAccess extends React.Component {
     onChange = (newValue) => {
         this.setState({ value: newValue })
     }
+    getAccess
     getFormValue = (props) => {
         const { config } = props
+        const viewAccess = getPropertyFromConfig(config ? config.access :
+            null, 'whoCanView', null)
+        const metadataAccess = getPropertyFromConfig(config ?
+            config.access : null, 'whoCanChangeMetadata',
+            null)
+        const deleteAccess = getPropertyFromConfig(config ? config.access :
+            null, 'whoCanDelete', null)
+        const changeAccess = getPropertyFromConfig(
+            config ? config.access : null,
+            'whoCanChangeConfiguration', null)
         const value = {
-            whoCanView: getPropertyFromConfig(config ? config.access :
-                null, 'whoCanView', null),
-            whoCanChangeMetadata: getPropertyFromConfig(config ?
-                config.access : null, 'whoCanChangeMetadata',
-                null),
-            whoCanDelete: getPropertyFromConfig(config ? config.access :
-                null, 'whoCanDelete', null),
-            whoCanChangeConfiguration: getPropertyFromConfig(
-                config ? config.access : null,
-                'whoCanChangeConfiguration', null),
+            whoCanView: viewAccess?getSelectOptions(viewAccess):viewAccess,
+            whoCanChangeMetadata: metadataAccess?getSelectOptions(metadataAccess):metadataAccess,
+            whoCanDelete:  deleteAccess?getSelectOptions(deleteAccess):deleteAccess,
+            whoCanChangeConfiguration: changeAccess?getSelectOptions(changeAccess):changeAccess,
         }
         return value
     }
