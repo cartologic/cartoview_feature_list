@@ -1,20 +1,21 @@
 import ArrowBackIcon from 'material-ui-icons/ArrowBack'
 import Autosuggest from 'react-autosuggest'
 import IconButton from 'material-ui/IconButton'
-import {Loader} from './statelessComponents'
+import { Loader } from './statelessComponents'
 import { MenuItem } from 'material-ui/Menu'
+import { Message } from './statelessComponents'
 import NavigationMenu from './NavigationMenu'
 import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
 import React from 'react'
 import TextField from 'material-ui/TextField'
+import classnames from 'classnames'
 import match from 'autosuggest-highlight/match'
 import ol from 'openlayers'
 import parse from 'autosuggest-highlight/parse'
 import { withStyles } from 'material-ui/styles'
-
 function renderInput(inputProps) {
-    const { classes, autoFocus, value, ref, searchResultIsLoading, selectionModeEnabled, backToAllFeatures, urls, back, detailsModeEnabled, detailsOfFeature, ...other } =
+    const { classes, autoFocus, value, ref, searchResultIsLoading, selectionModeEnabled, config, backToAllFeatures, urls, back, detailsModeEnabled, detailsOfFeature, ...other } =
         inputProps
     return (
         <Paper className="search-paper" elevation={1}>
@@ -25,7 +26,7 @@ function renderInput(inputProps) {
             {selectionModeEnabled && !detailsModeEnabled && <IconButton onTouchTap={backToAllFeatures} className="menu-button" aria-label="Menu">
                 <ArrowBackIcon />
             </IconButton>}
-            <TextField
+            {config.filters && <TextField
                 autoFocus={autoFocus}
                 className={classes.textField}
                 value={value}
@@ -36,7 +37,8 @@ function renderInput(inputProps) {
                     },
                     ...other,
                 }}
-            />
+            />}
+            {/* {!config.filters&& <Message align="left" type="headline" color="default" message={config.formTitle} />} */}
             {searchResultIsLoading && <Loader size={30} thickness={3} />}
         </Paper>
     )
@@ -48,6 +50,14 @@ const styles = theme => ({
         height: 'auto',
         margin: "15px",
         width: "100%"
+    },
+    containerNoSeach: {
+        flexGrow: 1,
+        position: 'relative',
+        height: 'auto',
+        margin: "15px",
+        marginRight: "auto",
+        width: "auto !important"
     },
     suggestionsContainerOpen: {
         position: 'absolute',
@@ -146,7 +156,7 @@ class IntegrationAutosuggest extends React.Component {
         return (
             <Autosuggest
                 theme={{
-                    container: classes.container,
+                    container: classnames({ [classes.container]: true, [classes.containerNoSeach]: !config.filters }),
                     suggestionsContainerOpen: classes.suggestionsContainerOpen,
                     suggestionsList: classes.suggestionsList,
                     suggestion: classes.suggestion,
@@ -167,6 +177,7 @@ class IntegrationAutosuggest extends React.Component {
                     back, detailsModeEnabled, detailsOfFeature,
                     backToAllFeatures,
                     selectionModeEnabled,
+                    config: config,
                     searchResultIsLoading,
                     urls
                 }}

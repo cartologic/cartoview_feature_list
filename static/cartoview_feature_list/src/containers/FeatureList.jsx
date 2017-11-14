@@ -51,6 +51,7 @@ class FeatureListContainer extends Component {
             activeFeatures: null,
             filterType: null,
             ImageBase64: null,
+            drawerOpen: true,
             detailsModeEnabled: false,
             detailsOfFeature: null
         }
@@ -58,6 +59,10 @@ class FeatureListContainer extends Component {
         this.map = getMap()
         this.featureCollection = new ol.Collection()
         addSelectionLayer( this.map, this.featureCollection, styleFunction )
+    }
+    toggleDrawer = () => {
+        const { drawerOpen } = this.state
+        this.setState({ drawerOpen: !drawerOpen })
     }
     readThenSave = ( file, featureId ) => {
         const { config } = this.props
@@ -334,6 +339,7 @@ class FeatureListContainer extends Component {
         }
         this.setState( {
             featureIdentifyResult: transformedFeatures,
+            drawerOpen:true,
             activeFeatures: null,
             ...featureDetails,
             featureIdentifyLoading: false
@@ -422,7 +428,8 @@ class FeatureListContainer extends Component {
             SaveImageBase64: this.SaveImageBase64,
             getImageFromURL: this.getImageFromURL,
             openDetails: this.openDetails,
-            back: this.backToList
+            back: this.backToList,
+            toggleDrawer:this.toggleDrawer
         }
         return <FeatureList childrenProps={childrenProps} map={this.map} />
     }

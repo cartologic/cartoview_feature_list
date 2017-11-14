@@ -10,10 +10,20 @@ export const listConfigFormSchema = () => {
         subtitleAttribute: t.maybe(t.String),
         filters: t.maybe(t.String),
         pagination: t.String,
-        attachmentTags: t.maybe(t.list(selectTagItem)),
-        attributesToDisplay: t.maybe(t.list(selectTagItem)),
         zoomOnSelect: t.Boolean,
         enableImageListView: t.Boolean,
+
+    })
+    return formSchema
+}
+export const detailsConfigFormSchema = () => {
+    const selectTagItem = t.struct({
+        value: t.String,
+        label: t.String
+    })
+    const formSchema = t.struct({
+        attachmentTags: t.maybe(t.list(selectTagItem)),
+        attributesToDisplay: t.maybe(t.list(selectTagItem))
 
     })
     return formSchema
@@ -23,15 +33,23 @@ export const generalFormSchema = () => {
         value: t.String,
         label: t.String
     })
-    const accessOptions = t.enums({
-        public: 'Public',
-        private: 'Private'
-    })
     const formSchema = t.struct({
         title: t.String,
         abstract: t.maybe(t.String),
-        access: accessOptions,
         keywords: t.list(selectKeywordItem)
+    })
+    return formSchema
+}
+export const accessFormSchema = () => {
+    const selectUserItem = t.struct({
+        value: t.String,
+        label: t.String
+    })
+    const formSchema = t.struct({
+        whoCanView: t.maybe(t.list(selectUserItem)),
+        whoCanChangeMetadata: t.maybe(t.list(selectUserItem)),
+        whoCanDelete: t.maybe(t.list(selectUserItem)),
+        whoCanChangeConfiguration: t.maybe(t.list(selectUserItem))
     })
     return formSchema
 }

@@ -16,6 +16,7 @@ export const getKeywordsTemplate = (options) => {
                 deleteRemoves={true}
                 resetValue={null}
                 placeholder={options.message} />
+                <p className="help-block">{options.help}</p>
         </div>
     }
 
@@ -36,6 +37,7 @@ export const getAttributesTemplate = (options) => {
                 deleteRemoves={true}
                 resetValue={null}
                 placeholder={options.message} />
+                <p className="help-block">{options.help}</p>
         </div>
     }
 

@@ -2,8 +2,10 @@ import '../css/app.css'
 
 import { doGet, doPost } from './utils'
 
+import AppAccess from '../components/edit/Access'
 import AppConfiguration from '../components/edit/AppConfiguration'
 import EditPageComponent from '../components/edit/EditPage'
+import FeatureDetailsPanel from '../components/edit/FeatureDetailsPanel'
 import FeatureListConfig from '../components/edit/FeatureListConfig'
 import MapSelector from '../components/edit/MapSelector'
 import PropTypes from 'prop-types'
@@ -32,6 +34,7 @@ class EditPage extends React.Component {
             keywords: [],
             saving: false,
             errors: [],
+            profiles:[],
             instanceId: config ? config.id : null,
             searchEnabled: false
         }
@@ -46,6 +49,7 @@ class EditPage extends React.Component {
             this.getAttributes(config.layer)
         }
         this.getKeywords()
+        this.getProfiles()
         this.getTags()
     }
     UserMapsChanged = () => {
@@ -127,6 +131,14 @@ class EditPage extends React.Component {
             this.setState({ keywords: result.objects, loading: false })
         })
     }
+    getProfiles = () => {
+        this.setState({ loading: true })
+        const { urls } = this.props
+        const url = urls.profilesAPI
+        doGet(url).then(result => {
+            this.setState({ profiles: result.objects, loading: false })
+        })
+    }
     getTags = () => {
         const { urls } = this.props
         doGet(urls.tagsAPI).then(result => {
@@ -154,7 +166,8 @@ class EditPage extends React.Component {
             abstract,
             keywords,
             instanceId,
-            searchEnabled
+            searchEnabled,
+            profiles
         } = this.state
         let steps = [
             {
@@ -178,6 +191,20 @@ class EditPage extends React.Component {
                 }
             },
             {
+                title: "General",
+                component: AppConfiguration,
+                ref: 'generalStep',
+                hasErrors: false,
+                props: {
+                    abstract,
+                    title,
+                    selectedMap,
+                    config,
+                    allKeywords: keywords,
+                    instanceId
+                }
+            },
+            {
                 title: "FeatureList Configuration",
                 component: FeatureListConfig,
                 ref: 'featureListConfigurationStep',
@@ -192,17 +219,26 @@ class EditPage extends React.Component {
                 }
             },
             {
-                title: "General",
-                component: AppConfiguration,
-                ref: 'generalStep',
+                title: "Feature Details Configuration",
+                component: FeatureDetailsPanel,
+                ref: 'featureDetailsConfigurationStep',
                 hasErrors: false,
                 props: {
-                    abstract,
-                    title,
-                    selectedMap,
+                    layerAttributes,
+                    loading,
                     config,
-                    allKeywords: keywords,
-                    instanceId
+                    tags
+                }
+            },
+            {
+                title: "Acccess Configuration",
+                component: AppAccess,
+                ref: 'accessConfigurationStep',
+                hasErrors: false,
+                props: {
+                    loading,
+                    config,
+                    profiles,
                 }
             },
             {
@@ -232,8 +268,8 @@ class EditPage extends React.Component {
     }
     prepareServerData = () => {
         const keywords = this.generalStep.getComponentValue().keywords
-        let tags = this.featureListConfigurationStep.getComponentValue().attachmentTags
-        let attributes = this.featureListConfigurationStep.getComponentValue().attributesToDisplay
+        let tags = this.featureDetailsConfigurationStep.getComponentValue().attachmentTags
+        let attributes = this.featureDetailsConfigurationStep.getComponentValue().attributesToDisplay
         const { selectedMap } = this.state
         let finalConfiguration = {
             map: selectedMap.id,
@@ -243,6 +279,7 @@ class EditPage extends React.Component {
                 ...this.featureListConfigurationStep.getComponentValue()
 
             },
+            access:this.accessConfigurationStep.getComponentValue(),
             keywords: this.toArray(keywords)
 
         }
