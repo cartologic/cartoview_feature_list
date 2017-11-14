@@ -1,9 +1,9 @@
 import ArrowBackIcon from 'material-ui-icons/ArrowBack'
 import Autosuggest from 'react-autosuggest'
 import IconButton from 'material-ui/IconButton'
-import {Loader} from './statelessComponents'
+import { Loader } from './statelessComponents'
 import { MenuItem } from 'material-ui/Menu'
-import {Message} from './statelessComponents'
+import { Message } from './statelessComponents'
 import NavigationMenu from './NavigationMenu'
 import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
@@ -15,7 +15,7 @@ import ol from 'openlayers'
 import parse from 'autosuggest-highlight/parse'
 import { withStyles } from 'material-ui/styles'
 function renderInput(inputProps) {
-    const { classes, autoFocus, value, ref, searchResultIsLoading, selectionModeEnabled, config,backToAllFeatures, urls, back, detailsModeEnabled, detailsOfFeature, ...other } =
+    const { classes, autoFocus, value, ref, searchResultIsLoading, selectionModeEnabled, config, backToAllFeatures, urls, back, detailsModeEnabled, detailsOfFeature, ...other } =
         inputProps
     return (
         <Paper className="search-paper" elevation={1}>
@@ -26,7 +26,7 @@ function renderInput(inputProps) {
             {selectionModeEnabled && !detailsModeEnabled && <IconButton onTouchTap={backToAllFeatures} className="menu-button" aria-label="Menu">
                 <ArrowBackIcon />
             </IconButton>}
-            {config.filters&&<TextField
+            {config.filters && <TextField
                 autoFocus={autoFocus}
                 className={classes.textField}
                 value={value}
@@ -153,10 +153,10 @@ class IntegrationAutosuggest extends React.Component {
     render() {
         const { classes, config, back,
             detailsModeEnabled, detailsOfFeature, selectionModeEnabled, backToAllFeatures, urls, searchResultIsLoading } = this.props
-            return (
+        return (
             <Autosuggest
                 theme={{
-                    container: classnames({[classes.container]:true,[classes.containerNoSeach]:!config.filters}),
+                    container: classnames({ [classes.container]: true, [classes.containerNoSeach]: !config.filters }),
                     suggestionsContainerOpen: classes.suggestionsContainerOpen,
                     suggestionsList: classes.suggestionsList,
                     suggestion: classes.suggestion,
@@ -177,7 +177,7 @@ class IntegrationAutosuggest extends React.Component {
                     back, detailsModeEnabled, detailsOfFeature,
                     backToAllFeatures,
                     selectionModeEnabled,
-                    config:config,
+                    config: config,
                     searchResultIsLoading,
                     urls
                 }}

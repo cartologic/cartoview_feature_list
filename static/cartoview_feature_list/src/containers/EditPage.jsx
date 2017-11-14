@@ -2,6 +2,7 @@ import '../css/app.css'
 
 import { doGet, doPost } from './utils'
 
+import AppAccess from '../components/edit/Access'
 import AppConfiguration from '../components/edit/AppConfiguration'
 import EditPageComponent from '../components/edit/EditPage'
 import FeatureDetailsPanel from '../components/edit/FeatureDetailsPanel'
@@ -33,6 +34,7 @@ class EditPage extends React.Component {
             keywords: [],
             saving: false,
             errors: [],
+            profiles:[],
             instanceId: config ? config.id : null,
             searchEnabled: false
         }
@@ -47,6 +49,7 @@ class EditPage extends React.Component {
             this.getAttributes(config.layer)
         }
         this.getKeywords()
+        this.getProfiles()
         this.getTags()
     }
     UserMapsChanged = () => {
@@ -128,6 +131,14 @@ class EditPage extends React.Component {
             this.setState({ keywords: result.objects, loading: false })
         })
     }
+    getProfiles = () => {
+        this.setState({ loading: true })
+        const { urls } = this.props
+        const url = urls.profilesAPI
+        doGet(url).then(result => {
+            this.setState({ profiles: result.objects, loading: false })
+        })
+    }
     getTags = () => {
         const { urls } = this.props
         doGet(urls.tagsAPI).then(result => {
@@ -155,7 +166,8 @@ class EditPage extends React.Component {
             abstract,
             keywords,
             instanceId,
-            searchEnabled
+            searchEnabled,
+            profiles
         } = this.state
         let steps = [
             {
@@ -219,6 +231,17 @@ class EditPage extends React.Component {
                 }
             },
             {
+                title: "Acccess Configuration",
+                component: AppAccess,
+                ref: 'accessConfigurationStep',
+                hasErrors: false,
+                props: {
+                    loading,
+                    config,
+                    profiles,
+                }
+            },
+            {
                 title: "Navigation Tools",
                 component: ToolConfiguration,
                 ref: 'toolsStep',
@@ -256,6 +279,7 @@ class EditPage extends React.Component {
                 ...this.featureListConfigurationStep.getComponentValue()
 
             },
+            access:this.accessConfigurationStep.getComponentValue(),
             keywords: this.toArray(keywords)
 
         }

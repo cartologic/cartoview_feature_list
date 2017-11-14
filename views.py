@@ -5,10 +5,43 @@ from cartoview.app_manager.views import StandardAppViews
 from django.shortcuts import HttpResponse
 
 from . import APP_NAME
+_js_permissions_mapping = {
+    'whoCanView': 'view_resourcebase',
+    'whoCanChangeMetadata': 'change_resourcebase_metadata',
+    'whoCanDelete': 'delete_resourcebase',
+    'whoCanChangeConfiguration': 'change_resourcebase'
+}
+
+
+def change_dict_None_to_list(access):
+    for permission, users in list(access.items()):
+        if not users:
+            access[permission] = []
 
 
 class FeatureList(StandardAppViews):
+    def get_users_permissions(self, access, initial, owner):
+        change_dict_None_to_list(access)
+        users = []
+        for permission_users in list(access.values()):
+            if permission_users:
+                users.extend(permission_users)
+        users = set(users)
+        for user in users:
+            user_permissions = []
+            for js_permission, gaurdian_permission in \
+                    list(_js_permissions_mapping.items()):
+                if user in access[js_permission]:
+                    user_permissions.append(gaurdian_permission)
+            if len(user_permissions) > 0 and user != owner:
+                initial['users'].update({'{}'.format(user): user_permissions})
+            if len(access["whoCanView"]) == 0:
+                initial['users'].update({'AnonymousUser': [
+                    'view_resourcebase',
+                ]})
+
     def save(self, request, instance_id=None):
+        user = request.user
         res_json = dict(success=False)
         data = json.loads(request.body)
         config = data.get('config', None)
@@ -23,16 +56,16 @@ class FeatureList(StandardAppViews):
         if instance_id is None:
             instance_obj = AppInstance()
             instance_obj.app = App.objects.get(name=self.app_name)
-            instance_obj.owner = request.user
+            instance_obj.owner = user
         else:
             instance_obj = AppInstance.objects.get(pk=instance_id)
+            user = instance_obj.owner
 
         instance_obj.title = title
         instance_obj.config = config
         instance_obj.abstract = abstract
         instance_obj.map_id = map_id
         instance_obj.save()
-
         owner_permissions = [
             'view_resourcebase',
             'download_resourcebase',
@@ -42,27 +75,13 @@ class FeatureList(StandardAppViews):
             'change_resourcebase_permissions',
             'publish_resourcebase',
         ]
-        # access limited to specific users
-        if access == "private":
-            permessions = {
-                'users': {
-                    '{}'.format(request.user): owner_permissions,
-                }
+        permessions = {
+            'users': {
+                '{}'.format(request.user.username): owner_permissions,
             }
-        else:
-            permessions = {
-                'users': {
-                    '{}'.format(request.user): owner_permissions,
-                    'AnonymousUser': [
-                        'view_resourcebase',
-                    ],
-                }
-            }
-        # set permissions so that no one can view this appinstance other than
-        #  the user
+        }
+        self.get_users_permissions(access, permessions, user.username)
         instance_obj.set_permissions(permessions)
-
-        # update the instance keywords
         if hasattr(instance_obj, 'keywords') and keywords:
             new_keywords = [
                 k for k in keywords if k not in instance_obj.keyword_list()]

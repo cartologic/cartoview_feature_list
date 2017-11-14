@@ -62,8 +62,6 @@ export default class AppConfiguration extends React.Component {
             title: title ? title : selectedMap ? selectedMap.title : null,
             abstract: abstract ? abstract : selectedMap ?
                 selectedMap.abstract : null,
-            access: getPropertyFromConfig(config, 'access',
-                'public'),
             keywords: this.keywordsToOptions(getPropertyFromConfig(config, 'keywords',[]))
         }
         return value

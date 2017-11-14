@@ -66,6 +66,9 @@ export default class FeatureDetailsPanel extends React.Component {
         }
         return value
     }
+    onChange=(newValue)=>{
+        this.setState({value:newValue})
+    }
     getMultiSelectAttributesOptions = (attributes) => {
         let options = []
         attributes.forEach((attribute) => {
