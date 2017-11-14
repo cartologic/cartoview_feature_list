@@ -14,18 +14,33 @@ import match from 'autosuggest-highlight/match'
 import ol from 'openlayers'
 import parse from 'autosuggest-highlight/parse'
 import { withStyles } from 'material-ui/styles'
+export const NavButtons = (props) => {
+    const { selectionModeEnabled, detailsModeEnabled, detailsOfFeature, urls, back, backToAllFeatures } = props
+    return <div>
+        {!selectionModeEnabled && !detailsModeEnabled && <NavigationMenu urls={urls} />}
+        {detailsModeEnabled && detailsOfFeature && <IconButton onTouchTap={back} className="menu-button" aria-label="Menu">
+            <ArrowBackIcon />
+        </IconButton>}
+        {selectionModeEnabled && !detailsModeEnabled && <IconButton onTouchTap={backToAllFeatures} className="menu-button" aria-label="Menu">
+            <ArrowBackIcon />
+        </IconButton>}
+    </div>
+}
+NavButtons.propTypes = {
+    selectionModeEnabled: PropTypes.bool.isRequired,
+    detailsModeEnabled: PropTypes.bool.isRequired,
+    detailsOfFeature: PropTypes.object,
+    urls: PropTypes.object.isRequired,
+    back: PropTypes.func.isRequired,
+    backToAllFeatures: PropTypes.func.isRequired,
+
+}
 function renderInput(inputProps) {
-    const { classes, autoFocus, value, ref, searchResultIsLoading, selectionModeEnabled, config, backToAllFeatures, urls, back, detailsModeEnabled, detailsOfFeature, ...other } =
+    const { classes, autoFocus, value, ref, searchResultIsLoading, config, ...other } =
         inputProps
     return (
         <Paper className="search-paper" elevation={1}>
-            {!selectionModeEnabled && !detailsModeEnabled && <NavigationMenu urls={urls} />}
-            {detailsModeEnabled && detailsOfFeature && <IconButton onTouchTap={back} className="menu-button" aria-label="Menu">
-                <ArrowBackIcon />
-            </IconButton>}
-            {selectionModeEnabled && !detailsModeEnabled && <IconButton onTouchTap={backToAllFeatures} className="menu-button" aria-label="Menu">
-                <ArrowBackIcon />
-            </IconButton>}
+            <NavButtons {...inputProps} />
             {config.filters && <TextField
                 autoFocus={autoFocus}
                 className={classes.textField}

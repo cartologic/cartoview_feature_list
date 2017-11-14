@@ -115,11 +115,14 @@ export const getAttachmentTags = (config) => {
         `feature_list_${layerName(config.layer)}`]
     return tags
 }
-export const getSelectOptions = (arr,label,value=null) => {
+export const getSelectOptions = (arr, label = null, value = null) => {
     let options = []
     if (arr && arr.length > 0) {
         options = arr.map(item => {
-            return { value: item[label], label: item[value?value:label] }
+            if (!label) {
+                return { value: item, label: item }
+            }
+            return { value: item[label], label: item[value ? value : label] }
         })
     }
     return options
