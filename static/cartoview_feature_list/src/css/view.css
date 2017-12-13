@@ -1,17 +1,22 @@
 .element-flex {
     display: flex;
-    flex: 1
+    flex-grow: 1
+}
+.row {
+    display: flex;
+    flex: 1;
+    flex-direction: column
 }
 
 .list-item {
-    display: flex;
     max-height: 115px;
-    padding: 10px
 }
 
 .list-item-text {
-    display: block;
-    flex-grow: 1;
+    display: flex;
+    flex: 1;
+    position: relative;
+    flex-direction: column;
 }
 
 .text-center {

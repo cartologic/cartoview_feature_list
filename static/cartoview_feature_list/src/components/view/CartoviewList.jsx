@@ -10,7 +10,8 @@ import { withStyles } from 'material-ui/styles'
 const styles = theme => ({
     list: {
         height:`calc(100% - 76px )`,
-        overflowY:'overlay'
+        overflowY:'overlay',
+        overflowX:'hidden',
     },
     root:{
         height: "100%"

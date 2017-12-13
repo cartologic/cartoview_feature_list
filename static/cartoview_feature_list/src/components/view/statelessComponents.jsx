@@ -1,4 +1,5 @@
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table'
+import List, { ListItem, ListItemText } from 'material-ui/List'
+import Table, { TableBody, TableCell, TableRow } from 'material-ui/Table'
 
 import Button from 'material-ui/Button'
 import { Carousel } from 'react-responsive-carousel'
@@ -8,8 +9,6 @@ import Dropzone from 'react-dropzone'
 import Fade from 'material-ui/transitions/Fade'
 import Grid from 'material-ui/Grid'
 import Img from 'react-image'
-import { ListItem } from 'material-ui/List'
-import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
 import React from 'react'
 import SendIcon from 'material-ui-icons/Send'
@@ -19,7 +18,7 @@ import Typography from 'material-ui/Typography'
 import { checkURL } from '../../containers/staticMethods'
 import noImage from '../../img/no-img.png'
 
-export const Loader = ( props ) => {
+export const Loader = (props) => {
     const { size, thickness } = props
     return (
         <div className="text-center" >
@@ -31,36 +30,41 @@ Loader.propTypes = {
     size: PropTypes.number,
     thickness: PropTypes.number
 }
-export const Message = ( props ) => {
-    const { align, type, message, color } = props
-    return <Typography type={type} align={align || "center"} noWrap={message.length > 70 ? true : false} color={color ? color : "inherit"} className="element-flex">{message}</Typography>
+export const Message = (props) => {
+    const { align, type, message, color, noWrap } = props
+    return <Typography
+        type={type}
+        align={align || "center"}
+        noWrap={typeof (noWrap) !== "undefined" ? noWrap : message.length > 50 ? true : false}
+        color={color ? color : "inherit"}
+        className="element-flex">
+        {message}
+    </Typography>
 }
 Message.propTypes = {
     type: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
     align: PropTypes.string,
     color: PropTypes.string,
+    noWrap: PropTypes.bool
 }
-const PaperListItem = ( props ) => {
-    return <ListItem button {...props}></ListItem>
-}
-export const Item = ( props ) => {
+export const Item = (props) => {
     const { openDetails, feature, attachment, config } = props
+    const title = feature.getProperties()[config.titleAttribute]
+    const description = config.subtitleAttribute ? feature.getProperties()[config.subtitleAttribute] : ''
     return <div>
-        <Paper component={PaperListItem} onTouchTap={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })} elevation={0} className="list-item">
-            <div className="list-item-text">
-                <Message type="subheading" align="left" message={`${feature.getProperties()[config.titleAttribute]}`} />
-                <Message type="body2" color="secondary" align="left" message={`${config.subtitleAttribute ? feature.getProperties()[config.subtitleAttribute] : ''}`} />
-            </div>
+        <ListItem className="list-item" onTouchTap={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })}>
+            <ListItemText primary={`${title.length > 25 ? title.substr(0, 25) + '...' : title}`} secondary={`${description.length>70 ? description.substr(0,70):description}`} />
             {config.enableImageListView && <Img className="big-avatar"
                 src={[
                     attachment.length > 0 ? attachment[0].file : noImage
                 ]}
                 loader={<Loader />}
             />}
-        </Paper>
+        </ListItem>
         <Divider />
     </div>
+
 }
 Item.propTypes = {
     classes: PropTypes.object.isRequired,
@@ -69,7 +73,7 @@ Item.propTypes = {
     config: PropTypes.object.isRequired,
     openDetails: PropTypes.func.isRequired
 }
-export const FeatureListComponent = ( props ) => {
+export const FeatureListComponent = (props) => {
     const {
         features,
         loading,
@@ -81,20 +85,22 @@ export const FeatureListComponent = ( props ) => {
         searchFilesById,
         openDetails,
     } = props
-    return ( !loading && !attachmentIsLoading && features && features.length >
+    return (!loading && !attachmentIsLoading && features && features.length >
         0 ?
-        <div>
+        <div className="row">
             <div className="list-header">
                 <Message align="left" message={subheader} type="headline" />
             </div>
             <Divider />
-            {features && features.map((feature, index) => {
-                const attachment = searchFilesById(feature.getId())
-                return <Item key={index} classes={classes} feature={feature} config={config} attachment={attachment} openDetails={openDetails} />
-            })}
+            <List>
+                {features && features.map((feature, index) => {
+                    const attachment = searchFilesById(feature.getId())
+                    return <Item key={index} classes={classes} feature={feature} config={config} attachment={attachment} openDetails={openDetails} />
+                })}
+            </List>
         </div> :
         features && features.length == 0 ?
-        <Message message={message} type="body2" /> : <Loader /> )
+            <Message message={message} type="body2" /> : <Loader />)
 }
 FeatureListComponent.propTypes = {
     classes: PropTypes.object.isRequired,
@@ -107,7 +113,7 @@ FeatureListComponent.propTypes = {
     attachmentIsLoading: PropTypes.bool.isRequired,
     searchFilesById: PropTypes.func.isRequired
 }
-export const URL = ( props ) => {
+export const URL = (props) => {
     const { classes, url } = props
     return <Button color="accent" href={url} className={classes.button}>
         Link
@@ -117,9 +123,10 @@ URL.propTypes = {
     classes: PropTypes.object.isRequired,
     url: PropTypes.string.isRequired
 }
-export const PropsTable = ( props ) => {
+export const PropsTable = (props) => {
     const { classes, selectedFeature, attributesToDisplay } = props
-    const keys= attributesToDisplay.length ==0 ? Object.keys(selectedFeature.getProperties()): attributesToDisplay
+    const keys = attributesToDisplay.length == 0 ? Object.keys(
+        selectedFeature.getProperties()) : attributesToDisplay
     return <Table>
         <TableBody>
             {keys.map((key, i) => {
@@ -139,7 +146,7 @@ PropsTable.propTypes = {
     selectedFeature: PropTypes.object.isRequired,
     attributesToDisplay: PropTypes.array.isRequired
 }
-export const Slider = ( props ) => {
+export const Slider = (props) => {
     const { attachments } = props
     return <div>
         <Grid container justify={'center'} spacing={0}>
@@ -161,7 +168,7 @@ export const Slider = ( props ) => {
 Slider.propTypes = {
     attachments: PropTypes.array.isRequired
 }
-export const CommentBox = ( props ) => {
+export const CommentBox = (props) => {
     const { classes, value, handleChange, addComment, hasError } = props
     return (
         <div className="text-center fill-out-empty">
@@ -200,7 +207,7 @@ CommentBox.propTypes = {
     addComment: PropTypes.func.isRequired,
     hasError: PropTypes.bool.isRequired
 }
-export const DropZoneComponent = ( props ) => {
+export const DropZoneComponent = (props) => {
     const { classes, files, onDrop } = props
     return (
         <div className="center-div">
@@ -218,7 +225,7 @@ DropZoneComponent.propTypes = {
     onDrop: PropTypes.func.isRequired,
     files: PropTypes.array.isRequired,
 }
-export const CartoviewSnackBar = ( props ) => {
+export const CartoviewSnackBar = (props) => {
     const { handleClose, open, message } = props
     return (
         <Snackbar
@@ -228,11 +235,11 @@ export const CartoviewSnackBar = ( props ) => {
             SnackbarContentProps={{
                 'aria-describedby': 'message-id',
             }}
-            message={<span className="element-flex" id="message-id"><Loader size={20} thickness={4} /> { message } <
+            message={<span className="element-flex" id="message-id"><Loader size={20} thickness={4} /> {message} <
         /span>} / > )
 }
 CartoviewSnackBar.propTypes = {
-    handleClose: PropTypes.func,
+                    handleClose: PropTypes.func,
     open: PropTypes.bool.isRequired,
     message: PropTypes.string.isRequired
 }

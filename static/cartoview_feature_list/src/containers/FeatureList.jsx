@@ -33,8 +33,8 @@ class FeatureListContainer extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            mapIsLoading: false,
-            featuresIsLoading: false,
+            mapIsLoading: true,
+            featuresIsLoading: true,
             totalFeatures: 0,
             features: null,
             searchResultIsLoading: false,
@@ -42,7 +42,7 @@ class FeatureListContainer extends Component {
             searchTotalFeatures: 0,
             searchResult: null,
             attachmentIsLoading: false,
-            commentsIsLoading: false,
+            commentsIsLoading: true,
             attachments: null,
             comments: null,
             selectionModeEnabled: false,
@@ -141,7 +141,6 @@ class FeatureListContainer extends Component {
         }
         this.loadMap(urls.mapJsonUrl, urls.proxy)
         this.getFeatures(0)
-        this.setAttachmentCommentsLoading(true)
         this.getCommentsAndFiles().then(([attachments, comments]) => {
             this.setState({ attachments, comments }, this.setAttachmentCommentsLoading(
                 false))
@@ -174,7 +173,6 @@ class FeatureListContainer extends Component {
         this.singleClickListner()
     }
     loadMap = (mapUrl, proxyURL) => {
-        this.setState({ mapIsLoading: true })
         fetch(mapUrl, {
             method: "GET",
             credentials: 'include'
@@ -209,7 +207,6 @@ class FeatureListContainer extends Component {
     getFeatures = (startIndex) => {
         let { totalFeatures } = this.state
         const { urls, config } = this.props
-        this.setState({ featuresIsLoading: true })
         const requestUrl = wfsQueryBuilder(urls.wfsURL, {
             service: 'wfs',
             version: '2.0.0',

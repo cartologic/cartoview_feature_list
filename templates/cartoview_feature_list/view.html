@@ -1,4 +1,5 @@
 {% load static %}
+{% load cartoview_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,8 +63,8 @@
 
     const props = {{ instance.config | safe }}
     
-    props.formTitle="{{instance.title}}"
-    props.formAbstract="{{instance.abstract}}"
+    props.formTitle={{instance.title|dump_json}}
+    props.formAbstract={{instance.abstract|dump_json}}
     props.username="{{request.user.username}}"
     CartoviewFeatureList.show('root', props,urls);
   </script>
