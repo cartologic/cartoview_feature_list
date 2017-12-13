@@ -1,4 +1,4 @@
-import List, { ListItem, ListItemText } from 'material-ui/List'
+import List, { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List'
 import Table, { TableBody, TableCell, TableRow } from 'material-ui/Table'
 
 import Button from 'material-ui/Button'
@@ -53,14 +53,15 @@ export const Item = (props) => {
     const title = feature.getProperties()[config.titleAttribute]
     const description = config.subtitleAttribute ? feature.getProperties()[config.subtitleAttribute] : ''
     return <div>
-        <ListItem className="list-item" onTouchTap={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })}>
-            <ListItemText primary={`${title.length > 25 ? title.substr(0, 25) + '...' : title}`} secondary={`${description.length>70 ? description.substr(0,70):description}`} />
+        <ListItem onTouchTap={() => openDetails({ detailsModeEnabled: true, detailsOfFeature: feature })}>
             {config.enableImageListView && <Img className="big-avatar"
                 src={[
                     attachment.length > 0 ? attachment[0].file : noImage
                 ]}
                 loader={<Loader />}
             />}
+            <ListItemText primary={`${title}`} secondary={`${description}`} />
+
         </ListItem>
         <Divider />
     </div>
