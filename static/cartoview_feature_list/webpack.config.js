@@ -31,7 +31,10 @@ const config = {
     },
     plugins: plugins,
     resolve: {
-        extensions: [ '*', '.js', '.jsx' ]
+        extensions: [ '*', '.js', '.jsx' ],
+        alias: {
+            Source: APP_DIR
+        },
     },
     module: {
         loaders: [ {

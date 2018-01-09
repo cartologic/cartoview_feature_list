@@ -1,3 +1,4 @@
+import FeatureListHelper from 'Source/helpers/FeatureListHelper'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { accessFormSchema } from '../../containers/forms'
@@ -5,7 +6,6 @@ import {
     getAttributesTemplate
 } from './AutoCompleteInput'
 import { getPropertyFromConfig } from './FeatureListConfig'
-import { getSelectOptions } from '../../containers/staticMethods'
 import t from 'tcomb-form'
 const Form = t.form.Form
 export default class AppAccess extends React.Component {
@@ -57,16 +57,16 @@ export default class AppAccess extends React.Component {
             config ? config.access : null,
             'whoCanChangeConfiguration', null)
         const value = {
-            whoCanView: viewAccess?getSelectOptions(viewAccess):viewAccess,
-            whoCanChangeMetadata: metadataAccess?getSelectOptions(metadataAccess):metadataAccess,
-            whoCanDelete:  deleteAccess?getSelectOptions(deleteAccess):deleteAccess,
-            whoCanChangeConfiguration: changeAccess?getSelectOptions(changeAccess):changeAccess,
+            whoCanView: viewAccess?FeatureListHelper.getSelectOptions(viewAccess):viewAccess,
+            whoCanChangeMetadata: metadataAccess?FeatureListHelper.getSelectOptions(metadataAccess):metadataAccess,
+            whoCanDelete:  deleteAccess?FeatureListHelper.getSelectOptions(deleteAccess):deleteAccess,
+            whoCanChangeConfiguration: changeAccess?FeatureListHelper.getSelectOptions(changeAccess):changeAccess,
         }
         return value
     }
     getFormOptions = () => {
         const { profiles } = this.props
-        const userOptions = getSelectOptions(profiles, 'username')
+        const userOptions = FeatureListHelper.getSelectOptions(profiles, 'username')
         const options = {
             fields: {
                 whoCanView: {

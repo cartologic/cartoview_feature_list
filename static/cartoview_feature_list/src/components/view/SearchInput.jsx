@@ -3,7 +3,6 @@ import Autosuggest from 'react-autosuggest'
 import IconButton from 'material-ui/IconButton'
 import { Loader } from './statelessComponents'
 import { MenuItem } from 'material-ui/Menu'
-import { Message } from './statelessComponents'
 import NavigationMenu from './NavigationMenu'
 import Paper from 'material-ui/Paper'
 import PropTypes from 'prop-types'
@@ -11,9 +10,9 @@ import React from 'react'
 import TextField from 'material-ui/TextField'
 import classnames from 'classnames'
 import match from 'autosuggest-highlight/match'
-import ol from 'openlayers'
 import parse from 'autosuggest-highlight/parse'
 import { withStyles } from 'material-ui/styles'
+import  { wmsGetFeatureInfoFormats } from 'Source/helpers/FeaturesHelper'
 export const NavButtons = (props) => {
     const { selectionModeEnabled, detailsModeEnabled, detailsOfFeature, urls, back, backToAllFeatures } = props
     return <div>
@@ -139,7 +138,7 @@ class IntegrationAutosuggest extends React.Component {
     handleSuggestionsFetchRequested = ({ value }) => {
         let { config, search } = this.props
         search(value).then((json) => {
-            let features = new ol.format.GeoJSON().readFeatures(
+            let features = wmsGetFeatureInfoFormats['application/json'].readFeatures(
                 json)
             // const total = json.totalFeatures
             let suggestions = features.map((feature, i) => {

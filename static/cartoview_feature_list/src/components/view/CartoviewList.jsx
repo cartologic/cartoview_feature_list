@@ -58,7 +58,7 @@ class CartoviewList extends React.Component {
                     {!selectionModeEnabled && !detailsModeEnabled && !(featuresIsLoading || attachmentIsLoading) && totalFeatures > 0 && <div className="text-center">
                         <UltimatePaginationMaterialUi
                             totalPages={Math.ceil(totalFeatures / parseInt(config.pagination))}
-                            currentPage={this.state.currentPage}
+                            currentPage={totalFeatures > 0 ? this.state.currentPage : 0}
                             boundaryPagesRange={1}
                             onChange={number => this.setState({ currentPage: number }, getFeatures((number - 1) * parseInt(config.pagination)))} />
                     </div>}

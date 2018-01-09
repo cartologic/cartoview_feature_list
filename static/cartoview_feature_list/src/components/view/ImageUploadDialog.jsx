@@ -3,10 +3,10 @@ import Dialog, {
     DialogContent,
     DialogTitle,
 } from 'material-ui/Dialog'
-import { checkImageSrc, checkURL } from '../../containers/staticMethods'
 
 import Button from 'material-ui/Button'
 import { DropZoneComponent } from './statelessComponents'
+import FeatureListHelper from 'Source/helpers/FeatureListHelper'
 import FileUpload from 'material-ui-icons/FileUpload';
 import { FormControlLabel } from 'material-ui/Form'
 import PropTypes from 'prop-types'
@@ -129,7 +129,7 @@ class ImageDialog extends React.Component {
         const inputValue = event.target.value
         this.setState({
             ImageURL: inputValue,
-            ImageURLValid: checkURL(inputValue)
+            ImageURLValid: FeatureListHelper.checkURL(inputValue)
         })
     }
     handleRequestClose = () => {
@@ -147,7 +147,7 @@ class ImageDialog extends React.Component {
         const { SaveImageBase64, featureId, getImageFromURL } = this.props
         const { files, ImageURL, fromURL } = this.state
         if (ImageURL !== '' && fromURL) {
-            checkImageSrc(ImageURL, () => {
+            FeatureListHelper.checkImageSrc(ImageURL, () => {
                 getImageFromURL(ImageURL, featureId)
                 this.reset()
             },
