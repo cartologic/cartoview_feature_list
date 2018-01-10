@@ -15,11 +15,10 @@ import MapConfigTransformService from 'Source/services/MapConfigTransformService
 import PropTypes from 'prop-types'
 import URLS from './URLS'
 import { getCRSFToken } from '../helpers/helpers.jsx'
-import  injectTapEventPlugin from "react-tap-event-plugin"
+import injectTapEventPlugin from "react-tap-event-plugin"
 import { render } from 'react-dom'
 import { styleFunction } from 'Source/helpers/StyleHelper'
 import { wfsQueryBuilder } from "../helpers/helpers.jsx"
-
 injectTapEventPlugin()
 class FeatureListContainer extends Component {
     constructor( props ) {
@@ -184,22 +183,6 @@ class FeatureListContainer extends Component {
         } ).catch( ( error ) => {
             throw Error( error )
         } )
-    }
-    getCRS = ( crs ) => {
-        let promise = new Promise( ( resolve, reject ) => {
-            if ( proj4.defs( 'EPSG:' + crs ) ) {
-                resolve( crs )
-            } else {
-                fetch( "https://epsg.io/?format=json&q=" + crs ).then(
-                    response => response.json() ).then(
-                    projres => {
-                        proj4.defs( 'EPSG:' + crs, projres.results[
-                            0 ].proj4 )
-                        resolve( crs )
-                    } )
-            }
-        } )
-        return promise
     }
     getFeatures = ( startIndex ) => {
         let { totalFeatures, map } = this.state

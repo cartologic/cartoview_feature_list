@@ -8,7 +8,7 @@ import LastPage from 'material-ui-icons/LastPage'
 import React from 'react'
 
 const flatButtonStyle = {
-    maxWidth: 24
+    
 }
 const Page = ( { value, isActive, onClick } ) => (
     <IconButton

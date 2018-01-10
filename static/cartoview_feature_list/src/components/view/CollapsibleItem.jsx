@@ -34,7 +34,7 @@ class Collapsible extends React.Component {
             <div>
                 <div className="element-flex">
                     <div className="attrs-table-title">
-                        <Message align="center" message={title} classes={classes} type="body2" />
+                        <Message align="center" message={title} type="body2" />
                     </div>
                     <div className="fill-out-empty" />
                     <IconButton
