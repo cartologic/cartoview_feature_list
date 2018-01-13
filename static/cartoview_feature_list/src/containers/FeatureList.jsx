@@ -19,6 +19,7 @@ import injectTapEventPlugin from "react-tap-event-plugin"
 import { render } from 'react-dom'
 import { styleFunction } from 'Source/helpers/StyleHelper'
 import { wfsQueryBuilder } from "../helpers/helpers.jsx"
+
 injectTapEventPlugin()
 class FeatureListContainer extends Component {
     constructor( props ) {
@@ -288,7 +289,6 @@ class FeatureListContainer extends Component {
                 featureIdentifyResult: null,
                 selectionModeEnabled: true
             } )
-            document.body.style.cursor = "progress"
             this.featureIdentify( map, e.coordinate )
         } )
     }
@@ -298,26 +298,6 @@ class FeatureListContainer extends Component {
             featureIdentifyResult: null
         } )
         this.addStyleToFeature( [] )
-    }
-    transformFeatures = ( layer, features, map, crs ) => {
-        let transformedFeatures = FeaturesHelper.transformFeatures( layer,
-            features, map, crs )
-        let featureDetails = {
-            detailsModeEnabled: false,
-            detailsOfFeature: null,
-        }
-        if ( transformedFeatures.length == 1 ) {
-            featureDetails.detailsModeEnabled = true
-            featureDetails.detailsOfFeature = transformedFeatures[ 0 ]
-        }
-        this.setState( {
-            featureIdentifyResult: transformedFeatures,
-            drawerOpen: true,
-            activeFeatures: null,
-            ...featureDetails,
-            featureIdentifyLoading: false
-        }, () => this.addStyleToFeature( transformedFeatures ) )
-        document.body.style.cursor = "default"
     }
     addStyleToFeature = ( features ) => {
         this.state.featureCollection.clear()
