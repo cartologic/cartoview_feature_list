@@ -16,11 +16,14 @@ import PropTypes from 'prop-types'
 import URLS from './URLS'
 import { getCRSFToken } from '../helpers/helpers.jsx'
 import injectTapEventPlugin from "react-tap-event-plugin"
+import proj from 'ol/proj'
+import proj4 from 'proj4'
 import { render } from 'react-dom'
 import { styleFunction } from 'Source/helpers/StyleHelper'
 import { wfsQueryBuilder } from "../helpers/helpers.jsx"
 
 injectTapEventPlugin()
+proj.setProj4( proj4 )
 class FeatureListContainer extends Component {
     constructor( props ) {
         super( props )
