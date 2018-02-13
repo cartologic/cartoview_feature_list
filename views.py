@@ -35,10 +35,10 @@ class FeatureList(StandardAppViews):
                     user_permissions.append(gaurdian_permission)
             if len(user_permissions) > 0 and user != owner:
                 initial['users'].update({'{}'.format(user): user_permissions})
-            if len(access["whoCanView"]) == 0:
-                initial['users'].update({'AnonymousUser': [
-                    'view_resourcebase',
-                ]})
+        if len(access["whoCanView"]) == 0:
+            initial['users'].update({'AnonymousUser': [
+                'view_resourcebase',
+            ]})
 
     def save(self, request, instance_id=None):
         user = request.user
