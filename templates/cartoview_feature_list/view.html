@@ -20,8 +20,8 @@
 </head>
 <body>
 <div style="height: 100%;" id="root"></div>
-<script src="{{ STATIC_URL }}{{APP_NAME}}/dist/commons.js"></script>
-<script src="{% static APP_NAME|add:'/dist/FeatureList.bundle.js?version=2' %}"></script>
+<script src="{{ STATIC_URL }}cartoview_feature_list/dist/commons.js"></script>
+<script src="{% static 'cartoview_feature_list/dist/FeatureList.bundle.js?version=2' %}"></script>
 <script type="text/javascript">
     {% if instance %}
             const instanceId= {{ instance.id }}
@@ -56,8 +56,8 @@
                 layers: "{% url 'layer_browse' %}",
                 maps: "{% url 'maps_browse' %}",
                 apps: "{% url 'app_manager_base_url' %}",
-                viewURL: "{% url APP_NAME|add:".view" instance_id=instance.id %}",
-                appLogo:'{% static APP_NAME|add:'/logo.png' %}'
+                viewURL: "{% url "cartoview_feature_list.view" instance_id=instance.id %}",
+                appLogo:'{% static 'cartoview_feature_list/logo.png' %}'
             }
     {% endif %}
 

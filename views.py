@@ -91,14 +91,5 @@ class FeatureList(StandardAppViews):
         return HttpResponse(json.dumps(res_json),
                             content_type="application/json")
 
-    def edit(self, request, instance_id,
-            template=None, context={}, * args, **kwargs):
-        return super(FeatureList, self).edit(request, instance_id, template=None, context={'APP_NAME': APP_NAME}, * args, **kwargs)
-    
-    def new(self, request, template=None, context={}, *args, **kwargs):
-        return super(FeatureList, self).new(request, template=None, context={'APP_NAME': APP_NAME}, *args, **kwargs)
-    
-    def view_app(self, request, instance_id, template=None, context={}):
-        return super(FeatureList, self).view_app(request, instance_id, template=None, context={'APP_NAME': APP_NAME})
 
 feature_list = FeatureList(APP_NAME)

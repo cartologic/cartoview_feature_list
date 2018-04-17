@@ -24,7 +24,7 @@ const config = {
         library: '[name]',
         libraryTarget: 'umd',
         umdNamedDefine: true,
-        publicPath: "/static/"+__dirname+"/dist/"
+        publicPath: "/static/cartoview_feature_list/dist/"
     },
     node: {
         fs: "empty"

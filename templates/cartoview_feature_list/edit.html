@@ -17,8 +17,8 @@
 
 {% endblock %}
 {% block extra_script %}
-<script src="{{ STATIC_URL }}{{APP_NAME}}/dist/commons.js"></script>
-    <script src="{{ STATIC_URL }}{{APP_NAME}}/dist/config.bundle.js"></script>
+<script src="{{ STATIC_URL }}cartoview_feature_list/dist/commons.js"></script>
+    <script src="{{ STATIC_URL }}cartoview_feature_list/dist/config.bundle.js"></script>
     <script>
       
         {% if instance %}
@@ -35,15 +35,15 @@
                   media: "{{ MEDIA_URL }}",
                   rest: "{% url 'app_manager_base_url' %}rest/app_manager/",
                   geonodeRest: "{% url 'api_api_top_level' 'api' %}",
-                  appLogo:'{% static APP_NAME|add:'/logo.png' %}',
+                  appLogo:'{% static 'cartoview_feature_list/logo.png' %}',
                   layerAttributes:"{% url 'app_manager_base_url' %}rest/app_manager/geonodelayerattribute/",
                   mapLayers:"{% url "cartoview_map_layers" %}",
-                  newURL:"{% url APP_NAME|add:".new" %}",
+                  newURL:"{% url "cartoview_feature_list.new" %}",
                   editURL:function(id){
-                    return "/apps/{{APP_NAME}}/"+id+"/edit/"
+                    return "/apps/cartoview_feature_list/"+id+"/edit/"
                   },
                   viewURL:function(id){
-                    return "/apps/{{APP_NAME}}/"+id+"/view/"
+                    return "/apps/cartoview_feature_list/"+id+"/view/"
                   },
                   detailsURL:function(id){
                     return "/apps/appinstance/"+id+"/"
