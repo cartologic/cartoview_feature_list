@@ -19,8 +19,8 @@
 {% endblock %}
 {% block extra_script %}
 
-    <script src="{{ STATIC_URL }}cartoview_feature_list/dist/commons.js"></script>
-    <script src="{{ STATIC_URL }}cartoview_feature_list/dist/config.bundle.js"></script>
+    <script src="{{ STATIC_URL }}{{APP_NAME}}/dist/commons.js"></script>
+    <script src="{{ STATIC_URL }}{{APP_NAME}}/dist/config.bundle.js"></script>
     <script>
       const urls={
         MapsAPI: "{% url 'api_dispatch_list' api_name='api' resource_name='maps' %}",
@@ -34,16 +34,16 @@
         media: "{{ MEDIA_URL }}",
         rest: "{% url 'app_manager_base_url' %}rest/app_manager/",
         geonodeRest: "{% url 'api_api_top_level' 'api' %}",
-        appLogo:'{% static 'cartoview_feature_list/logo.png' %}',
+        appLogo:'{% static APP_NAME|add:'/logo.png' %}',
         layerAttributes:"{% url 'app_manager_base_url' %}rest/app_manager/geonodelayerattribute/",
         mapLayers:"{% url "cartoview_map_layers" %}",
-        newURL:"{% url "cartoview_feature_list.new" %}",
+        newURL:"{% url APP_NAME|add:".new" %}",
         tagsAPI:"{% url 'tags_list' %}",
         editURL:function(id){
-          return "/apps/cartoview_feature_list/"+id+"/edit/"
+          return "/apps/{{APP_NAME}}/"+id+"/edit/"
         },
         viewURL:function(id){
-          return "/apps/cartoview_feature_list/"+id+"/view/"
+          return "/apps/{{APP_NAME}}/"+id+"/view/"
         },
         detailsURL:function(id){
           return "/apps/appinstance/"+id+"/"
