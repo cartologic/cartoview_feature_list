@@ -3,11 +3,7 @@
 {% load i18n %}
 
 {% block title %} {{ block.super }} - {% trans "Feature List" %} {% endblock %}
-{% block head %}
-    {% include "geonode/ext_header.html" %}
-    {% include "geonode/app_header.html" %}
-    {{ block.super }}
-{% endblock %}
+
 {% block body %}
     <div id="page-wrapper">
         <div class="container-fluid">
@@ -36,7 +32,7 @@
                   rest: "{% url 'app_manager_base_url' %}rest/app_manager/",
                   geonodeRest: "{% url 'api_api_top_level' 'api' %}",
                   appLogo:'{% static 'cartoview_feature_list/logo.png' %}',
-                  layerAttributes:"{% url 'app_manager_base_url' %}rest/app_manager/geonodelayerattribute/",
+                  layerAttributes:'{% url 'api_dispatch_list' api_name='api' resource_name='attributes' %}',
                   mapLayers:"{% url "cartoview_map_layers" %}",
                   newURL:"{% url "cartoview_feature_list.new" %}",
                   editURL:function(id){
