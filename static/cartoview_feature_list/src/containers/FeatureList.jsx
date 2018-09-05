@@ -345,6 +345,7 @@ class FeatureListContainer extends Component {
         const view = map.getView()
         const selectedLayer = LayersHelper.getWMSLayer(config.layer, map.getLayers()
             .getArray())
+        console.log(config.layer)
         let identifyPromises = [selectedLayer].map(
             (layer) => FeaturesHelper.readFeaturesThenTransform(
                 this.urls, layer, coordinate, view, map))

@@ -34,7 +34,7 @@ class EditPage extends React.Component {
             keywords: [],
             saving: false,
             errors: [],
-            profiles:[],
+            profiles: [],
             instanceId: config ? config.id : null,
             searchEnabled: false
         }
@@ -61,7 +61,7 @@ class EditPage extends React.Component {
         const { urls } = this.props
         const { selectedMap } = this.state
         let url = urls.mapLayers
-        url = this.urls.getParamterizedURL(url, { id: selectedMap.id })
+        url = this.urls.getParamterizedURL(url, { map__id: selectedMap.id, 'local': true })
         doGet(url).then(result => {
             this.setState({
                 mapLayers: result.objects,
@@ -279,7 +279,7 @@ class EditPage extends React.Component {
                 ...this.featureListConfigurationStep.getComponentValue()
 
             },
-            access:this.accessConfigurationStep.getComponentValue(),
+            access: this.accessConfigurationStep.getComponentValue(),
             keywords: this.toArray(keywords)
 
         }

@@ -4,7 +4,7 @@ import Group from 'ol/layer/group'
 import ImageWMS from 'ol/source/imagewms'
 import TileWMS from 'ol/source/tilewms'
 import Vector from 'ol/source/vector'
-import {default as VectorLayer} from 'ol/layer/vector'
+import { default as VectorLayer } from 'ol/layer/vector'
 
 class LayersHelper {
     isWMSLayer = (layer) => {
@@ -48,10 +48,13 @@ class LayersHelper {
     getWMSLayer = (name, layers) => {
         let wmsLayer = null
         layers.forEach((layer) => {
+            let layerTypeName = layer.getProperties().name
+            if (layerTypeName.indexOf(":") == -1 && name.indexOf(":") > -1) {
+                name = name.split(":").pop()
+            }
             if (layer instanceof Group) {
                 wmsLayer = this.getWMSLayer(name, layer.getLayers())
-            } else if (this.isWMSLayer(layer) && layer.getSource()
-                .getParams().LAYERS == name) {
+            } else if (this.isWMSLayer(layer) && layerTypeName == name) {
                 wmsLayer = layer
             }
             if (wmsLayer) {
