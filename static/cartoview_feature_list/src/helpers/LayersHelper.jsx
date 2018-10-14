@@ -45,16 +45,13 @@ class LayersHelper {
             AnimationHelper.flash(e.feature, map)
         })
     }
-    getWMSLayer = (name, layers) => {
+    getWMSLayer(name, layers) {
         let wmsLayer = null
         layers.forEach((layer) => {
-            let layerTypeName = layer.getProperties().name
-            if (layerTypeName.indexOf(":") == -1 && name.indexOf(":") > -1) {
-                name = name.split(":").pop()
-            }
             if (layer instanceof Group) {
                 wmsLayer = this.getWMSLayer(name, layer.getLayers())
-            } else if (this.isWMSLayer(layer) && layerTypeName == name) {
+            } else if (this.isWMSLayer(layer) && layer.getSource()
+                .getParams().LAYERS == name) {
                 wmsLayer = layer
             }
             if (wmsLayer) {

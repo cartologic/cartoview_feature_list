@@ -342,23 +342,24 @@ class FeatureListContainer extends Component {
     }
     featureIdentify = (map, coordinate) => {
         const { config } = this.props
+        let that = this
         const view = map.getView()
         const selectedLayer = LayersHelper.getWMSLayer(config.layer, map.getLayers()
             .getArray())
-        console.log(config.layer)
         let identifyPromises = [selectedLayer].map(
             (layer) => FeaturesHelper.readFeaturesThenTransform(
-                this.urls, layer, coordinate, view, map))
+                this.urls, layer, coordinate, view, map)
+        )
         Promise.all(identifyPromises).then(result => {
             const featureIdentifyResult = result.reduce((array1,
                 array2) => array1.concat(array2), [])
-            this.setState({
+            that.setState({
                 featureIdentifyLoading: false,
                 featureIdentifyResult,
                 activeFeature: null,
                 detailsModeEnabled: false,
                 detailsOfFeature: null,
-            }, () => this.addStyleToFeature(
+            }, () => that.addStyleToFeature(
                 featureIdentifyResult))
         })
     }

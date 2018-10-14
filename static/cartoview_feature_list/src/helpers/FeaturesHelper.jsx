@@ -6,11 +6,11 @@ export const wmsGetFeatureInfoFormats = {
     'application/json': new GeoJSON(),
     'application/vnd.ogc.gml': new WMSGetFeatureInfo()
 }
-export const  wfsFormats={
-    'wfs':new WFS()
+export const wfsFormats = {
+    'wfs': new WFS()
 }
 class FeatureHelper {
-    getFormat=(format)=>{
+    getFormat = (format) => {
         return wmsGetFeatureInfoFormats[format]
     }
     getFeatureInfoUrl = (layer, coordinate, view, infoFormat) => {
@@ -43,11 +43,11 @@ class FeatureHelper {
             } else {
                 fetch("https://epsg.io/?format=json&q=" + crs).then(
                     response => response.json()).then(
-                    projres => {
-                        proj4.defs('EPSG:' + crs, projres.results[
-                            0].proj4)
-                        resolve(crs)
-                    })
+                        projres => {
+                            proj4.defs('EPSG:' + crs, projres.results[
+                                0].proj4)
+                            resolve(crs)
+                        })
             }
         })
         return promise
@@ -60,7 +60,10 @@ class FeatureHelper {
                 var promise = new Promise((resolve, reject) => {
                     const features = wmsGetFeatureInfoFormats[
                         'application/json'].readFeatures(
-                        result)
+                            result, {
+                                dataProjection: map.getView().getProjection().getCode(),
+                                featureProjection: map.getView().getProjection().getCode(),
+                            })
                     if (features.length > 0) {
                         const crs = result.features.length > 0 ?
                             result.crs.properties.name.split(":").pop() : null
@@ -79,6 +82,6 @@ class FeatureHelper {
                 return promise
             })
     }
-    
+
 }
 export default new FeatureHelper()

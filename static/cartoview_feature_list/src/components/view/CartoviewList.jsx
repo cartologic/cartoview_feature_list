@@ -9,11 +9,11 @@ import { withStyles } from 'material-ui/styles'
 
 const styles = theme => ({
     list: {
-        height:`calc(100% - 76px )`,
-        overflowY:'overlay',
-        overflowX:'hidden',
+        height: `calc(100% - 76px )`,
+        overflowY: 'overlay',
+        overflowX: 'hidden',
     },
-    root:{
+    root: {
         height: "100%"
     },
     progress: {
@@ -52,8 +52,21 @@ class CartoviewList extends React.Component {
             <Paper elevation={6} className={classes.root}>
                 <NavBar open={drawerOpen} childrenProps={this.props} />
                 <Paper elevation={0} className={classes.list}>
-                    {!selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="All Features" loading={featuresIsLoading} openDetails={openDetails} message={"No Features Found"} />}
-                    {selectionModeEnabled && !detailsModeEnabled && <FeatureListComponent {...this.props} subheader="Identified Features" loading={featureIdentifyLoading} features={featureIdentifyResult} openDetails={openDetails} message={"No Features At this Point"} />}
+                    {!selectionModeEnabled &&
+                        !detailsModeEnabled &&
+                        <FeatureListComponent {...this.props}
+                            subheader="All Features"
+                            loading={featuresIsLoading}
+                            openDetails={openDetails}
+                            message={"No Features Found"} />}
+                    {selectionModeEnabled &&
+                        !detailsModeEnabled &&
+                        <FeatureListComponent {...this.props}
+                            subheader="Identified Features"
+                            loading={featureIdentifyLoading}
+                            features={featureIdentifyResult}
+                            openDetails={openDetails}
+                            message={"No Features At this Point"} />}
                     {detailsModeEnabled && detailsOfFeature && <ItemDetails attributesToDisplay={config.attributesToDisplay} getImageFromURL={getImageFromURL} commentsIsLoading={commentsIsLoading} SaveImageBase64={SaveImageBase64} username={config.username} addComment={addComment} selectionModeEnabled={selectionModeEnabled} back={back} selectedFeature={detailsOfFeature} searchCommentById={searchCommentById} comments={comments} searchFilesById={searchFilesById} />}
                     {!selectionModeEnabled && !detailsModeEnabled && !(featuresIsLoading || attachmentIsLoading) && totalFeatures > 0 && <div className="text-center">
                         <UltimatePaginationMaterialUi
