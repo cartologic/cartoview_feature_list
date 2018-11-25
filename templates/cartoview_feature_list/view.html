@@ -21,7 +21,7 @@
 <body>
 <div style="height: 100%;" id="root"></div>
 <script src="{{ STATIC_URL }}cartoview_feature_list/dist/commons.js?version=1.7.5"></script>
-<script src="{% static 'cartoview_feature_list/dist/FeatureList.bundle.js?version=1.7.5' %}"></script>
+<script src="{% static 'cartoview_feature_list/dist/FeatureList.bundle.js' %}?version=1.7.5"></script>
 <script type="text/javascript">
     {% if instance %}
             const instanceId= {{ instance.id }}
