@@ -1,17 +1,15 @@
-__author__ = 'hisham'
+__author__ = 'Cartologic'
 
 info = {
-    "title": "Feature List",
-    "description": "Map and configurable feature list side by side. Map and feature list are connected in zoom and pan. Use for store locations or similar apps.",
+    "title": "Cartoview Feature List",
+    "description": "",
     "author": 'Cartologic',
-    "home_page": 'http://cartologic.com/cartoview/apps/feature_list',
-    "help_url": "http://cartologic.com/cartoview/apps/feature_list/help/",
+    "home_page": 'http://cartologic.com/cartoview/apps/viewer',
+    "help_url": "http://cartologic.com/cartoview/apps/viewer/help/",
     "tags": [
-        'map',
-        'viewer',
-        'feature_list',
-        'features',
-        'list'],
+        'cartoview',
+        'app',
+        'template'],
     "licence": 'BSD',
     "author_website": "http://www.cartologic.com",
     "single_instance": False}

@@ -1,5 +1,5 @@
-import os
-APP_NAME = os.path.basename(os.path.dirname(__file__))
-urls_dict = {
-    'admin': {'%s.new' % APP_NAME: 'Create new'},
-}
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+
+default_app_config = 'cartoview_feature_list.apps.CartoviewFeatureListConfig'

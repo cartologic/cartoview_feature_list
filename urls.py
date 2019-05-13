@@ -1,12 +1,10 @@
-from django.conf.urls import url
+# -*- coding: utf-8 -*-
+from django.urls import re_path
 
-from . import APP_NAME, views
+from .views import IndexView, ConfigView
 
 urlpatterns = [
-    url(r'^new/$', views.feature_list.new,
-        name='%s.new' % APP_NAME),
-    url(r'^(?P<instance_id>\d+)/edit/$',
-        views.feature_list.edit, name='%s.edit' % APP_NAME),
-    url(r'^(?P<instance_id>\d+)/view/$',
-        views.feature_list.view_app, name='%s.view' % APP_NAME)
+    re_path('^$', IndexView.as_view()),
+    re_path('^new$', ConfigView.as_view()),
+    re_path('^(?P<id>[\d]+)/edit$', ConfigView.as_view()),
 ]
